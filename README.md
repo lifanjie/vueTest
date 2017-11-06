@@ -32,4 +32,4 @@ cnpm install axios -D\
 emmet\
 file-icons\
 git-plus\
-language-vue\
+language-vue
