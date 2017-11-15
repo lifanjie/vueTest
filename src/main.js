@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
 
 // 引用API文件
 import api from './api/index.js'
@@ -13,6 +15,8 @@ Vue.prototype.$api = api
 Vue.prototype.$utils = utils
 
 Vue.config.productionTip = false
+
+Vue.use(MintUI)
 
 /* eslint-disable no-new */
 new Vue({
