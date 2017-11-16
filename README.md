@@ -29,7 +29,4 @@ cnpm install node-sass -D\
 --------安装axios----------------\
 cnpm install axios -D\
 --------需要用的插件--------------\
-emmet\
-file-icons\
-git-plus\
-language-vue\
+
