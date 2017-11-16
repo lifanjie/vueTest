@@ -1,0 +1,23 @@
+*{
+    margin:0;
+    padding:0
+}
+
+body {
+    /* 1 */
+    font-family: "Helvetica Neue", Helvetica, STHeiTi, Arial, sans-serif;
+  }
+
+html {
+    -ms-text-size-adjust: 100%;
+    /* 1 */
+    -webkit-text-size-adjust: 100%;
+    /* 1 */
+    -webkit-tap-highlight-color: transparent;
+    /* 2 */
+    height: 100%;
+  }
+
+.page-button{
+    padding: 0 15px 15px;
+}  

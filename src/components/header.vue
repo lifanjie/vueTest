@@ -1,5 +1,3 @@
 <template>
-  <header class="header">
-    <h1 class="logo">Vue Demo by FungLeo</h1>
-  </header>
+  <mt-header fixed title="会员注册"></mt-header>
 </template>
