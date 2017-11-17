@@ -11,7 +11,7 @@
         <div class="page-part">
           <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="phone"></mt-field>
           <mt-field label="验证码" placeholder="请输入验证码" v-model="captcha">
-            <div class="cond_num"><span class="valiCode">免费获取</span></div>
+            <div class="cond_num" v-bind:class="{cond_num_actinve: isActive }"><span class="valiCode">免费获取</span></div>
           </mt-field>
         </div>
         <div class="page-button">
@@ -32,7 +32,7 @@
 <script>
 import Vue from 'vue'
 import myHeader from '../components/header'
-import { Field, Toast, Button } from 'mint-ui'
+import { Field, Button, Toast } from 'mint-ui'
 
 Vue.component(Field)
 Vue.component(Button)
@@ -44,12 +44,41 @@ export default {
     return {
       active: 'tab-container1',
       captcha: '',
-      phone: ''
+      phone: '',
+      countdown: 60,
+      timeFlag: false,
+      isActive: true
     }
   },
   methods: {
+    settime: function () {
+      if (this.countdown === 0) {
+        this.isActive = false
+        $('#valiCode').html("免费获取")
+        this.countdown = 60
+        this.timeFlag = false
+        return
+      } else {
+        this.timeFlag = true
+        this.isActive = true
+        $('#valiCode').html("(<span id='limitTime'>" + countdown + "</span>)");
+        this.countdown--
+      }
+       setTimeout(function() {settime()},1000)
+    },
     validate: function () {
-      Toast(this.active)
+      let data = {
+        phone: this.phone,
+        orgId: 'cccfd3059d1d4976a879e02fe0277b1c',
+        openId: 'oA5XNjnip9eUqUSdrCAKYnwLymXc'
+      }
+      this.$api.post('sms/send', data,
+      r => {
+        this.settime()
+      },
+      r => {
+        Toast('1')
+      })
     }
   }
 }

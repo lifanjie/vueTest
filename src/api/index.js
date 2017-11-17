@@ -1,5 +1,5 @@
 // 配置API接口地址
-var root = '/api/v1'
+var root = '/wechat'
 // 引用axios
 var axios = require('axios')
 
@@ -54,14 +54,14 @@ function apiAxios (method, url, params, success, failure) {
       if (failure) {
         failure(res.data)
       } else {
-        window.alert('error: ' + JSON.stringify(res.data))
+        this.$toast('error: ' + JSON.stringify(res.data))
       }
     }
   })
   .catch(function (err) {
     let res = err.response
     if (err) {
-      window.alert('api error, HTTP CODE: ' + res.status)
+      this.$toast('api error, HTTP CODE: ' + res.status)
     }
   })
 }

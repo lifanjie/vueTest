@@ -10,6 +10,7 @@
     width: 70px;
     /* height: 40px; */
     background: #26a2ff;
+    background-color: none;
     color: #fff;
     line-height: 40px;
     text-align: center;
@@ -18,4 +19,8 @@
     //margin-top: 5px;
     border-radius: 3px;
     font-size: 13px;
+}
+
+.cond_num_actinve{
+    background-color: #dddddd;
 }
