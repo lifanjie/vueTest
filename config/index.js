@@ -32,9 +32,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/wechat': {
-      target: 'http://ceshiht.zuanno.cn', // 你接口的域名
-      secure: false,
-      changeOrigin: false,
+        target: 'http://localhost:8080/jeesite', // 你接口的域名
+        secure: false,
+        changeOrigin: true,
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

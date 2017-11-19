@@ -22,5 +22,111 @@
 }
 
 .cond_num_actinve{
-    background-color: #dddddd;
+    background-color: #26a2ff;
 }
+
+.org_box{
+	width: 100%;height: 140px;
+	background:#fff; 
+	border-bottom: 1px solid #e5e5e5; 
+	border-top: 1px solid #e5e5e5;
+	margin-bottom: 8px;
+}
+.org_box_a{
+	width: 96%;
+	height: 140px;
+	margin:0 auto;
+	background: none;
+}
+.org_box_a .images{
+	width: 40%;
+	height: 115px;
+	float:left;
+	margin-top: 12px;
+}
+.org_box_a .images img{
+	width:100%;
+	height:100%;
+}
+
+.org_box_a .info{
+	width: 58%;
+	height: 105px;
+	background: none;
+	float:left;
+	margin-top: 15px;
+	margin-left: 6px;
+}
+.org_box_a .info .xian{
+	width: 100%;
+	height:1px;
+	border-bottom: solid 1px #e4e4e4;
+	margin-top: 10px;
+}
+.org_box_a .info img{
+	background: none; 
+	width: 3%; 
+	margin-left: 9px;
+}
+
+.org_name{
+	background: none;
+	font-size: 15px;
+	word-wrap:break-word;
+	/* margin-top: 8px;  */
+	line-height: 27px;
+	/* color:#8b8b8b; */
+}
+.org_info{
+	background: none; 
+	word-wrap:break-word;
+	line-height: 20px;
+	font-size: 13px;
+	width: 90%;
+	margin-top: 10px;
+}
+
+.org_phone{
+	background: none; 
+	word-wrap:break-word;
+	line-height: 27px;
+	font-size: 13px; 
+}
+
+.page_c{
+    min-width: 40px;
+    height: 27px;
+    text-align: center;
+    display: inline-block;
+    position: absolute;
+    background-color: #fff;
+    right: 0;
+	
+}
+
+.fl {
+    float: right;
+}
+
+.page_c:before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    vertical-align: middle;
+    border-right: 1px #000000 solid;
+    border-top: 1px #000000 solid;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}  
+
+/* 说明https://fatesinger.com/74438 */
+
+.radio_label{
+    display: inline-block;
+    width: 6rem;
+ }
+.radio_input{display:none}
+.radio_span{background-color:#fff;border:1px solid rgba(0,0,0,0.15);border-radius:100%;display:inline-block;height:16px;margin-right:10px;margin-top:-1px;vertical-align:middle;width:16px;line-height:1;}
+.radio_input:checked + .radio_span:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+.demo--checkbox.radio_span,.radio_input:checked + .demo--checkbox.radio_span:after{border-radius:0}

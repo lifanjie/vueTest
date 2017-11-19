@@ -1,7 +1,13 @@
+import Vue from 'vue'
+import qs from 'qs'
+import { Toast } from 'mint-ui'
+import { validate } from '../utils/validate'
 // 配置API接口地址
+// var root = 'http://ceshiht.zuanno.cn/wechat'
 var root = '/wechat'
 // 引用axios
 var axios = require('axios')
+Vue.component(Toast)
 
 // 自定义判断元素类型JS
 function toType (obj) {
@@ -37,31 +43,48 @@ function apiAxios (method, url, params, success, failure) {
   if (params) {
     params = filterNull(params)
   }
+  var orgId = params.orgId
+  var openId = params.openId
+
+  params = qs.stringify(params)
+
+  // console.log(JSON.stringify(params))
   axios({
     method: method,
     url: url,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
     withCredentials: false
   })
   .then(function (res) {
     if (res.data.success === true) {
       if (success) {
+       // console.log(JSON.stringify(res.data))
         success(res.data)
       }
     } else {
-      if (failure) {
+      // 未注册
+      if (res.data.code === '101' && !validate.isEmpty(orgId) && !validate.isEmpty(openId)) {
+        this.$route.push({
+          path: '/register',
+          query: {
+            orgId: orgId,
+            openId: openId
+          }
+        })
+      } else if (failure) {
         failure(res.data)
       } else {
-        this.$toast('error: ' + JSON.stringify(res.data))
+        Toast('error: ' + JSON.stringify(res.data))
       }
     }
   })
   .catch(function (err) {
     let res = err.response
     if (err) {
-      this.$toast('api error, HTTP CODE: ' + res.status)
+      Toast('api error, HTTP CODE: ' + res.status)
     }
   })
 }
