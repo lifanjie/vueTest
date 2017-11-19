@@ -1,0 +1,50 @@
+http://localhost:8090/#/orgId/cccfd3059d1d4976a879e02fe0277b1c/openId/oA5XNjnip9eUqUSdrCAKYnwLymXc
+
+{
+    "editor.tabSize": 2,
+    "eslint.nodePath": "D:/Program Files (x86)/VSCode", // 应用路径
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "html",
+            "autoFix": true
+        },
+        {
+            "language": "vue",
+            "autoFix": true
+        },
+        "html",
+        "vue"
+    ],
+    "files.associations": {
+        "*.vue": "vue"
+    },
+    "eslint.autoFixOnSave": true,
+    "eslint.options": {
+        "plugins": [
+            "html"
+        ]
+    },
+    "file_peek.activeLanguages": [
+        "typescript",
+        "javascript",
+        "python",
+        "vue" // 添加vue支持
+    ],
+    "file_peek.searchFileExtensions": [
+        ".js",
+        ".ts",
+        ".html",
+        ".css",
+        ".scss",
+        ".vue" // 添加vue支持
+    ],
+    "emmet.syntaxProfiles": {
+        "vue-html": "html",
+        "vue": "html"
+    },
+    "vetur.format.defaultFormatter.js": "vscode-typescript",
+    "vetur.validation.template": false,
+    "[vue]": {}
+}
