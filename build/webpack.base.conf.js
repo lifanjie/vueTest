@@ -99,12 +99,7 @@ module.exports = {
           // 其他的资源转移到静态资源文件夹
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }/* ,
-      {
-        test: /\.scss$/,
-        include: '/src/',
-        use: ['style-loader', 'css-loader', 'sass-loader']
-    } */
+      }
     ]
   }
 }
