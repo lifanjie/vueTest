@@ -119,8 +119,8 @@ export default {
     }
   },
   created: function () {
-    this.orgId = this.$route.params.orgId
-    this.openId = this.$route.params.openId
+    this.orgId = this.$route.query.orgId
+    this.openId = this.$route.query.openId
     this.getOrgList()
   },
   methods: {
@@ -267,13 +267,7 @@ export default {
         },
         r => {
           // Toast('注册成功')
-          this.$route.push({
-            path: '/',
-            query: {
-              orgId: this.orgId,
-              openId: this.openId
-            }
-          })
+          this.$router.push({path: '/', query: {orgId: this.orgId, openId: this.openId}})
         },
         r => {
           Toast(r)

@@ -13,7 +13,9 @@
  	 <div class="one">
  		<ul>
 			<li class="order"><img class="" src="../../static/image/hy_03.png"/><p>我的订单</p></li>
-			<li class="exchange"><img src="../../static/image/hy_05.png"/><p>积分兑换</p></li>
+			<li class="exchange" @click="selExchange()">
+          <img src="../../static/image/hy_05.png"/>
+      <p>积分兑换</p></li>
 			<li><img src="../../static/image/hy_07.png"/><p>我的福券</p></li> 
 		</ul> 
 	</div> 
@@ -70,8 +72,8 @@ export default {
     }
   },
   created: function () {
-    this.orgId = this.$route.params.orgId
-    this.openId = this.$route.params.openId
+    this.orgId = this.$route.query.orgId
+    this.openId = this.$route.query.openId
 
     this.getCusInfo()
   },
@@ -103,6 +105,9 @@ export default {
           Toast(r)
         }
       )
+    },
+    selExchange: function () {
+      this.$router.push({path: '/exchange', query: {orgId: this.orgId, openId: this.openId}})
     }
   }
 }
