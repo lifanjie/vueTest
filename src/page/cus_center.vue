@@ -114,7 +114,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../style/scss/_cus_center";
 </style>
 
