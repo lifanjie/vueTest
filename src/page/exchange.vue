@@ -13,7 +13,7 @@
             <div class="list"></div>
             <div class="list_box">
               <div class="list_boxa">
-                  <router-link :to="{ path: '/exchangeDetail', query: { id: item.id,orgId:orgId,openId:openId}}">
+                  <router-link :to="{ path: '/exchangeDetail', query: { id: item.id,type:'gift'}}">
                     <img :src="item.giftImage">
                   </router-link>   
               </div>
@@ -34,7 +34,7 @@
             <div class="list"></div>
             <div class="list_box">
               <div class="list_boxa">
-                  <router-link :to="{ path: '/exchangeDetail', query: { id: item.id,orgId: orgId,openId: openId}}">
+                  <router-link :to="{ path: '/exchangeDetail', query: { id: item.id,type:'coupon'}}">
                     <img :src="item.images">
                   </router-link>    
                 </div>
@@ -54,20 +54,13 @@
       </div>      
     
     </div>
-
-    <div class="bottom">
-      <div class="gift_b">
-        <p class="event"><img src="../../static/image/lp_icon_66.png"/>活动中心</p>
-      </div>
-      <div class="user_b">
-        <p class="selfcenter"><img src="../../static/image/hy_43.png"/> 会员中心</p>
-      </div>
-    </div>    
+    <myFooter></myFooter>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+import myFooter from '../components/footer'
 import { Toast, Navbar, TabItem } from 'mint-ui'
 
 Vue.component(Toast)
@@ -75,19 +68,15 @@ Vue.component(Navbar)
 Vue.component(TabItem)
 
 export default {
+  components: {myFooter},
   data () {
     return {
       selected: '1',
-      orgId: '',
-      openId: '',
       giftItems: [],
       couponItems: []
     }
   },
   created: function () {
-    this.orgId = this.$route.query.orgId
-    this.openId = this.$route.query.openId
-
     this.giftList()
     this.couponList()
   },
@@ -96,7 +85,7 @@ export default {
       this.$api.post(
         'gift/list',
         {
-          orgId: this.orgId
+          orgId: this.$store.state.orgId
         },
         r => {
           this.giftItems = r.data
@@ -110,7 +99,7 @@ export default {
       this.$api.post(
         'coupon/list',
         {
-          orgId: this.orgId
+          orgId: this.$store.state.orgId
         },
         r => {
           this.couponItems = r.data
@@ -125,8 +114,8 @@ export default {
         'gift/addOrder',
         {
           id: id,
-          orgId: this.orgId,
-          openId: this.openId
+          orgId: this.$store.state.orgId,
+          openId: this.$store.state.openId
         },
         r => {
           this.couponItems = r.data
@@ -141,7 +130,7 @@ export default {
         'coupon/addOrder',
         {
           id: id,
-          openId: this.openId
+          openId: this.$store.state.openId
         },
         r => {
           this.couponItems = r.data
@@ -156,7 +145,7 @@ export default {
         'gift/list',
         {
           id: id,
-          orgId: this.orgId
+          orgId: this.$store.state.orgId
         },
         r => {
           this.couponItems = r.data

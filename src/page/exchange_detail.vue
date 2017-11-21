@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="page-field headdiv">
+      <mt-header fixed title="说明">
+        <router-link to="/exchange"  slot="left">
+          <mt-button icon="back">返回</mt-button>
+        </router-link>
+      </mt-header>
+    </div>    
     <div class="head">
 	    <div class="head_left">
 		    <p class="giftName_p"><span id="giftName">{{giftName}}</span></p>
@@ -19,19 +26,22 @@
     </section>
 	
     <div class="add_new_address">
-      <a class="exchange"><div class="add_new_address_body">兑换</div></a> 
+      <a class="exchange"><div class="add_new_address_body" @click="sure()">兑换</div></a> 
     </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import {Toast} from 'mint-ui'
+
+Vue.component(Toast)
 export default {
   data () {
     return {
       selected: '1',
       id: '',
-      orgId: '',
-      openId: '',
+      type: '',
       giftName: '',
       price: '',
       spendPoints: ''
@@ -39,11 +49,63 @@ export default {
   },
   created: function () {
     this.id = this.$route.query.id
-    this.orgId = this.$route.query.orgId
-    this.openId = this.$route.query.openId
+    this.type = this.$route.query.type
+
+    this.getDetail()
   },
   methods: {
+    getDetail: function () {
+      let url = ''
 
+      if (this.type === 'gift') {
+        url = 'gift/list'
+      } else {
+        url = 'coupon/list'
+      }
+      this.$api.post(
+        url,
+        {
+          id: this.id,
+          orgId: this.$store.state.orgId
+        },
+        r => {
+          if (this.type === 'gift') {
+            this.giftName = r.data.giftName
+          } else {
+            this.giftName = r.data.title
+          }
+          this.price = r.data.price
+          this.spendPoints = r.data.spendPoints
+          this.recommend = r.data.detail
+        },
+        r => {
+          Toast(r)
+        }
+      )
+    },
+    sure: function () {
+      let url = ''
+      if (this.type === 'gift') {
+        url = 'gift/addOrder'
+      } else {
+        url = 'coupon/addOrder'
+      }
+
+      this.$api.post(
+        url,
+        {
+          id: this.id,
+          orgId: this.$store.state.orgId,
+          openId: this.$store.state.openId
+        },
+        r => {
+          Toast('1')
+        },
+        r => {
+          Toast(r)
+        }
+      )
+    }
   }
 }
 </script>

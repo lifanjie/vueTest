@@ -38,42 +38,36 @@
 		
 	</div> 
 
- 	<div class="bottom">
-		<div class="gift_b">
-			<p class="event">
-			  <img src="../../static/image/lp_icon_66.png"/>
-			      活动中心
-			</p>
-		</div>
-		<div class="user_b">
-			<p class="selfcenter">
-			  <img src="../../static/image/hy_43.png"/>
-			     会员中心
-			</p>
-		</div>
-	</div>
+ 	<myFooter></myFooter>
 </div>	  
 </template>
 
 <script>
 import Vue from 'vue'
+import myFooter from '../components/footer'
 import { Toast } from 'mint-ui'
+import { validate } from '../utils/validate'
 
 Vue.component(Toast)
 
 export default {
+  components: {myFooter},
   data () {
     return {
-      orgId: '',
-      openId: '',
       photo: '../../static/image/ft_03.png',
       integral: 0,
       username: ''
     }
   },
   created: function () {
-    this.orgId = this.$route.query.orgId
-    this.openId = this.$route.query.openId
+    let orgId = this.$route.query.orgId
+    let openId = this.$route.query.openId
+    if (!validate.isEmpty(orgId)) {
+      this.$store.commit('setOrgId', this.$route.query.orgId)
+    }
+    if (!validate.isEmpty(openId)) {
+      this.$store.commit('setOrgId', this.$route.query.openId)
+    }
 
     this.getCusInfo()
   },
@@ -89,8 +83,8 @@ export default {
       this.$api.post(
         'customer/info',
         {
-          orgId: this.orgId,
-          openId: this.openId
+          orgId: this.$store.state.orgId,
+          openId: this.$store.state.openId
         },
         r => {
           this.username = r.data.username
@@ -107,7 +101,7 @@ export default {
       )
     },
     selExchange: function () {
-      this.$router.push({path: '/exchange', query: {orgId: this.orgId, openId: this.openId}})
+      this.$router.push({path: '/exchange'})
     }
   }
 }

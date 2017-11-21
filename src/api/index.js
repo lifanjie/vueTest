@@ -43,8 +43,6 @@ function apiAxios (method, url, params, success, failure) {
   if (params) {
     params = filterNull(params)
   }
-  var orgId = params.orgId
-  var openId = params.openId
 
   params = qs.stringify(params)
 
@@ -66,6 +64,8 @@ function apiAxios (method, url, params, success, failure) {
       }
     } else {
       // 未注册
+      let orgId = this.$store.state.orgId
+      let openId = this.$store.state.openId
       if (res.data.code === '101' && !validate.isEmpty(orgId) && !validate.isEmpty(openId)) {
         this.$route.push({
           path: '/register',
