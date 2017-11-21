@@ -52,7 +52,7 @@ module.exports = {
     // 例如将'localhost:8080/api/xxx'代理到'www.example.com/api/xxx'
     proxyTable: {
       '/wechat': {
-        target: 'http://localhost:8080/jeesite', // 你接口的域名
+        target: 'http://ceshiht.zuanno.cn', // 你接口的域名
         secure: false,
         changeOrigin: true,
       }

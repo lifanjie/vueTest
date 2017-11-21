@@ -13,7 +13,7 @@
             <div class="list"></div>
             <div class="list_box">
               <div class="list_boxa">
-                  <router-link :to="'/giftdetail/' + item.id">
+                  <router-link :to="{ path: '/exchangeDetail', query: { id: item.id,orgId:orgId,openId:openId}}">
                     <img :src="item.giftImage">
                   </router-link>   
               </div>
@@ -34,7 +34,7 @@
             <div class="list"></div>
             <div class="list_box">
               <div class="list_boxa">
-                  <router-link :to="'/coupondetail/' + item.id">
+                  <router-link :to="{ path: '/exchangeDetail', query: { id: item.id,orgId: orgId,openId: openId}}">
                     <img :src="item.images">
                   </router-link>    
                 </div>
@@ -78,6 +78,8 @@ export default {
   data () {
     return {
       selected: '1',
+      orgId: '',
+      openId: '',
       giftItems: [],
       couponItems: []
     }
@@ -117,13 +119,73 @@ export default {
           Toast(r)
         }
       )
+    },
+    sureGift: function (id) {
+      this.$api.post(
+        'gift/addOrder',
+        {
+          id: id,
+          orgId: this.orgId,
+          openId: this.openId
+        },
+        r => {
+          this.couponItems = r.data
+        },
+        r => {
+          Toast(r)
+        }
+      )
+    },
+    sureCoupon: function (id) {
+      this.$api.post(
+        'coupon/addOrder',
+        {
+          id: id,
+          openId: this.openId
+        },
+        r => {
+          this.couponItems = r.data
+        },
+        r => {
+          Toast(r)
+        }
+      )
+    },
+    getGiftDetail: function (id) {
+      this.$api.post(
+        'gift/list',
+        {
+          id: id,
+          orgId: this.orgId
+        },
+        r => {
+          this.couponItems = r.data
+        },
+        r => {
+          Toast(r)
+        }
+      )
+    },
+    getCouponDetail: function (id) {
+      this.$api.post(
+        'gift/list',
+        {
+          id: id
+        },
+        r => {
+          this.couponItems = r.data
+        },
+        r => {
+          Toast(r)
+        }
+      )
     }
   }
 
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../style/scss/_exchange";
 </style>
 
