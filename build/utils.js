@@ -79,6 +79,7 @@ exports.cssLoaders = function (options) {
 }
 
 // Generate loaders for standalone style files (outside of .vue)
+// 生成处理单独的.css、.sass、.scss等样式文件的规则
 exports.styleLoaders = function (options) {
   const output = []
   const loaders = exports.cssLoaders(options)

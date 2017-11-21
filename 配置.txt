@@ -1,8 +1,8 @@
-http://localhost:8090/#/orgId/cccfd3059d1d4976a879e02fe0277b1c/openId/oA5XNjnip9eUqUSdrCAKYnwLymXc
+http://localhost:8090/#/?orgId=cccfd3059d1d4976a879e02fe0277b1c&openId=oA5XNjnip9eUqUSdrCAKYnwLymXc
 
 {
     "editor.tabSize": 2,
-    "eslint.nodePath": "D:/Program Files (x86)/VSCode", // 应用路径
+    "eslint.nodePath": "D:/Program Files (x86)/VSCode", // 应锟斤拷路锟斤拷
     "eslint.validate": [
         "javascript",
         "javascriptreact",
@@ -30,7 +30,7 @@ http://localhost:8090/#/orgId/cccfd3059d1d4976a879e02fe0277b1c/openId/oA5XNjnip9
         "typescript",
         "javascript",
         "python",
-        "vue" // 添加vue支持
+        "vue" // 锟斤拷锟絭ue支锟斤拷
     ],
     "file_peek.searchFileExtensions": [
         ".js",
@@ -38,7 +38,7 @@ http://localhost:8090/#/orgId/cccfd3059d1d4976a879e02fe0277b1c/openId/oA5XNjnip9
         ".html",
         ".css",
         ".scss",
-        ".vue" // 添加vue支持
+        ".vue" // 锟斤拷锟絭ue支锟斤拷
     ],
     "emmet.syntaxProfiles": {
         "vue-html": "html",
