@@ -18,10 +18,25 @@ html {
     height: 100%;
   }
 
-.page-button{
-    padding: 0 15px 15px;
+.page-field{
+    margin-bottom: 40px;
+}
+
+.page-part{
+    margin-bottom: 15px;
 }  
 
-.headdiv{
-    margin-bottom: 40px
+.page-button{
+    padding: 0 15px 15px;
 }
+
+/* 说明https://fatesinger.com/74438 */
+
+.radio_label{
+    display: inline-block;
+    width: 6rem;
+ }
+.radio_input{display:none}
+.radio_span{background-color:#fff;border:1px solid rgba(0,0,0,0.15);border-radius:100%;display:inline-block;height:16px;margin-right:10px;margin-top:-1px;vertical-align:middle;width:16px;line-height:1;}
+.radio_input:checked + .radio_span:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+.demo--checkbox.radio_span,.radio_input:checked + .demo--checkbox.radio_span:after{border-radius:0}

@@ -1,6 +1,7 @@
 // 我们组装模块并导出 store 的地方
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
@@ -20,5 +21,6 @@ const mutations = {
 
 export default new Vuex.Store({
   state,
-  mutations
+  mutations,
+  plugins: [createPersistedState()]
 })

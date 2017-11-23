@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="page-field headdiv">
+    <div class="page-field">
       <mt-header fixed title="说明">
         <router-link to="/exchange"  slot="left">
           <mt-button icon="back">返回</mt-button>
@@ -99,7 +99,7 @@ export default {
           openId: this.$store.state.openId
         },
         r => {
-          Toast('1')
+          this.$router.push({path: '/exchangeSure', query: {code: r.data.code}})
         },
         r => {
           Toast(r)
@@ -110,7 +110,7 @@ export default {
 }
 </script>
 
-<<style lang="sass" scoped>
+<<style lang="scss" scoped>
 @import "../style/scss/_exchange_detail";
 </style>
 

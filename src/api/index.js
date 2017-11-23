@@ -43,7 +43,8 @@ function apiAxios (method, url, params, success, failure) {
   if (params) {
     params = filterNull(params)
   }
-
+  let orgId = params.orgId
+  let openId = params.openId
   params = qs.stringify(params)
 
   // console.log(JSON.stringify(params))
@@ -54,7 +55,7 @@ function apiAxios (method, url, params, success, failure) {
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-    withCredentials: false
+    withCredentials: true
   })
   .then(function (res) {
     if (res.data.success === true) {
@@ -64,8 +65,6 @@ function apiAxios (method, url, params, success, failure) {
       }
     } else {
       // 未注册
-      let orgId = this.$store.state.orgId
-      let openId = this.$store.state.openId
       if (res.data.code === '101' && !validate.isEmpty(orgId) && !validate.isEmpty(openId)) {
         this.$route.push({
           path: '/register',
@@ -82,6 +81,9 @@ function apiAxios (method, url, params, success, failure) {
     }
   })
   .catch(function (err) {
+    if (validate.isEmpty(err.data)) {
+      return
+    }
     let res = err.response
     if (err) {
       Toast('api error, HTTP CODE: ' + res.status)
