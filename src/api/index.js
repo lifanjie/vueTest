@@ -7,6 +7,8 @@ import { validate } from '../utils/validate'
 var root = '/wechat'
 // 引用axios
 var axios = require('axios')
+// 如果不设置全局
+axios.defaults.withCredentials = true
 Vue.component(Toast)
 
 // 自定义判断元素类型JS
