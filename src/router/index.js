@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Register from '@/page/register'
-import cusCenter from '@/page/cus_center'
-import exchange from '@/page/exchange'
-import exchangeDetail from '@/page/exchange_detail'
-import exchangeOrder from '@/page/exchange_order'
-import exchangeSure from '@/page/exchange_sure'
-import selfInfo from '@/page/self_info'
+import Register from '@/page/member/register'
+import cusCenter from '@/page/member/cus_center'
+import exchange from '@/page/member/exchange'
+import exchangeDetail from '@/page/member/exchange_detail'
+import exchangeOrder from '@/page/member/exchange_order'
+import exchangeSure from '@/page/member/exchange_sure'
+import selfInfo from '@/page/member/self_info'
 
 Vue.use(Router)
 
@@ -16,7 +16,7 @@ export default new Router({
       path: '/register',
       component: Register
     }, {
-      path: '/',
+      path: '/cusCenter',
       component: cusCenter
     }, {
       path: '/exchange',

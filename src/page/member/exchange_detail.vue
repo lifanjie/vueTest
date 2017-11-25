@@ -111,7 +111,7 @@ export default {
 </script>
 
 <<style lang="scss" scoped>
-@import "../style/scss/_exchange_detail";
+@import "../../style/scss/member/_exchange_detail";
 </style>
 
 

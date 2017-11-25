@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import qs from 'qs'
+import axios from 'axios'
 import { Toast } from 'mint-ui'
 import { validate } from '../utils/validate'
 // 配置API接口地址
 // var root = 'http://ceshiht.zuanno.cn/wechat'
-var root = '/wechat'
+var root = 'http://localhost:8080/jeesite/wechat'
 // 引用axios
-var axios = require('axios')
+
 // 如果不设置全局
 axios.defaults.withCredentials = true
 Vue.component(Toast)
@@ -62,7 +63,7 @@ function apiAxios (method, url, params, success, failure) {
   .then(function (res) {
     if (res.data.success === true) {
       if (success) {
-       // console.log(JSON.stringify(res.data))
+        // console.log(JSON.stringify(res.data))
         success(res.data)
       }
     } else {

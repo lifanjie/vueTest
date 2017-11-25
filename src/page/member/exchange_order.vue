@@ -19,11 +19,9 @@
               </div>
               <div class="div_title">    
                 <p class="dt_title">{{item.giftName}}</p>
-                <p class="dt_text">价值：{{item.price}}</p>
+                <p class="dt_text">订单号：{{item.code}}</p>
                 <p class="dt_text">所需积分：<span>{{item.spendPoints}}</span></p>	
-                <p class="dt_text">剩余数量：{{item.number}}
-                  <button type="button" class="exchange" @click="sureGift(item.id)">兑换</button>
-                </p>
+                <p class="dt_text">订单状态：{{item.statusStr}}</p>
               </div>		
             </div>
           </div>
@@ -40,11 +38,9 @@
                 </div>
                   <div class="div_title">    
                   <p class="dt_title">{{item.title}}</p>
-                  <p class="dt_text">价值：{{item.price}}</p>
+                  <p class="dt_text">订单号：{{item.code}}</p>
                   <p class="dt_text">所需积分：<span>{{item.spendPoints}}</span></p>	
-                  <p class="dt_text">剩余数量：{{item.number}}
-                    <button type="button" class="exchange" @click="sureCoupon(item.id)">兑换</button>
-                  </p>	
+                  <p class="dt_text">订单状态：{{item.statusStr}}</p>	
                 </div>		
             </div>
                   
@@ -60,7 +56,7 @@
 
 <script>
 import Vue from 'vue'
-import myFooter from '../components/footer'
+import myFooter from '../../components/footer'
 import { Toast, Navbar, TabItem } from 'mint-ui'
 
 Vue.component(Toast)
@@ -83,9 +79,9 @@ export default {
   methods: {
     giftList: function () {
       this.$api.post(
-        'gift/list',
+        'gift/order/list',
         {
-          orgId: this.$store.state.orgId
+          openId: this.$store.state.openId
         },
         r => {
           this.giftItems = r.data
@@ -97,43 +93,10 @@ export default {
     },
     couponList: function () {
       this.$api.post(
-        'coupon/list',
-        {
-          orgId: this.$store.state.orgId
-        },
+        'coupon/order/list',
+        {},
         r => {
           this.couponItems = r.data
-        },
-        r => {
-          Toast(r)
-        }
-      )
-    },
-    sureGift: function (id) {
-      this.$api.post(
-        'gift/addOrder',
-        {
-          id: id,
-          orgId: this.$store.state.orgId,
-          openId: this.$store.state.openId
-        },
-        r => {
-          this.$router.push({path: '/exchangeSure', query: {code: r.data.code}})
-        },
-        r => {
-          Toast(r)
-        }
-      )
-    },
-    sureCoupon: function (id) {
-      this.$api.post(
-        'coupon/addOrder',
-        {
-          id: id,
-          openId: this.$store.state.openId
-        },
-        r => {
-          this.$router.push({path: '/exchangeSure', query: {code: r.data.code}})
         },
         r => {
           Toast(r)
@@ -146,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/scss/_exchange";
+@import "../../style/scss/member/_exchange";
 </style>
 
 

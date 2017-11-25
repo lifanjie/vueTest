@@ -1,4 +1,4 @@
-http://localhost:8090/#/?orgId=cccfd3059d1d4976a879e02fe0277b1c&openId=oA5XNjnip9eUqUSdrCAKYnwLymXc
+http://localhost:8090/#/cusCenter/?orgId=cccfd3059d1d4976a879e02fe0277b1c&openId=oA5XNjnip9eUqUSdrCAKYnwLymXc
 
 {
     "editor.tabSize": 2,

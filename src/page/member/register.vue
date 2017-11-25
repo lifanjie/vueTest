@@ -84,8 +84,8 @@
 <script>
 import Vue from 'vue'
 import { Field, Button, Toast, DatetimePicker } from 'mint-ui'
-import { validate } from '../utils/validate'
-import { formatDate } from '../utils/dateUtils'
+import { validate } from '../../utils/validate'
+import { formatDate } from '../../utils/dateUtils'
 
 Vue.component(Field)
 Vue.component(Button)
@@ -267,7 +267,7 @@ export default {
         },
         r => {
           // Toast('注册成功')
-          this.$router.push({path: '/', query: {orgId: this.orgId, openId: this.openId}})
+          this.$router.push({path: '/cusCenter', query: {orgId: this.orgId, openId: this.openId}})
         },
         r => {
           Toast(r)
@@ -279,7 +279,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/scss/_register";
+@import "../../style/scss/member/_register";
 </style>
 
 
