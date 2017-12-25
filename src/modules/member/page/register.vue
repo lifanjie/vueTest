@@ -84,8 +84,8 @@
 <script>
 import Vue from 'vue'
 import { Field, Button, Toast, DatetimePicker } from 'mint-ui'
-import { validate } from '../../utils/validate'
-import { formatDate } from '../../utils/dateUtils'
+import { validate } from '../utils/validate'
+import { formatDate } from '../utils/dateUtils'
 
 Vue.component(Field)
 Vue.component(Button)
@@ -153,7 +153,7 @@ export default {
         return
       }
 
-      this.$api.post(
+      this.$axios.post(
         'sms/send',
         {
           mobile: this.mobile,
@@ -184,7 +184,7 @@ export default {
         return
       }
 
-      this.$api.post(
+      this.$axios.post(
         'sms/validate',
         {
           phone: this.mobile,
@@ -201,7 +201,7 @@ export default {
     },
     // 生成门店选择模板
     getOrgList: function () {
-      this.$api.post(
+      this.$axios.post(
         'customer/getweixinOrgId',
         {
           orgId: this.orgId
@@ -254,7 +254,7 @@ export default {
         return
       }
 
-      this.$api.post(
+      this.$axios.post(
         'customer/register',
         {
           mobile: mobile,
@@ -279,7 +279,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/scss/member/_register";
+@import "../style/scss/member/_register";
 </style>
 
 

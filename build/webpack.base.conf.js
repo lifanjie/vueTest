@@ -10,6 +10,8 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+//引入多页面支持
+const multipageHelper = require('./multipage-helper')
 
 // 获取绝对路径
 function resolve (dir) {
@@ -17,10 +19,11 @@ function resolve (dir) {
 }
 
 module.exports = {
+  entry: multipageHelper.getEntries(), //设置入口集合
   // webpack入口文件
-  entry: {
-    app: './src/main.js'
-  },
+  // entry: {
+  //   app: './src/main.js'
+  // },
   // webpack输出路径和命名规则
   output: {
     // webpack输出的目标文件夹路径（例如：/dist）
@@ -39,7 +42,7 @@ module.exports = {
     // import Vue from 'vue/dist/vue.common.js'可以写成 import Vue from 'vue'
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      '@': resolve('src/modules'),
     }
   },
   // 不同类型模块的处理规则

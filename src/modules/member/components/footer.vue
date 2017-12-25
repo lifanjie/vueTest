@@ -3,12 +3,12 @@
     <div class="bottom">
       <div class="gift_b" @click="goCenter()">
         <p class="event">
-            <img src="../../static/image/lp_icon_66.png"/>活动中心
+            <img src="../static/image/lp_icon_66.png"/>活动中心
         </p>      
       </div>
       <div class="user_b" @click="goCenter()">
         <p class="selfcenter">
-            <img src="../../static/image/hy_43.png"/> 会员中心
+            <img src="../static/image/hy_43.png"/> 会员中心
         </p>
       </div>
     </div> 

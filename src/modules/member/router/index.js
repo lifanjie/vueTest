@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Register from '@/page/member/register'
-import cusCenter from '@/page/member/cus_center'
-import exchange from '@/page/member/exchange'
-import exchangeDetail from '@/page/member/exchange_detail'
-import exchangeOrder from '@/page/member/exchange_order'
-import exchangeSure from '@/page/member/exchange_sure'
-import selfInfo from '@/page/member/self_info'
+import Register from '@/member/page/register'
+import cusCenter from '@/member/page/cus_center'
+import exchange from '@/member/page/exchange'
+import exchangeDetail from '@/member/page/exchange_detail'
+import exchangeOrder from '@/member/page/exchange_order'
+import exchangeSure from '@/member/page/exchange_sure'
+import selfInfo from '@/member/page/self_info'
 
 Vue.use(Router)
 

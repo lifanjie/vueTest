@@ -3,15 +3,15 @@
 import Vue from 'vue'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
-import App from './App'
+import member from './member.vue'
 import router from './router'
 import store from './store/index'
 
 // 引用API文件
-import api from './api/index.js'
+import axios from '../../api/api'
 
-// 将API方法绑定到全局
-Vue.prototype.$api = api
+// 将axios方法绑定到全局
+Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false
 
@@ -22,6 +22,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  template: '<App/>',
-  components: { App }
+  template: '<member/>',
+  components: { member }
 })

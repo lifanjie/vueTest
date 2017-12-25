@@ -62,7 +62,7 @@ export default {
       } else {
         url = 'coupon/list'
       }
-      this.$api.post(
+      this.$axios.post(
         url,
         {
           id: this.id,
@@ -91,7 +91,7 @@ export default {
         url = 'coupon/addOrder'
       }
 
-      this.$api.post(
+      this.$axios.post(
         url,
         {
           id: this.id,
@@ -111,7 +111,7 @@ export default {
 </script>
 
 <<style lang="scss" scoped>
-@import "../../style/scss/member/_exchange_detail";
+@import "../style/scss/member/_exchange_detail";
 </style>
 
 

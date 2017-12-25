@@ -6,7 +6,8 @@
 // 3.配置样式文件的处理规则，styleLoaders
 // 4.配置Source Maps
 // 5.配置webpack插件
-
+//引入多页面支持
+const multipageHelper = require('./multipage-helper')
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
@@ -46,11 +47,13 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     // 自动将依赖注入html模板，并输出最终的html文件到目标文件夹
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true
-    }),
+    // new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: 'index.html',
+    //   inject: true
+    // }),
     new FriendlyErrorsPlugin()
   ]
 })
+//添加Html模板集合
+Array.prototype.push.apply(module.exports.plugins,multipageHelper.getDevHtmlWebpackPluginList())

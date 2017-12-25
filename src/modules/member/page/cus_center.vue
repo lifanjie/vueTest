@@ -12,11 +12,11 @@
  	
  	 <div class="one">
  		<ul>
-			<li class="order"><img class="" src="../../../static/image/hy_03.png"/><p>我的订单</p></li>
+			<li class="order"><img class="" src="../static/image/hy_03.png"/><p>我的订单</p></li>
       <router-link to="/exchange">
-			<li class="exchange" ><img src="../../../static/image/hy_05.png"/><p>积分兑换</p></li>
+			<li class="exchange" ><img src="../static/image/hy_05.png"/><p>积分兑换</p></li>
       </router-link>  
-			<li><img src="../../../static/image/hy_07.png"/><p>我的福券</p></li> 
+			<li><img src="../static/image/hy_07.png"/><p>我的福券</p></li> 
 		</ul> 
 	</div> 
 
@@ -24,19 +24,19 @@
 
  	<div class="main">
 		<ul>
-			<li><img src="../../../static/image/hy_13.png"/><p>积分明细</p></li>
+			<li><img src="../static/image/hy_13.png"/><p>积分明细</p></li>
       <router-link to="/exchangeOrder">
-			<li class="exchange_order"><img src="../../../static/image/hy_15.png"/><p>已领礼品</p></li>
+			<li class="exchange_order"><img src="../static/image/hy_15.png"/><p>已领礼品</p></li>
       </router-link>
-			<li class="hl"><img src="../../../static/image/hy_17.png"/><p>活动参与</p></li>
-			<li><img src="../../../static/image/hy_27.png"/><p>会员权益</p></li>
-			<li><img src="../../../static/image/hy_33.png"/><p>售后服务</p></li>
-			<li class="hl"><img src="../../../static/image/hy_35.png"/><p>投诉建议</p></li>
+			<li class="hl"><img src="../static/image/hy_17.png"/><p>活动参与</p></li>
+			<li><img src="../static/image/hy_27.png"/><p>会员权益</p></li>
+			<li><img src="../static/image/hy_33.png"/><p>售后服务</p></li>
+			<li class="hl"><img src="../static/image/hy_35.png"/><p>投诉建议</p></li>
       <router-link to="/selfInfo">
-			<li class="info"><img src="../../../static/image/hy_25.png"/><p>我的资料</p></li>
+			<li class="info"><img src="../static/image/hy_25.png"/><p>我的资料</p></li>
       </router-link>
-			<li><img src="../../../static/image/hy_23.png"/><p>我的好友</p></li>
-			<li class="hl"><img src="../../../static/image/hy_31.png"/><p>足迹记录</p></li>
+			<li><img src="../static/image/hy_23.png"/><p>我的好友</p></li>
+			<li class="hl"><img src="../static/image/hy_31.png"/><p>足迹记录</p></li>
 			
 		</ul>
 		
@@ -48,9 +48,9 @@
 
 <script>
 import Vue from 'vue'
-import myFooter from '../../components/footer'
+import myFooter from '../components/footer'
 import { Toast } from 'mint-ui'
-import { validate } from '../../utils/validate'
+import { validate } from '../utils/validate'
 
 Vue.component(Toast)
 
@@ -58,7 +58,7 @@ export default {
   components: {myFooter},
   data () {
     return {
-      photo: '../../../static/image/ft_03.png',
+      photo: '../static/image/ft_03.png',
       integral: 0,
       username: ''
     }
@@ -84,7 +84,7 @@ export default {
         this.photo = dt
       }
 
-      this.$api.post(
+      this.$axios.post(
         'customer/info',
         {
           orgId: this.$store.state.orgId,
@@ -110,7 +110,7 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../../style/scss/member/_cus_center";
+@import "../style/scss/member/_cus_center";
 </style>
 
 

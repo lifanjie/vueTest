@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/scss/member/_exchange_sure"
+@import "../style/scss/member/_exchange_sure"
 </style>
 
 

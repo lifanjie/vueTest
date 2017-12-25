@@ -39,8 +39,7 @@
 <script>
 import Vue from 'vue'
 import { Toast } from 'mint-ui'
-// import { formatDate } from '../../utils/dateUtils'
-import { validate } from '../../utils/validate'
+import { validate } from '../utils/validate'
 Vue.component(Toast)
 export default {
   data () {
@@ -59,7 +58,7 @@ export default {
   },
   methods: {
     getInfo: function () {
-      this.$api.post(
+      this.$axios.post(
         'isLogin',
         {},
         r => {
@@ -77,7 +76,7 @@ export default {
       )
     },
     sure: function () {
-      this.$api.post(
+      this.$axios.post(
         'customer/update',
         {
           id: this.id,
