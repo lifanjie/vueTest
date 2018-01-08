@@ -110,7 +110,7 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../style/scss/member/_cus_center";
+@import "../style/scss/_cus_center";
 </style>
 
 

@@ -109,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/scss/member/_exchange";
+@import "../style/scss/_exchange";
 </style>
 
 

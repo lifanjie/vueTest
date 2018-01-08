@@ -279,7 +279,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/scss/member/_register";
+@import "../style/scss/_register";
 </style>
 
 
