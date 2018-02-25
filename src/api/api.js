@@ -5,7 +5,7 @@ import { Toast } from 'mint-ui'
 import { validate } from '@/member/utils/validate'
 // 配置API接口地址
 // var root = 'http://ceshiht.zuanno.cn/wechat'
-var root = 'http://localhost:8080/jeesite/wechat'
+var root = 'http://localhost/jeesite/wechat'
 // 引用axios
 
 // 如果不设置全局
