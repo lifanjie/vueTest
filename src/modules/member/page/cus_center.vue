@@ -50,7 +50,7 @@
 import Vue from 'vue'
 import myFooter from '../components/footer'
 import { Toast } from 'mint-ui'
-import { validate } from '../utils/validate'
+import { validate } from 'utils/validate'
 
 Vue.component(Toast)
 

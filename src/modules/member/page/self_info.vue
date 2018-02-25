@@ -39,7 +39,7 @@
 <script>
 import Vue from 'vue'
 import { Toast } from 'mint-ui'
-import { validate } from '../utils/validate'
+import { validate } from 'utils/validate'
 Vue.component(Toast)
 export default {
   data () {

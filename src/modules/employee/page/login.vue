@@ -36,6 +36,37 @@
 
 <script>
 export default {
+  data () {
+    return {
+      localList: []
+    }
+  },
+  created: function () {
+
+  },
+  methods: {
+    getLocalList: function () {
+      for (let i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i)
+        var value = localStorage.getItem(key)
+        var a = {key: value}
+        this.localList.push(a)
+      }
+    },
+    setLocal: function () {
+      var a = 0
+      for (let i = y.length - 1; i >= 0; i--) {
+        if (isContains(myStorage.key(i), '_login')) {
+          if (a++ == 5 && myStorage.key(i) != _key) {
+            removeLocal(myStorage.key(i))
+          }
+        }
+      }
+
+      myStorage.setItem(_key, _value)
+    }
+
+  }
 
 }
 </script>

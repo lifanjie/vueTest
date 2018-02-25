@@ -14,6 +14,7 @@ const vueLoaderConfig = require('./vue-loader.conf')
 const multipageHelper = require('./multipage-helper')
 
 // 获取绝对路径
+//“__dirname”是node.js中的一个全局变量，它指向当前执行脚本所在的目录
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -43,6 +44,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src/modules'),
+      'utils': resolve('src/utils'),
     }
   },
   // 不同类型模块的处理规则

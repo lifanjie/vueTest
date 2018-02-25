@@ -84,8 +84,8 @@
 <script>
 import Vue from 'vue'
 import { Field, Button, Toast, DatetimePicker } from 'mint-ui'
-import { validate } from '../utils/validate'
-import { formatDate } from '../utils/dateUtils'
+import { validate } from 'utils/validate'
+import { formatDate } from 'utils/dateUtils'
 
 Vue.component(Field)
 Vue.component(Button)
