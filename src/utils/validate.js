@@ -3,7 +3,7 @@ import { Toast } from 'mint-ui'
 
 Vue.component(Toast)
 
-var validate = {
+const validate = {
 
   /**
    * 判断substr在str中是否存在
