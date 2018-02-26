@@ -3,7 +3,7 @@
      * @param date
      * @param format
      */
-var formatDate = function (date, format) {
+var formatDate = (date, format) => {
   var o =
     {
       'M+': date.getMonth() + 1, // month

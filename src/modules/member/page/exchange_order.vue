@@ -72,12 +72,12 @@ export default {
       couponItems: []
     }
   },
-  created: function () {
+  created: () => {
     this.giftList()
     this.couponList()
   },
   methods: {
-    giftList: function () {
+    giftList: () => {
       this.$axios.post(
         'gift/order/list',
         {
@@ -91,7 +91,7 @@ export default {
         }
       )
     },
-    couponList: function () {
+    couponList: () => {
       this.$axios.post(
         'coupon/order/list',
         {},

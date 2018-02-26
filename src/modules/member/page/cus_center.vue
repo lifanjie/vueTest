@@ -63,7 +63,7 @@ export default {
       username: ''
     }
   },
-  created: function () {
+  created: () => {
     let orgId = this.$route.query.orgId
     let openId = this.$route.query.openId
     if (!validate.isEmpty(orgId)) {
@@ -76,7 +76,7 @@ export default {
     this.getCusInfo()
   },
   methods: {
-    getCusInfo: function () {
+    getCusInfo: () => {
     // 如果缓存有头像先用缓存
       let dt = localStorage.getItem('userImg')
 

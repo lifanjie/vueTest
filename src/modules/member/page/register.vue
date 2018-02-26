@@ -118,13 +118,13 @@ export default {
       isActive: false
     }
   },
-  created: function () {
+  created: () => {
     this.orgId = this.$route.query.orgId
     this.openId = this.$route.query.openId
     this.getOrgList()
   },
   methods: {
-    settime: function () {
+    settime: () => {
       if (this.countdown === 0) {
         this.isActive = false
         this.codeText = '免费获取'
@@ -142,7 +142,7 @@ export default {
       }, 1000)
     },
     // 获得验证码短信
-    getSMS: function () {
+    getSMS: () => {
       if (this.timeFlag) {
         Toast('请勿频繁获取')
         return
@@ -169,7 +169,7 @@ export default {
         }
       )
     },
-    sureCode: function () {
+    sureCode: () => {
       let captcha = this.captcha
       // 检查验证码输入
       if (!validate.isRequired(captcha, '验证码')) {
@@ -200,7 +200,7 @@ export default {
       )
     },
     // 生成门店选择模板
-    getOrgList: function () {
+    getOrgList: () => {
       this.$axios.post(
         'customer/getweixinOrgId',
         {
@@ -214,23 +214,23 @@ export default {
         }
       )
     },
-    activeTab: function () {
+    activeTab: () => {
       this.active = 'tab-container2'
     },
-    selectOrg: function (orgId) {
+    selectOrg: (orgId) => {
       this.orgId = orgId
       // 进入选择门店界面
       this.active = 'tab-container3'
     },
     // 弹出生日选择
-    openPicker: function () {
+    openPicker: () => {
       this.$refs.picker.open()
     },
-    handleConfirm: function (value) {
+    handleConfirm: (value) => {
       // Toast(formatDate(this.select_birthday, 'yyyy-MM-dd'))
       this.birthday = formatDate(value, 'yyyy-MM-dd')
     },
-    sureRigister: function () {
+    sureRigister: () => {
       let mobile = this.mobile
       let username = this.username
       let birthday = this.birthday

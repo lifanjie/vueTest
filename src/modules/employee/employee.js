@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
-import member from './employee.vue'
+import employee from './employee.vue'
 import router from './router'
 import store from './store/index'
 
@@ -22,6 +22,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  template: '<member/>',
-  components: { member }
+  template: '<employee/>',
+  components: { employee }
 })
