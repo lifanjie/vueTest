@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/employee/page/login'
+import errorBind from '@/employee/page/errorBind'
+import productList from '@/employee/page/productList'
+import goodsCart from '@/employee/page/goodsCart'
+import orderList from '@/employee/page/orderList'
+import more from '@/employee/page/more'
 
 Vue.use(Router)
 
@@ -9,6 +14,26 @@ export default new Router({
     {
       path: '/login',
       component: login
+    },
+    {
+      path: '/errorBind',
+      component: errorBind
+    },
+    {
+      path: '/productList',
+      component: productList
+    },
+    {
+      path: '/goodsCart',
+      component: goodsCart
+    },
+    {
+      path: '/orderList',
+      component: orderList
+    },
+    {
+      path: '/more',
+      component: more
     }
   ]
 })

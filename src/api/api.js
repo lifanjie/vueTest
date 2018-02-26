@@ -2,7 +2,7 @@ import Vue from 'vue'
 import qs from 'qs'
 import axios from 'axios'
 import { Toast } from 'mint-ui'
-import { validate } from '@/member/utils/validate'
+import { validate } from 'utils/validate'
 // 配置API接口地址
 // var root = 'http://ceshiht.zuanno.cn/wechat'
 var root = 'http://localhost/jeesite/wechat'

@@ -76,12 +76,12 @@ export default {
       couponItems: []
     }
   },
-  created: function () {
+  created: () => {
     this.giftList()
     this.couponList()
   },
   methods: {
-    giftList: function () {
+    giftList: () => {
       this.$axios.post(
         'gift/list',
         {
@@ -95,7 +95,7 @@ export default {
         }
       )
     },
-    couponList: function () {
+    couponList: () => {
       this.$axios.post(
         'coupon/list',
         {
@@ -109,7 +109,7 @@ export default {
         }
       )
     },
-    sureGift: function (id) {
+    sureGift: (id) => {
       this.$axios.post(
         'gift/addOrder',
         {
@@ -125,7 +125,7 @@ export default {
         }
       )
     },
-    sureCoupon: function (id) {
+    sureCoupon: (id) => {
       this.$axios.post(
         'coupon/addOrder',
         {

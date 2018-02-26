@@ -5,12 +5,28 @@ Vue.component(Toast)
 
 var validate = {
 
+  /**
+   * 判断substr在str中是否存在
+   * @param string,string
+   * @param str,substr
+   */
+  isContains (str, substr) {
+    return str.indexOf(substr) >= 0
+  },
+
   // 判断不为空
   isEmpty (data) {
     if (typeof data === 'undefined' || data == null || data === '') {
       return true
     } else {
       return false
+    }
+  },
+  isEmptyWarn (data, field) {
+    if (typeof data === 'undefined' || data == null || data === '') {
+      Toast(`${field}不能为空`)
+    } else {
+      return true
     }
   },
   // 验证字符串长度
