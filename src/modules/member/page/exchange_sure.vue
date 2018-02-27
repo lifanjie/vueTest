@@ -33,11 +33,11 @@ export default {
     }
   },
   computed: {
-    codestr: () => {
+    codestr: function () {
       return this.code.substr(0, 3) + ' ' + this.code.substr(3, 3) + ' ' + this.code.substr(6)
     }
   },
-  created: () => {
+  created: function () {
     this.code = this.$route.query.code
   }
 }

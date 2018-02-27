@@ -3,6 +3,8 @@ import qs from 'qs'
 import axios from 'axios'
 import { Toast } from 'mint-ui'
 import { validate } from 'utils/validate'
+import { commonUtil } from 'utils/commonUtil'
+
 // 配置API接口地址
 // var root = 'http://ceshiht.zuanno.cn/wechat'
 var root = 'http://localhost/jeesite/wechat'
@@ -61,6 +63,7 @@ function apiAxios (method, url, params, success, failure) {
     withCredentials: true
   })
   .then(function (res) {
+    commonUtil.indicatorClose()
     if (res.data.success === true) {
       if (success) {
         // console.log(JSON.stringify(res.data))
@@ -84,6 +87,7 @@ function apiAxios (method, url, params, success, failure) {
     }
   })
   .catch(function (err) {
+    commonUtil.indicatorClose()
     if (validate.isEmpty(err.data)) {
       return
     }

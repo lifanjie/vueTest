@@ -6,6 +6,8 @@ import productList from '@/employee/page/productList'
 import goodsCart from '@/employee/page/goodsCart'
 import orderList from '@/employee/page/orderList'
 import more from '@/employee/page/more'
+import productDetail from '@/employee/page/productDetail'
+import reserve from '@/employee/page/reserve'
 
 Vue.use(Router)
 
@@ -34,6 +36,14 @@ export default new Router({
     {
       path: '/more',
       component: more
+    },
+    {
+      path: '/productDetail',
+      component: productDetail
+    },
+    {
+      path: '/reserve',
+      component: reserve
     }
   ]
 })

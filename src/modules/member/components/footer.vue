@@ -19,7 +19,7 @@
 
 export default {
   methods: {
-    goCenter: () => {
+    goCenter: function () {
       this.$router.push({path: '/cusCenter'})
     }
   }

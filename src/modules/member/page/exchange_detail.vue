@@ -47,14 +47,14 @@ export default {
       spendPoints: ''
     }
   },
-  created: () => {
+  created: function () {
     this.id = this.$route.query.id
     this.type = this.$route.query.type
 
     this.getDetail()
   },
   methods: {
-    getDetail: () => {
+    getDetail: function () {
       let url = ''
 
       if (this.type === 'gift') {
@@ -83,7 +83,7 @@ export default {
         }
       )
     },
-    sure: () => {
+    sure: function () {
       let url = ''
       if (this.type === 'gift') {
         url = 'gift/addOrder'

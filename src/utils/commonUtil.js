@@ -6,9 +6,9 @@ Vue.component(Indicator)
 
 var commonUtil = {
 
-  indicatorOpen () {
+  indicatorOpen (text) {
     Indicator.open({
-      text: '加载中...',
+      text: text,
       spinnerType: 'fading-circle'
     })
   },

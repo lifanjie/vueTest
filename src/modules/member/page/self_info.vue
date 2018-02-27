@@ -53,11 +53,11 @@ export default {
       refereeMobile: ''
     }
   },
-  created: () => {
+  created: function () {
     this.getInfo()
   },
   methods: {
-    getInfo: () => {
+    getInfo: function () {
       this.$axios.post(
         'isLogin',
         {},
@@ -75,7 +75,7 @@ export default {
         }
       )
     },
-    sure: () => {
+    sure: function () {
       this.$axios.post(
         'customer/update',
         {

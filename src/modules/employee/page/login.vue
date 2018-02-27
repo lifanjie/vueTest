@@ -31,7 +31,7 @@
   </div> 
 
   <div class="page_bot"> 
-    <a class="login_btn">登&nbsp;&nbsp;&nbsp;录</a>  
+    <a @click="login()" class="login_btn">登&nbsp;&nbsp;&nbsp;录</a>  
   </div>
 
 </div>  
@@ -54,11 +54,11 @@ export default {
       isSelectName: false
     }
   },
-  created: () => {
+  created: function () {
     this.getLocalList()
   },
   methods: {
-    getLocalList: () => {
+    getLocalList: function () {
       let username = ''
       let password = ''
       for (let i = 0; i < localStorage.length; i++) {
@@ -75,7 +75,7 @@ export default {
       this.username = username
       this.password = password
     },
-    setLocal: (username, password) => {
+    setLocal: function (username, password) {
       var a = 0
       for (let b in this.localList) {
         if (a++ === 5 && b !== username) {
@@ -85,12 +85,12 @@ export default {
 
       localStorage.setItem(username + '_login', password)
     },
-    selectName: (username) => {
+    selectName: function (username) {
       this.username = username
       this.password = localStorage.getItem(name + '_login')
       this.isSelectName = false
     },
-    login: () => {
+    login: function () {
       if (!validate.isEmptyWarn(this.username, '账号')) {
         return
       }
@@ -99,7 +99,7 @@ export default {
         return
       }
 
-      commonUtil.indicatorOpen()
+      commonUtil.indicatorOpen('登录中...')
       this.$axios.post(
         'syslogin',
         {
@@ -107,8 +107,6 @@ export default {
           password: this.password
         },
         r => {
-          commonUtil.indicatorClose()
-
           // 设置全局变量
           localStorage.setItem('orgId', r.data.office.id)
           localStorage.setItem('userId', r.data.id)
@@ -132,7 +130,7 @@ export default {
         }
       )
     },
-    bindDrivice: () => {
+    bindDrivice: function () {
       this.$axios.post(
         'check/checkDriveId',
         {
@@ -153,7 +151,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-@import "../style/scss/login";
+  @import "../style/scss/login";
 </style>
 
 
