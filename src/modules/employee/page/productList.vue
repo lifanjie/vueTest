@@ -2,12 +2,12 @@
   <div>
     <div class="product_search">
       <div class="select_value_box">
-      <span class="select_value" >{{goodsType}}</span>
+      <span class="select_value" >{{goodsType.goodsType}}</span>
       <span class="sanjiao_xia" ></span>
       </div>
-      <select id="goodsType" v-model="goodsType">
-        <option value="全部">全部</option>
-        <option class="select_value_li" v-for="item in goodsTypeList" v-bind:value="item.id">{{item.goodsType}}</option>
+      <select id="goodsType" v-model="goodsType" @change="initGoodsType()">
+        <option value="">全部</option>
+        <option class="select_value_li" v-for="item in goodsTypeList" :value="item">{{item.goodsType}}</option>
       </select>
       <input type="text" placeholder='搜索条码' @keydown.13="queryGoods()" v-focus="isfocus"  v-model="searchKey" autocapitalize="off" autocorrect="off" id="searchKey" />
       <img id="clear" src="../static/image/close.png" 
@@ -61,20 +61,11 @@ import { Toast } from 'mint-ui'
 Vue.component(Toast)
 Vue.use(focus)
 
-Vue.component('child1', {
-  template: '#child1',
-  data () {
-    return {
-      msg: '这是子组件1的信息'
-    }
-  }
-})
-
 export default {
   components: {myFooter},
   data () {
     return {
-      goodsType: '全部',
+      goodsType: {goodsType: '全部'},
       searchKey: '',
       isfocus: true,
       goodsTypeList: [],
@@ -82,13 +73,17 @@ export default {
     }
   },
   created: function () {
+    this.setGoodsType()
     this.queryGoods2()
-   // console.log(this.$refs.myFooter)
-   // this.$refs.myFooter.loadShopping()
   },
   methods: {
+    initGoodsType: function () {
+      if (validate.isEmpty(this.goodsType)) {
+        this.goodsType = {goodsType: '全部'}
+      }
+    },
     queryGoods: function () {
-      if (validate.isEmpty(this.searchKey) && validate.isEmpty(this.goodsType)) {
+      if (validate.isEmpty(this.searchKey) && validate.isEmpty(this.goodsType.id)) {
         Toast('请输入要搜索的商品')
         return
       }
@@ -97,7 +92,7 @@ export default {
         'goods/list',
         {
           goodsCode: this.searchKey,
-          goodsType: this.goodsType === '全部' ? '' : this.goodsType
+          goodsType: this.goodsType.id
         },
         r => {
           this.clear()
@@ -152,6 +147,7 @@ export default {
           goodsId: goodsId
         },
         r => {
+          this.$refs.myFooter.addCount()
         },
         r => {
           Toast(r)
@@ -166,8 +162,17 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-@import "../style/scss/productList"
+<style lang="scss">
+body {
+	font-family: "Microsoft YaHei";
+	background-color: #f3f3f3;
+	padding-bottom: 90px;
+}
 </style>
+
+<style lang="scss" scoped>
+  @import "../style/scss/productList";
+</style>
+
 
 

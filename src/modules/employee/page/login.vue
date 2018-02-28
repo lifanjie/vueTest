@@ -15,11 +15,10 @@
         </div>
         <div style="width:100%">
           <input style="padding-top:12px;width:100%" type="text" class="username" v-model="username"
-  
-          autocapitalize="off" autocorrect="off"
+          autocapitalize="off" autocorrect="off" @click="isSelectName = true" @keydown="isSelectName = false"
           placeholder="请输入您的账号" autofocus maxlength="20"/>
           <ul class="select_username" v-show="isSelectName">
-            <li class="getname" @click="selectName(key)" v-for="item in localList" >{{ key }}</li>
+            <li class="getname" @click="selectName(key)" v-for="(value,key) in localList" >{{ key }}</li>
           </ul>
 		    </div>
     </div>
@@ -48,7 +47,7 @@ Vue.component(Toast)
 export default {
   data () {
     return {
-      localList: [],
+      localList: {},
       username: '',
       password: '',
       isSelectName: false
@@ -63,11 +62,11 @@ export default {
       let password = ''
       for (let i = 0; i < localStorage.length; i++) {
         let key = localStorage.key(i)
+
         if (validate.isContains(key, '_login')) {
           username = key.replace(/_login/, '')
-          password = localStorage.getItem(username)
-          let a = {usernamename: password}
-          this.localList.push(a)
+          password = localStorage.getItem(key)
+          this.localList[username] = password
         }
       }
 
@@ -77,8 +76,8 @@ export default {
     },
     setLocal: function (username, password) {
       var a = 0
-      for (let b in this.localList) {
-        if (a++ === 5 && b !== username) {
+      for (let key in this.localList.keys) {
+        if (a++ === 5 && key !== username) {
           localStorage.removeItem(username + '_login')
         }
       }
@@ -87,7 +86,7 @@ export default {
     },
     selectName: function (username) {
       this.username = username
-      this.password = localStorage.getItem(name + '_login')
+      this.password = localStorage.getItem(username + '_login')
       this.isSelectName = false
     },
     login: function () {
@@ -150,7 +149,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
   @import "../style/scss/login";
 </style>
 

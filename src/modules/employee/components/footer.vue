@@ -46,7 +46,8 @@ export default {
     }
   },
   created: function () {
-    this.showCount()
+    this.loadOrder()
+    this.loadShopping()
   },
   methods: {
     loadShopping: function () {
@@ -66,6 +67,46 @@ export default {
         }
       )
     },
+    loadOrder: function () {
+      this.$axios.post(
+        'goods/order/listCount',
+        {},
+        r => {
+          localStorage.setItem('orderCount', r.data)
+          this.showCount()
+        },
+        r => {
+          if (r.code === '101') {
+            this.$router.push({path: '/login'})
+          }
+          localStorage.setItem('orderCount', '')
+          this.showCount()
+        }
+      )
+    },
+    addCount: function () {
+      let shoppingCount = localStorage.getItem('shoppingCount')
+      if (validate.isEmpty(shoppingCount)) {
+        localStorage.setItem('shoppingCount', '1')
+      } else if (!Number.isNaN(shoppingCount)) {
+        shoppingCount = Number(shoppingCount) + 1
+        localStorage.setItem('shoppingCount', shoppingCount)
+      }
+      this.showCount()
+    },
+    minusCount: function () {
+      let shoppingCount = localStorage.getItem('shoppingCount')
+      if (!Number.isNaN(shoppingCount) && shoppingCount !== '0') {
+        shoppingCount = Number(shoppingCount) - 1
+        localStorage.setItem('shoppingCount', shoppingCount)
+      }
+      this.showCount()
+
+      // 如果清空了购物车，则返回首页
+      if (!this.isCount) {
+        this.$router.push({path: '/productList'})
+      }
+    },
     showCount: function () {
       let shoppingCount = localStorage.getItem('shoppingCount')
       if (!validate.isEmpty(shoppingCount) && shoppingCount !== '0') {
@@ -76,7 +117,7 @@ export default {
       }
 
       let orderCount = localStorage.getItem('orderCount')
-      if (!validate.isEmpty(shoppingCount) && orderCount !== '0') {
+      if (!validate.isEmpty(orderCount) && orderCount !== '0') {
         this.order = orderCount
         this.isOrder = true
       } else {
@@ -90,23 +131,6 @@ export default {
         Toast('购物车是空的')
       }
     },
-    loadOrder: function () {
-      this.$axios.post(
-        'goods/order/listCount',
-        {},
-        r => {
-          localStorage.setItem('orderCount', r.data)
-          this.showCount()
-        },
-        r => {
-          if (r.code === '101') {
-            this.$router.push({path: '/login'})
-          }
-          localStorage.setItem('shoppingCount', '')
-          this.showCount()
-        }
-      )
-    },
     showPay: function () {
       if (this.isOrder) {
         this.$router.push({path: '/orderList'})
@@ -119,7 +143,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-@import "../style/scss/footer"
+<style lang="scss" scoped>
+@import "../style/scss/footer";
 </style>
             

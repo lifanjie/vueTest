@@ -8,6 +8,7 @@ import orderList from '@/employee/page/orderList'
 import more from '@/employee/page/more'
 import productDetail from '@/employee/page/productDetail'
 import reserve from '@/employee/page/reserve'
+import orderAdd from '@/employee/page/orderAdd'
 
 Vue.use(Router)
 
@@ -44,6 +45,10 @@ export default new Router({
     {
       path: '/reserve',
       component: reserve
+    },
+    {
+      path: '/orderAdd',
+      component: orderAdd
     }
   ]
 })

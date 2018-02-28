@@ -43,15 +43,29 @@
 .active{
   color:#fb366b!important;
 }
-.tab-sub {
-  right: -5px;
-  top: -8px;
-  height:auto;
-  padding:2px;
-}
 
 @media screen and (min-width: 760px){
 .footer{height: 80px;padding-top: 15px;}
 .footer>a{font-size:16px;}
 .nav_icon{width:30px;}
+}
+
+.tab-sub {
+  right: -5px;
+  top: -8px;
+  height: auto;
+  padding: 2px;
+
+	position: absolute;
+	z-index: 3;
+	/* border: 1px solid #B61D1D; */
+	overflow: hidden;
+	color: #FFF;
+	font: 11px/11px verdana;
+	text-align: center;
+	min-width: 14px;
+	border-radius: 15px;
+	background-color: #fb366b;
+	background-image: -webkit-linear-gradient(to right, #ff4582, #fb366b);
+	background-image: linear-gradient(to right, #ff4582, #fb366b);
 }
