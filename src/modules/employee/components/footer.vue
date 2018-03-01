@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="footer_box">		
+    <div id="footer_box">		     
       <div class="footer" >
         <router-link to="/productList">
           <div class="nav_icon"><img  src="../static/image/icon_a (1).png"  /></div>
