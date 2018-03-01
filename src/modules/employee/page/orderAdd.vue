@@ -27,9 +27,9 @@
             </span>
           </div>
 
- 					<div class="storage_body_line">
-						<span class="storage_body_line_title">客户头像</span> 
-            <span class="storage_body_line_title touxiang" style="width:70%;">
+ 					<div class="storage_img_line">
+						<span class="storage_img_line_title">客户头像</span> 
+            <span class="storage_img_line_info touxiang" style="width:70%;">
               <div class="fileUpload btn btn-primary" id="fileUpload">
                 <span></span> 
                 <input id="uploadBtn" type="file" 
@@ -38,6 +38,15 @@
               </div>
             </span> 
 					</div>
+
+          <div class="add_new_address3">
+            <a class="page_next2" @click="cusOver()" style="display:block;">
+            <div class="add_new_address_body" style="background-color: #ccc!important;background-image: none!important;">跳过</div>
+            </a> 
+            <a class="page_next" data-page="page_b" style="display:block;" @click="cusNext()">
+            <div class="add_new_address_body">下一步</div>
+            </a> 
+          </div>          
 
         </div>
         
@@ -73,6 +82,9 @@ export default {
       this.active = 'tab-container1'
     },
     cusOver: function () {
+
+    },
+    cusNext: function () {
 
     },
     uploadPicture: function () {
