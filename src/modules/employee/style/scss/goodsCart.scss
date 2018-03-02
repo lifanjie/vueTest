@@ -85,7 +85,7 @@
       line-height:60px;
       border-top:1px solid #e5e5e5; 
       border-bottom: 1px solid #efefef;
-      bottom: 70px;
+      bottom: 55px;
       width: 100%;
       position: fixed;
     }
@@ -122,13 +122,13 @@
   .submit_button{float:right;margin-right:15px;width: auto;font-size: 1em;}
   @media screen and (max-width: 759px){
   .icon_sure{width: 18px;position: absolute;right: 0px;top: 15px;}
-  .goodsImg {padding-left: 35px;padding-top: 30px;width: 40px;}
+  .goodsImg {padding-left: 35px;padding-top: 30px;width: 75px;}
   #bill_List{    margin-bottom: 130px;}
   .margin-bottom-15{margin-bottom:10px!important;}
   }
 
 @media screen and (min-width: 760px){
-    .con_footer{height:60px;line-height:60px;bottom: 90px;}
+    .con_footer{height:60px;line-height:60px;bottom: 75px;}
     #bill_List{    margin-bottom: 155px;}
     .select_button{font-size:18px;}
     .select_button>img { width: 23px;}

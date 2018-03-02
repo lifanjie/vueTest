@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="goodsCart">
     <div class="tab-content">
 			
       <div class="page-field">
@@ -109,10 +109,13 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-	font-family: "Microsoft YaHei";
-    background-color: #f3f3f3;
-    padding-bottom: 4rem;
+#goodsCart {
+   font-family: "Microsoft YaHei";
+   position: absolute;
+   width: 100%;
+   height: 100%;
+	 background-color: #f3f3f3;
+	 padding-bottom: 90px;
 }
 </style>
 
