@@ -31,8 +31,8 @@
             <span class="storage_img_line_info touxiang" style="width:70%;">
               <div class="fileUpload btn btn-primary" id="fileUpload">
                 <span></span> 
-                <input id="uploadBtn" type="file" ref="myfiles"
-                class="upload" name="myfiles" @change="uploadPicture()" />
+                <input id="uploadBtn" type="file"
+                class="upload" name="myfiles" @change="uploadPicture" />
               </div>
               <img :src="headPic" v-show="isHeadPic" alt="" id="viewImg" class="storage_img_line_img"/>
             </span> 
@@ -62,28 +62,28 @@
 
         <div id="billTemplate">
 
-          <div class="storage_choose_place GoodsInfo" v-for="item in goodsList">
+          <div class="storage_choose_place GoodsInfo" v-for="(item,index) in tbgoodsStr">
 
             <div class="col-md-12 margin-bottom-15" style="margin-bottom:15px;padding-bottom:3px;">
-              <span class="product_title">【{{item.goodsTypeName}}】{{item.goodsName}}</span>
+              <span class="product_title">【{{item.goods.goodsTypeName}}】{{item.goods.goodsName}}</span>
               <div class="product">
                 <div>  
-                  <a @click="checkGoods(item.id)" >
-                  <img v-if="item.images === ''" src="../static/image/storage_camera1_03.png" class="goodsImg">
-                  <img v-else :src="item.images" style="width:230px;height:130px;">
+                  <a @click="checkGoods(item.goods.id)" >
+                  <img v-if="item.goods.images === ''" src="../static/image/storage_camera1_03.png" class="goodsImg">
+                  <img v-else :src="item.goods.images" style="width:230px;height:130px;">
                   </a>
                   <ul class="Attribute_list" style="max-width:140px;">
-                  <li>条码：{{item.goodsCode}} </li>
-                  <li>净度：{{item.cleanliness}} </li>
-                  <li>重量：{{item.weight}} </li>
-                  <li>标价：<span style="color:#fb366b;font-size:18px;"> {{item.tagPrice}}</span> </li>
+                  <li>条码：{{item.goods.goodsCode}} </li>
+                  <li>净度：{{item.goods.cleanliness}} </li>
+                  <li>重量：{{item.goods.weight}} </li>
+                  <li>标价：<span style="color:#fb366b;font-size:18px;"> {{item.goods.tagPrice}}</span> </li>
                   </ul>
                 </div> 
 
                 <div style="position:absolute;right:5px;bottom:0;"> 
                   <ul class="margin-bottom_20">    
                     <li style="margin-bottom:0;"><button type="button" style="background-color:#aaa; margin-right:5px;" class="button_style2"  
-                    @click="deletebill('${id}GoodsInfo','${shoppingId}')">删除</button>
+                    @click="deletebill(item.goods.shoppingId,index)">删除</button>
                     </li>
                   </ul> 
                 </div> 
@@ -91,19 +91,18 @@
             </div>
               
     
-            <div class="storage_body_line" v-if="item.number > 1">
+            <div class="storage_body_line" v-if="item.goods.number > 1">
               <span class="storage_body_line_title">数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量</span> 
               <span class="storage_body_line_info shuliang">
-              <input type="hidden" class="numberCount" value="${number}"/>
-              <input type="number" placeholder="请输入数量" class="number" maxlength="11"  @blur="numPriceSum()">
+              <input type="number" placeholder="请输入数量" v-model="tbgoodsStr[index].number" class="number" maxlength="11"  @blur="numPriceSum()">
               </span>
             </div>
 
-            <div v-if="item.tagPrice === '' && item.weight != ''">
+            <div v-if="item.goods.tagPrice === '' && item.goods.weight != ''">
               <div class="storage_body_line">
                 <span class="storage_body_line_title">商品实重</span> 
                 <span class="storage_body_line_info">
-                  <input class="realWeight" type="number" placeholder="请输入商品实重" value="${weight}" @blur="countspend()">
+                  <input class="realWeight" type="number" placeholder="请输入商品实重" v-model="tbgoodsStr[index].realWeight" @blur="countspend()">
                 </span>
               </div>
 				
@@ -111,62 +110,58 @@
                 <span class="storage_body_line_title">销售单价</span> 
                 <span class="storage_body_line_info">
                   <input class="quoteprice" v-model="item.quoteprice" type="hidden" />
-                  <input class="nowPrice" type="number" placeholder="今日牌价:item.quoteprice" maxlength="11"  v-modal="item.nowPrice" @blur="countspend()">
+                  <input class="nowPrice" type="number" :placeholder="'今日牌价:'+item.goods.quoteprice" maxlength="11"  v-model="tbgoodsStr[index].nowPrice" @blur="countspend()">
                 </span>
               </div> 
 				
               <div class="storage_body_line" v-if="isExcludeFee === true">
                 <span class="storage_body_line_title">工费单价</span> 
                 <span class="storage_body_line_info">
-                  <input class="fee" type="number" placeholder="请输入工费单价" maxlength="11" @blur="setFee()">
+                  <input class="fee" type="number" v-model="tbgoodsStr[index].fee" placeholder="请输入工费单价" maxlength="11" @blur="setFee()">
                 </span>
               </div>
 
               <div class="storage_body_line" v-if="isExcludeFee === true">
                 <span class="storage_body_line_title">工费</span> 
                 <span class="storage_body_line_info">
-                  <input class="feePrice" type="number" placeholder="请输入工费" maxlength="11"  v-model="item.fee" @blur="countspend()">
+                  <input class="feePrice" type="number" v-model="tbgoodsStr[index].feePrice" placeholder="请输入工费" maxlength="11"  @blur="countspend()">
                 </span>
               </div>
             </div>        
 
-            <div class="storage_body_line" v-if="item.tagPrice != '' && item.isFictitious != '1'">
+            <div class="storage_body_line" v-if="item.goods.tagPrice != '' && item.goods.isFictitious != '1'">
               <span class="storage_body_line_title">折扣(%)</span>
               <span class="storage_body_line_info">
-                <input type="hidden" class="tagPrice" value="${tagPrice}" />
-                <input class="discount" type="number" placeholder="标价*折扣=成交价格" maxlength="11" @blur="setDiscount(this)">
+                <input class="discount" type="number" v-model="tbgoodsStr[index].discount" placeholder="标价*折扣=成交价格" maxlength="11" @blur="setDiscount(this)">
               </span>
             </div>
 
             <div class="storage_body_line">
               <span class="storage_body_line_title">优惠金额</span> 
               <span class="storage_body_line_info">
-                <input class="differPrice" type="number" placeholder="请输入优惠金额" maxlength="11" @blur="setDifferPrice(this)">
+                <input class="differPrice" type="number" v-model="tbgoodsStr[index].differPrice" placeholder="请输入优惠金额" maxlength="11" @blur="setDifferPrice(this)">
               </span>
             </div>
 
             <div class="storage_body_line">
               <span class="storage_body_line_title">销售金额</span> 
               <span class="storage_body_line_info">
-                <input v-if="item.tagPrice != ''" type="hidden" class="noSuJin" />
-                <input class="goodsTagPrice" value="${tagPrice}" type="hidden" />
-                <input class="receMoney" value="${tagPrice}" type="hidden" />
-                <input class="receMon" type="hidden" />
-                <input class="strikePrice" type="number" placeholder="请输入销售金额" maxlength="11"  v-model="item.tagPrice" @blur="setTotalBill()">
+                <input v-if="item.goods.tagPrice != ''" type="hidden" class="noSuJin" />
+                <input class="strikePrice" type="number" placeholder="请输入销售金额" maxlength="11"  v-model="tbgoodsStr[index].strikePrice" @blur="setTotalBill()">
               </span>
             </div>
 
             <div class="storage_body_line" v-if="item.isReserve === '1'">
               <span class="storage_body_line_title">已收订金</span> 
               <span class="storage_body_line_info">
-                <input class="deposit" type="number" value="${deposit}" readonly="true" style="color:#fb366b;">
+                <input class="deposit" type="number" :value="item.goods.deposit" readonly="true" style="color:#fb366b;">
               </span>
             </div>
 
             <div class="storage_body_line">
               <span class="storage_body_line_title">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</span> 
               <span class="storage_body_line_info beizhu">
-                <input class="remarks" type="text" placeholder="请输入备注" maxlength="200" />         
+                <input class="remarks" v-model="tbgoodsStr[index].remarks" type="text" placeholder="请输入备注" maxlength="200" />         
               </span>
             </div>
 
@@ -175,10 +170,9 @@
               <span class="storage_img_line_info touxiang" style="width:50%;">
                 <div class="fileUpload btn btn-primary">
                   <span></span>
-                  <input id="uploadBtn${id}" type="file" class="upload"  name="myfiles"  @change="uploadGoodsPicture(item.id)"/>
-                  <input type="hidden" class="photo"/>
+                  <input type="file" class="upload"  name="myfiles"  @change="uploadGoodsPicture(item.id,index,$event)"/>
                 </div>
-                <img style="display:none" src="" alt=""  class="storage_img_line_img"/>	
+                <img v-show="item.photosrc != ''" :src="item.photosrc" alt=""  class="storage_img_line_img"/>	
               </span>
             </div>
 
@@ -194,7 +188,109 @@
             </div>
             </span> 											
           </div>						
-          <div id="xinzeng_huanhuo_List" style="background-color: #ececec;"></div>														
+          <div id="xinzeng_huanhuo_List" style="background-color: #ececec;">
+            
+            <div class="barterInfo" v-for="(item,index) in tbBarter" >  
+
+              <div class="storage_body_line bgc_opcity">
+                <span class="storage_body_line_title ">换货方式</span> 
+                  <span>
+                    <label v-for="barterMode in barterModeList">
+                      <input class="barterMode" type="radio" v-model="tbBarter[index].barterMode" :value="barterMode.value">{{barterMode.label}}
+                    </label> 
+                  </span>
+              </div>
+
+              <div class="storage_body_line bgc_opcity">
+                <span class="storage_body_line_title ">回收方式</span> 
+                  <span>
+                    <label v-for="isOneself in isOneselfList">
+                      <input class="isOneself" @click="setOldType(this)" type="radio" 
+                      v-model="tbBarter[index].isOneself" :value="isOneself.value">{{isOneself.label}}
+                    </label>
+                  </span>        
+              </div>
+
+              <div class="storage_body_line bgc_opcity oldmanufacturerDiv" v-if="isManufacturer">
+					      <span class="storage_body_line_title">品牌</span>
+                <span class="storage_body_line_info">
+                <input placeholder="点击选择品牌" maxlength="11" v-model="tbBarter[index].oldmanufacturer" @click="manufacturerVisible === !manufacturerVisible">
+                  <mt-popup v-model="manufacturerVisible" class="area-class" position="bottom">
+                    <div class="picker-toolbar">          
+                      <span class="mint-datetime-action mint-datetime-cancel" @click="cancleaddress">取消</span>          
+                      <span class="mint-datetime-action mint-datetime-confirm" @click="selectaddress">确定</span>         
+                    </div>
+                    <mt-picker :slots="manufacturerList" valueKey='manufacturer' @change="setManufacturer(index)"></mt-picker>
+                  </mt-popup>
+                </span> 
+				      </div>
+
+              <div class="storage_body_line bgc_opcity goodsCodeDiv">
+                <span class="storage_body_line_title">回收条码</span>
+                <span class="storage_body_line_info">
+                <input class="goodsCode" v-model="tbBarter[index].goodsCode" maxlength="255" style="z-index:9999"
+                  type="text" placeholder="请输入条码" >
+                  <!-- <mt-popup v-model="manufacturerVisible" class="area-class" position="bottom">
+                    <div class="picker-toolbar">          
+                      <span class="mint-datetime-action mint-datetime-cancel" @click="cancleaddress">取消</span>          
+                      <span class="mint-datetime-action mint-datetime-confirm" @click="selectaddress">确定</span>         
+                    </div>
+                    <mt-picker :slots="manufacturerList" valueKey='manufacturer' @change="setManufacturer(index)"></mt-picker>
+                  </mt-popup>                   -->
+                <img class="search" style="height: 35px;" src="../static/image/search.png" />
+                </span>
+              </div>
+				
+              <div class="storage_body_line bgc_opcity addold">
+                <span class="storage_body_line_title">旧料品类</span>
+                  <span class="storage_body_line_info">
+                    <button type="button" class="button_style2 button_jisuan" @click="">抵换</button>
+                  </span>                                       
+              </div>
+
+              <div class="storage_body_line bgc_opcity">
+                <span class="storage_body_line_title">总&ensp;重&ensp;量</span> 
+                <span class="storage_body_line_info">
+                  <input class="barterWeightNum" v-model="tbBarter[index].barterWeightNum" type="number" placeholder="请输入总重量" maxlength="11" >
+                </span>          
+              </div>
+                
+              <div class="storage_body_line bgc_opcity oldpriceTypeDiv">
+                <span class="storage_body_line_title">价格类型</span>
+			      	</div>
+
+              <div class="storage_body_line bgc_opcity certNoDiv">
+                <span class="storage_body_line_title">证&ensp;书&ensp;号</span> 
+                <span class="storage_body_line_info">
+                  <input class="certNo" type="text" placeholder="请输入证书号" v-model="tbBarter[index].certNo" maxlength="64">  
+                </span>                       
+              </div>
+				
+              <div class="storage_body_line bgc_opcity mainStoneDiv">
+                <span class="storage_body_line_title">主&ensp;石&ensp;重</span> 
+                <span class="storage_body_line_info">
+                  <input class="mainStone" v-model="tbBarter[index].mainStone"type="number" placeholder="请输入主石重" maxlength="64" >  
+                </span>                  
+              </div>
+
+              <div class="storage_body_line bgc_opcity colorDiv" style="display:none">
+                <span class="storage_body_line_title">颜&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色</span>
+              </div>
+
+              <div class="storage_body_line bgc_opcity cleanlinessDiv" style="display:none">
+                <span class="storage_body_line_title">净&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</span>
+              </div>
+
+              <div class="xinzeng_old_List"></div>
+
+              <div class="Info_title storage_body_line" >
+                <button style=" width: 100%;color: #fff;background-color: #c9c9c9;" type="button"  class="" 
+                @click="deletebarter(index)">删除<img class="botton_delete" src="../static/image/botton_delete.png" /></button>
+              </div>
+
+			      </div>
+
+          </div>														
 				</div> 
 
         <div class="storage_body_line_box">
@@ -227,7 +323,7 @@
         <div class="storage_body_line" style="border-top:1px solid #e5e5e5;">
           <span class="storage_body_line_title">总折扣</span> 
           <span class="storage_body_line_info "> 
-            <input type="number" placeholder="总折扣(%)" id="discountSum" o@blur="setDiscountSum()" class="input_button" maxlength="11">	
+            <input type="number" placeholder="总折扣(%)" id="discountSum" @blur="setDiscountSum()" class="input_button" maxlength="11">	
           </span>  									
         </div> 
 
@@ -278,7 +374,7 @@
       <mt-tab-container-item id="tab-container3">
         <div class="page-field">
           <mt-header fixed title="商品信息">
-            <router-link to="" @click.native="activeTab('tab-container3')" slot="left">
+            <router-link to="" @click.native="activeTab('tab-container2')" slot="left">
             <mt-button icon="back">返回</mt-button>
           </router-link>
           </mt-header>
@@ -286,7 +382,7 @@
 
         <div id="goodsTemplate">
 
-          <div class="storage_choose_place" v-for="item in goodsList">
+          <div class="storage_choose_place" v-for="item in goodsList" v-if="item.id === checkGoodsId">
 
             <div class="storage_body_line ">
               <span class="storage_body_line_title">品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span> <span
@@ -294,79 +390,79 @@
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">商品分类</span> <span
-                class="storage_body_line_info">${goodsTypeName} </span>
+                class="storage_body_line_info">{{item.goodsTypeName}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">证&nbsp;&nbsp;书&nbsp;&nbsp;号</span> <span
-                class="storage_body_line_info"> ${certNo}</span>
+                class="storage_body_line_info"> {{item.certNo}}</span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">货&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</span> <span
-                class="storage_body_line_info">${goodsCode} </span>
+                class="storage_body_line_info">{{item.goodsCode}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">金属材质</span> <span
-                class="storage_body_line_info">${materialMetal} </span>
+                class="storage_body_line_info">{{item.materialMetal}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">总重量</span> <span
-                class="storage_body_line_info"> ${weight}</span>
+                class="storage_body_line_info"> {{item.weight}}</span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费</span> <span
-                class="storage_body_line_info"> ${fee}</span>
+                class="storage_body_line_info"> {{item.ee}}</span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">精&nbsp;&nbsp;品&nbsp;&nbsp;费</span> <span
-                class="storage_body_line_info"> ${qualityCost}</span>
+                class="storage_body_line_info"> {{item.qualityCost}}</span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价</span> <span
-                class="storage_body_line_info">${tagPrice}</span>
+                class="storage_body_line_info">{{item.tagPrice}}</span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">主石大小</span> <span
-                class="storage_body_line_info">${mainStone} </span>
+                class="storage_body_line_info">{{item.mainStone}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">颜&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色</span> <span
-                class="storage_body_line_info">${color} </span>
+                class="storage_body_line_info">{{item.color}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">净&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</span> <span
-                class="storage_body_line_info">${cleanliness} </span>
+                class="storage_body_line_info">{{item.cleanliness}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">质&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地</span> <span
-                class="storage_body_line_info">${texture} </span>
+                class="storage_body_line_info">{{item.texture}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">形&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状</span> <span
-                class="storage_body_line_info">${shape} </span>
+                class="storage_body_line_info">{{item.shape}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">透&nbsp;&nbsp;明&nbsp;&nbsp;度</span> <span
-                class="storage_body_line_info">${transparency} </span>
+                class="storage_body_line_info">{{item.transparency}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">瑕&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;疵</span> <span
-                class="storage_body_line_info">${flaw} </span>
+                class="storage_body_line_info">{{item.flaw}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">光&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;泽</span> <span
-                class="storage_body_line_info">${gloss} </span>
+                class="storage_body_line_info">{{item.gloss}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">证&nbsp;&nbsp;书&nbsp;&nbsp;费</span> <span
-                class="storage_body_line_info">${certFee} </span>
+                class="storage_body_line_info">{{item.certFee}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">指&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;圈</span> <span
-                class="storage_body_line_info">${ringSize} </span>
+                class="storage_body_line_info">{{item.ringSize}} </span>
             </div>
             <div class="storage_body_line">
               <span class="storage_body_line_title">厂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家</span> <span
-                class="storage_body_line_info">${manufacturer} </span>
+                class="storage_body_line_info">{{item.manufacturer}} </span>
             </div>							
           </div>          
           
@@ -374,20 +470,24 @@
       </mt-tab-container-item>  
 
     </mt-tab-container>
+    <form enctype="multipart/form-data" method="post" name="fileinfo">
+    </form>
 
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import {Toast} from 'mint-ui'
+import {Toast, Picker} from 'mint-ui'
 import { validate } from 'utils/validate'
 
 Vue.component(Toast)
+Vue.component(Picker.name, Picker)
 
 export default {
   data () {
     return {
+      checkGoodsId: '',
       active: 'tab-container1',
       mobile: '',
       username: '',
@@ -405,11 +505,22 @@ export default {
       giveList: [],
       priceTypeList: [],
       isPriceType: true,
-      manufacturerList: [],
+      manufacturerList: [
+        {
+          flex: 1,
+          values: [],
+          className: 'manufacturer',
+          textAlign: 'center'
+        }
+      ],
+      manufacturerVisible: false,
       isManufacturer: true,
       remarksList: [],
       isRemarks: true,
-      isExcludeFee: true
+      isExcludeFee: true,
+      tbgoodsStr: [],
+      tbOld: [],
+      tbBarter: []
     }
   },
   created: function () {
@@ -429,8 +540,40 @@ export default {
         'goods/dicList',
         {},
         r => {
-          console.log(r.data)
           this.goodsList = r.data.goodsList
+          for (let goods of this.goodsList) {
+            this.tbgoodsStr.push({
+              goods: goods,
+              goodsId: goods.id,
+              receivable: '',
+              spendSum: '',
+              differPrice: '',
+              goodsTagPriceSum: '',
+              voucherNum: '',
+              voucherId: '',
+              barterMoneySum: '',
+              prestoreSum: '',
+              depositSum: '',
+              discountSum: '',
+              discountType: '',
+              totalBill: '',
+              orderRemarks: '',
+              discount: '',
+              strikePrice: goods.tagPrice,
+              receMoney: '',
+              goodsTagPrice: '',
+              priceType: '',
+              number: '',
+              nowPrice: goods.nowPrice,
+              fee: '',
+              feePrice: goods.fee,
+              remarks: '',
+              photo: '',
+              photosrc: '',
+              realWeight: goods.weight
+            })
+          }
+
           this.goodsTypeList = r.data.goodsTypeList
           this.barterModeList = r.data.barterModeList
           this.isOneselfList = r.data.isOneselfList
@@ -441,9 +584,9 @@ export default {
           if (validate.isEmpty(this.priceTypeList)) {
             this.isPriceType = false
           }
-          this.manufacturerList = r.data.manufacturer
-          if (validate.isEmpty(this.manufacturerList)) {
+          if (validate.isEmpty(r.data.manufacturer)) {
             this.isManufacturer = false
+            this.manufacturerList[0].values = r.data.manufacturer
           }
           this.remarksList = r.data.orderRemarks
           if (validate.isEmpty(this.remarksList)) {
@@ -454,13 +597,7 @@ export default {
             this.isExcludeFee = false
           }
 
-          if (!validate.isEmpty(r.data.goodsShopping.thumbHeadPic)) {
-            // 如果有会员头像，显示出来
-            this.headPic = r.data.goodsShopping.thumbHeadPic
-            this.isHeadPic = true
-          } else {
-            this.isHeadPic = false
-          }
+          this.setCusImager(r.data.goodsShopping.thumbHeadPic)
         },
         r => {
           if (r.code === '101') {
@@ -470,6 +607,15 @@ export default {
         }
       )
     },
+    setCusImager: function (headPic) {
+      if (!validate.isEmpty(headPic)) {
+        this.headPic = headPic
+        this.thumbHeadPic = headPic
+        this.isHeadPic = true
+      } else {
+        this.isHeadPic = false
+      }
+    },
     getcusInfo: function () {
       this.$axios.post(
         'customer/list',
@@ -478,12 +624,7 @@ export default {
         },
         r => {
           this.username = r.data.username
-          if (!validate.isEmpty(r.data.thumbHeadPic)) {
-            this.headPic = r.data.thumbHeadPic
-            this.isHeadPic = true
-          } else {
-            this.isHeadPic = false
-          }
+          this.setCusImager(r.data.thumbHeadPic)
         },
         r => {
           if (r.code === '101') {
@@ -524,7 +665,6 @@ export default {
           if (r.code === '101') {
             this.$router.push({path: '/login'})
           }
-          Toast(r)
         }
       )
     },
@@ -543,17 +683,51 @@ export default {
           if (r.code === '101') {
             this.$router.push({path: '/login'})
           }
+        }
+      )
+    },
+    uploadGoodsPicture: function (id, index, event) {
+      let file = event.target.files[0]
+      let param = new FormData()
+      param.append('myfiles', file)
+      param.append('id', id)
+
+      this.$axios.upload(
+        'goods/upload',
+        param,
+        r => {
+          this.tbgoodsStr[index].photo = r.data
+          this.tbgoodsStr[index].photosrc = URL.createObjectURL(file)
+        },
+        r => {
+          if (r.code === '101') {
+            this.$router.push({path: '/login'})
+          }
           Toast(r)
         }
       )
     },
-    uploadPicture: function () {
+    uploadPicture: function (event) {
+      let file = event.target.files[0]
+      let param = new FormData()
+      param.append('myfiles', file)
 
+      this.$axios.upload(
+        'user/upload',
+        param,
+        r => {
+          this.setCusImager(r.data.thumbSaveUrl)
+          this.headPic = URL.createObjectURL(file)
+        },
+        r => {
+          if (r.code === '101') {
+            this.$router.push({path: '/login'})
+          }
+          Toast(r)
+        }
+      )
     },
     numPriceSum: function () {
-
-    },
-    insertBarter: function () {
 
     },
     insertGive: function () {
@@ -566,6 +740,53 @@ export default {
 
     },
     sureOrder: function () {
+
+    },
+    insertBarter: function () {
+      this.tbBarter.push({
+        tbOld: [],
+        barterMode: '',
+        isOneself: '',
+        goodsCode: '',
+        barterWeightNum: '',
+        oldType: '',
+        oldTypeName: '',
+        oldpriceType: '',
+        oldmanufacturer: '',
+        certNo: '',
+        mainStone: '',
+        color: '',
+        cleanliness: ''
+      })
+    },
+    deletebarter: function (index) {
+      this.tbBarter.splice(index, 1)
+    },
+    deletebill: function (id, index) {
+      this.$axios.post(
+        'goods/deleteShopping',
+        {
+          id: id
+        },
+        r => {
+          if (this.tbgoodsStr.length === 1) {
+            this.$router.push({path: '/productList'})
+          }
+          this.tbgoodsStr.splice(index, 1)
+        },
+        r => {
+          if (r.code === '101') {
+            this.$router.push({path: '/login'})
+          }
+          Toast(r)
+        }
+      )
+    },
+    checkGoods: function (checkGoodsId) {
+      this.checkGoodsId = checkGoodsId
+      this.active = 'tab-container3'
+    },
+    setManufacturer (picker, values) {
 
     }
   }

@@ -11,9 +11,9 @@
       </div>	
 
       <div id="bill_List">
-        <div class=" billxinxi" v-for="item in goodsList" >
+        <div class=" billxinxi" v-for="(item,index) in goodsList" >
           <input type="hidden"  class="GoodsInfo"/>
-          <div class="col-md-12 margin-bottom-15" style="margin-bottom:15px;padding-bottom:15px;">
+          <div class="col-md-13 margin-bottom-15" style="margin-bottom:15px;padding-bottom:15px;">
             <span class="product_title">【{{item.goodsTypeName}}】{{item.goodsName}}
             </span>
             <div class="product">
@@ -32,7 +32,7 @@
               <div style="position:absolute;right:5px;bottom:0;">
                   <ul class="margin-bottom_20">
                     <li style="margin-bottom:0;">
-                        <button type="button" style="background-color:#aaa; margin-right:5px;" class="button_style2 " @click="deletebill(item.shoppingId,$index)">删除</button>
+                        <button type="button" style="background-color:#aaa; margin-right:5px;" class="button_style2 " @click="deletebill(item.shoppingId,index)">删除</button>
                     </li>
                   </ul>
               </div>
