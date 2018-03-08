@@ -214,7 +214,8 @@
               <div class="storage_body_line bgc_opcity oldmanufacturerDiv" v-if="isManufacturer">
 					      <span class="storage_body_line_title">品牌</span>
                 <span class="storage_body_line_info">
-                <input placeholder="点击选择品牌" maxlength="11" v-model="tbBarter[index].oldmanufacturer" @click="manufacturerVisible === !manufacturerVisible">
+                <input placeholder="点击选择品牌" maxlength="11" style="z-index:9999" type="text" 
+                v-model="tbBarter[index].oldmanufacturer" @click="manufacturerVisible === !manufacturerVisible">
                   <mt-popup v-model="manufacturerVisible" class="area-class" position="bottom">
                     <div class="picker-toolbar">          
                       <span class="mint-datetime-action mint-datetime-cancel" @click="cancleaddress">取消</span>          
@@ -244,7 +245,9 @@
               <div class="storage_body_line bgc_opcity addold">
                 <span class="storage_body_line_title">旧料品类</span>
                   <span class="storage_body_line_info">
-                    <button type="button" class="button_style2 button_jisuan" @click="">抵换</button>
+                    <div style="text-align: right;padding-right: 10px;">
+                    <button type="button" class="button_style2 button_jisuan" @click="insertOld(index)">抵换</button>
+                    </div>
                   </span>                                       
               </div>
 
@@ -284,7 +287,7 @@
               <div class="xinzeng_old_List"></div>
 
               <div class="Info_title storage_body_line" >
-                <button style=" width: 100%;color: #fff;background-color: #c9c9c9;" type="button"  class="" 
+                <button style=" width: 100%;color: #fff;display: block;border: 0;background-color: #c9c9c9;line-height:4.4rem" type="button"  class="" 
                 @click="deletebarter(index)">删除<img class="botton_delete" src="../static/image/botton_delete.png" /></button>
               </div>
 
@@ -741,6 +744,11 @@ export default {
     },
     sureOrder: function () {
 
+    },
+    insertOld: function (index) {
+      if (validate.isEmpty(this.tbBarter[index].barterWeightNum)) {
+        Toast('总重量不能为空')
+      }
     },
     insertBarter: function () {
       this.tbBarter.push({

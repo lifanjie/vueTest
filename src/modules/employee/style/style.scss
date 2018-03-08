@@ -157,6 +157,9 @@ input[type='text'],input[type='number'],input[type='button'],input[type='submit'
 
 button{
     border:0;
+    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
 }
 
 /*咨询*/
