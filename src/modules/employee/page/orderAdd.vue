@@ -460,7 +460,7 @@
         <div class="storage_body_line">
           <span class="storage_body_line_title">订单备注</span> 
           <span class="storage_body_line_info beizhu">
-            <input id="orderRemarks" type="text" placeholder="请输入订单备注" maxlength="120">
+            <input type="text" v-model="orderRemarks" placeholder="请输入订单备注" maxlength="120">
           </span>
         </div> 
 
@@ -486,7 +486,7 @@
               已收订金 <span id="depositSum" style="margin-left:15px;color:#fb366b;">{{reserveSum}}</span>
             </div>
             <div class="col-md-12" style="margin-bottom:0!important;">
-              换货金额 <span id="barterMoneySum" style="margin-left:15px;">{{barterMoneySum}}</span>	
+              换货金额 <span style="margin-left:15px;">{{barterMoneySum}}</span>	
             </div>
             <div class="col-md-12" style="margin-bottom:0!important;">
               折&ensp;旧&ensp;费 <span id="depreciationSum" style="margin-left:15px;">{{depreciationSum}}</span>
@@ -634,6 +634,7 @@ export default {
       mobile: '',
       username: '',
       headPic: '',
+      orderRemarks: '',
       discountSum: null,
       prestoreCount: 0,
       prestore: null,
@@ -738,18 +739,18 @@ export default {
       return Number(this.strikePriceSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
     },
     totalBill: function () {
-      return Number(this.receMoneySum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
+      return Number(this.spendSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
     },
     prestoreSum: function () {
       return 0 - validate.isEmpty(this.prestore) ? 0 : this.prestore
     },
-    receMoneySum: function () {
-      var receMoneySum = 0
+    spendSum: function () {
+      var spendSum = 0
       for (let item of this.tbgoodsStr) {
         let receMoney = validate.isEmpty(item.receMoney) ? 0 : item.receMoney
-        receMoneySum += Number(receMoney)
+        spendSum += Number(receMoney)
       }
-      return receMoneySum
+      return spendSum
     },
     differPriceSum: function () {
       var differPriceSum = 0
@@ -838,13 +839,6 @@ export default {
         deposit += Number(item['goods']['deposit'])
       }
       return deposit
-    },
-    spendSum: function () {
-      let receMoney = 0
-      for (let item of this.tbgoodsStr) {
-        receMoney += Number(item['receMoney'])
-      }
-      return receMoney
     }
   },
   created: function () {
@@ -874,7 +868,6 @@ export default {
               prestoreSum: 0,
               depositSum: 0,
               discountSum: null,
-              discountType: '',
               totalBill: 0,
               orderRemarks: '',
               discount: null,
@@ -1189,7 +1182,73 @@ export default {
       }
     },
     sureOrder: function () {
+      // 销售信息
+      for (let item of this.tbgoodsStr) {
+        item.spendSum = this.spendSum
+        item.receivable = this.receivable
+        item.barterMoneySum = Math.abs(this.barterMoneySum)
+        item.discountSum = this.discountSum
+        item.totalBill = this.totalBill
+        item.orderRemarks = this.orderRemarks
+      }
+      // 换货信息
+      for (let barter of this.tbBarter) {
+        let barterWeight = 0
+        barter.goodsCode = barter.goodsCode.toUpperCase()
+        barter.certNo = barter.certNo.toUpperCase()
+        for (let old of barter.tbOld) {
+          barterWeight = old.barterWeight
+          old.barterMode = barter.barterMode
+          old.isOneself = barter.isOneself
+          old.goodsCode = barter.goodsCode
+          old.oldType = barter.oldType
+          old.oldTypeName = barter.oldTypeName
+        }
 
+        if (barter.barterWeightNum !== barterWeight) {
+          Toast(`${barter.oldTypeName}的抵扣重量合计不等于总重量`)
+          return
+        }
+
+        if (barter.barterMode === '上柜' && validate.isEmpty(barter.goodsCode)) {
+          Toast(`${barter.oldTypeName}的回收条码不能为空`)
+          return
+        }
+      }
+      // 赠品信息
+      for (let give of this.giveList) {
+        if (validate.isEmpty(give.giveId)) {
+          Toast('请选择赠品')
+          return
+        }
+
+        if (validate.isEmpty(give.giveCount)) {
+          Toast('请输入赠品数量')
+          return
+        }
+      }
+
+      // 保存订单
+      this.$axios.post(
+        'orders/add',
+        {
+          mobile: this.mobile,
+          thumbHeadPic: this.thumbHeadPic,
+          username: this.username,
+          tbBarterStr: JSON.stringify(this.tbBarter),
+          tbgoodsStr: JSON.stringify(this.tbgoodsStr),
+          tbgiveStr: JSON.stringify(this.giveList)
+        },
+        r => {
+          Toast(r)
+        },
+        r => {
+          if (r.code === '101') {
+            this.$router.push({path: '/login'})
+          }
+          Toast(r)
+        }
+      )
     },
     insertGive: function () {
       this.giveList.push({
