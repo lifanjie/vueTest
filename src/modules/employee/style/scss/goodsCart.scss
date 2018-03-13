@@ -103,12 +103,15 @@
     #footer_box{position: fixed;bottom: 0;width: 100%;}
     #payNum{position:relative;}
     #orderNum{position:relative;}
-    .footer{text-align: center;display: -webkit-box;      
-    display: -moz-box;         
-    display: -ms-flexbox;      
-    display: -webkit-flex;     
-    display: flex;font-size:12px;background-color: #fff;height: 60px;padding-top: 12px; width: 100%;}
-     .footer>a{-webkit-box-flex: 1;   
+    .footer{
+        text-align: center;
+        display: -webkit-box;      
+        display: -moz-box;         
+        display: -ms-flexbox;      
+        display: -webkit-flex;     
+        display: flex;
+        font-size:12px;background-color: #fff;height: 60px;padding-top: 12px; width: 100%;}
+    .footer>a{-webkit-box-flex: 1;   
     -moz-box-flex: 1;        
     -webkit-flex: 1;        
     -ms-flex: 1;             
