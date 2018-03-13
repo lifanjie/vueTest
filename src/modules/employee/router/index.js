@@ -9,6 +9,7 @@ import more from '@/employee/page/more'
 import productDetail from '@/employee/page/productDetail'
 import reserve from '@/employee/page/reserve'
 import orderAdd from '@/employee/page/orderAdd'
+import storageSuccess from '@/employee/page/storageSuccess'
 
 Vue.use(Router)
 
@@ -49,6 +50,10 @@ export default new Router({
     {
       path: '/orderAdd',
       component: orderAdd
+    },
+    {
+      path: '/storageSuccess',
+      component: storageSuccess
     }
   ]
 })

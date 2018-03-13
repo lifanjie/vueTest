@@ -400,7 +400,7 @@
           </div>														
 				</div> 
 
-        <div class="storage_body_line_box" v-if="giveList.length > 0">
+        <div class="storage_body_line_box" v-if="giveLength > 0">
           <div class="storage_body_line">
             <span class="storage_body_line_title" >赠品记录</span> 
             <span class="storage_img_line_info zengpinNo">
@@ -420,7 +420,7 @@
                   <mt-picker :slots="selectGiveList" :visible-item-count="giveLength"
                   :show-toolbar="false" valueKey='giveName' @change="selectGive"></mt-picker>
                 </mt-popup>                     
-                <input class="giveName" type="text" readonly="true" @click="setGive" v-model="giveList[index].giveName" 
+                <input class="giveName" type="text" readonly="true" @click="setGive(index)" v-model="giveList[index].giveName" 
                 placeholder="点击选择赠品"  maxlength="11" >
               </span>                        
             </div>
@@ -635,9 +635,9 @@ export default {
       username: '',
       headPic: '',
       orderRemarks: '',
-      discountSum: null,
+      discountSum: '',
       prestoreCount: 0,
-      prestore: null,
+      prestore: '',
       thumbHeadPic: '',
       isHeadPic: false,
       voucherCode: '',
@@ -736,13 +736,16 @@ export default {
   },
   computed: {
     receivable: function () {
-      return Number(this.strikePriceSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
+      let receivable = Number(this.strikePriceSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
+      return receivable.toString()
     },
     totalBill: function () {
-      return Number(this.spendSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
+      let totalBill = Number(this.spendSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
+      return totalBill.toString()
     },
     prestoreSum: function () {
-      return 0 - validate.isEmpty(this.prestore) ? 0 : this.prestore
+      let prestoreSum = 0 - validate.isEmpty(this.prestore) ? 0 : this.prestore
+      return prestoreSum.toString()
     },
     spendSum: function () {
       var spendSum = 0
@@ -750,7 +753,7 @@ export default {
         let receMoney = validate.isEmpty(item.receMoney) ? 0 : item.receMoney
         spendSum += Number(receMoney)
       }
-      return spendSum
+      return spendSum.toString()
     },
     differPriceSum: function () {
       var differPriceSum = 0
@@ -758,7 +761,7 @@ export default {
         let differPrice = validate.isEmpty(item.differPrice) ? 0 : item.differPrice
         differPriceSum += Number(differPrice)
       }
-      return differPriceSum
+      return differPriceSum.toString()
     },
     depreciationSum: function () {
       let depreciation = 0
@@ -767,7 +770,7 @@ export default {
           depreciation += Number(old.depreciation)
         }
       }
-      return depreciation
+      return depreciation.toString()
     },
     barterMoneySum: function () {
       let barterMoneySum = 0
@@ -798,8 +801,8 @@ export default {
           barterMoneySum += old.barterMoney
         }
       }
-
-      return 0 - barterMoneySum
+      barterMoneySum = 0 - barterMoneySum
+      return barterMoneySum.toString()
     },
     strikePriceSum: function () {
       let strikePriceSum = 0
@@ -831,14 +834,14 @@ export default {
 
         strikePriceSum += Number(item.strikePrice)
       }
-      return strikePriceSum
+      return strikePriceSum.toString()
     },
     reserveSum: function () {
       let deposit = 0
       for (let item of this.tbgoodsStr) {
         deposit += Number(item['goods']['deposit'])
       }
-      return deposit
+      return deposit.toString()
     }
   },
   created: function () {
@@ -858,26 +861,25 @@ export default {
             this.tbgoodsStr.push({
               goods: goods,
               goodsId: goods.id,
-              numberCount: goods.number,
               receivable: 0,
               spendSum: 0,
-              differPrice: null,
+              differPrice: '',
               voucherNum: 0,
               voucherId: '',
               barterMoneySum: 0,
-              prestoreSum: 0,
+              prestoreSum: '',
               depositSum: 0,
-              discountSum: null,
+              discountSum: '',
               totalBill: 0,
               orderRemarks: '',
-              discount: null,
+              discount: '',
               tagPrice: goods.tagPrice,
               strikePrice: goods.tagPrice,
               receMoney: 0,
               priceType: '',
               number: 1,
               nowPrice: goods.nowPrice,
-              fee: null,
+              fee: '',
               feePrice: goods.fee,
               remarks: '',
               photo: '',
@@ -904,9 +906,9 @@ export default {
           this.isOneselfList = r.data.isOneselfList
           this.diamondColorList = r.data.diamondColorList
           this.cleanlinessList = r.data.cleanlinessList
-          this.giveList = r.data.giveList
-          this.selectGiveList[0].values = this.giveList
-          this.giveLength = this.giveList.length < 8 ? this.giveList.length : 8
+
+          this.selectGiveList[0].values = r.data.giveList
+          this.giveLength = r.data.giveList.length < 8 ? r.data.giveList.length : 8
 
           this.priceType = r.data.priceType
           if (validate.isEmpty(this.priceType)) {
@@ -985,8 +987,8 @@ export default {
       }
 
       this.active = 'tab-container2'
-      this.getSaleGoods()
-      this.getExchange()
+      this.getSaleGoods(this.mobile)
+      this.getExchange(this.mobile)
     },
     getSaleGoods: function (mobile) {
       this.$axios.post(
@@ -995,7 +997,7 @@ export default {
           mobile: this.mobile
         },
         r => {
-          this.saleGoodsList[0].values = r.dada
+          this.saleGoodsList[0].values = r.data
           this.saleGoodsLength = r.data.length < 8 ? r.data.length : 8
         },
         r => {
@@ -1014,7 +1016,7 @@ export default {
           couponType: 'cash'
         },
         r => {
-          this.exchangeList[0].values = r.dada
+          this.exchangeList[0].values = r.data
           this.exchangeLength = r.data.length < 8 ? r.data.length : 8
         },
         r => {
@@ -1122,6 +1124,7 @@ export default {
     selectGive: function (picker, values) {
       if (!validate.isEmpty(values[0])) {
         this.giveList[this.giveIndex].giveId = values[0]['id']
+        this.giveList[this.giveIndex].giveName = values[0]['giveName']
       }
     },
     setSaleGoods: function (index) {
@@ -1184,12 +1187,17 @@ export default {
     sureOrder: function () {
       // 销售信息
       for (let item of this.tbgoodsStr) {
+        item.number = item.number.toString()
         item.spendSum = this.spendSum
+        item.voucherNum = this.voucherNum.toString()
         item.receivable = this.receivable
-        item.barterMoneySum = Math.abs(this.barterMoneySum)
+        item.barterMoneySum = Math.abs(this.barterMoneySum).toString()
+        item.prestoreSum = this.prestoreSum
         item.discountSum = this.discountSum
         item.totalBill = this.totalBill
         item.orderRemarks = this.orderRemarks
+        item.strikePrice = item.strikePrice.toString()
+        item.receMoney = item.receMoney.toString()
       }
       // 换货信息
       for (let barter of this.tbBarter) {
@@ -1198,11 +1206,14 @@ export default {
         barter.certNo = barter.certNo.toUpperCase()
         for (let old of barter.tbOld) {
           barterWeight = old.barterWeight
+
           old.barterMode = barter.barterMode
           old.isOneself = barter.isOneself
           old.goodsCode = barter.goodsCode
           old.oldType = barter.oldType
           old.oldTypeName = barter.oldTypeName
+          old.barterMoney = old.barterMoney.toString()
+          old.oldPrice = old.oldPrice.toString()
         }
 
         if (barter.barterWeightNum !== barterWeight) {
@@ -1240,7 +1251,7 @@ export default {
           tbgiveStr: JSON.stringify(this.giveList)
         },
         r => {
-          Toast(r)
+          this.$router.push({path: '/storageSuccess'})
         },
         r => {
           if (r.code === '101') {
@@ -1270,21 +1281,21 @@ export default {
       }
 
       this.tbBarter[index].tbOld.push({
-        depreciation: null,
-        unitDepreciation: null,
+        depreciation: '',
+        unitDepreciation: '',
         barterGoodsCode: '',
         barterGoods: '',
         barterType: '',
-        barterMoney: null,
-        unitPrice: null,
+        barterMoney: '',
+        unitPrice: '',
         barterDiscount: '',
         barterIsWeightCal: '1',
-        barterWeight: null,
+        barterWeight: '',
         oldType: '',
         oldTypeName: '',
         oldIsWeightCal: '',
-        oldPrice: null,
-        feePrice: null,
+        oldPrice: '',
+        feePrice: '',
         barterRemarks: ''
       })
 
