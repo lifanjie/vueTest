@@ -220,7 +220,7 @@
                 <span class="storage_body_line_info">
                 <input placeholder="点击选择品牌" maxlength="11" style="z-index:9999" type="text" readonly="true"
                 v-model="tbBarter[index].oldmanufacturer" @click="setManufacturer(index)">
-                  <mt-popup v-model="manufacturerVisible" :visible-item-count="manufacturerLength" class="area-class" position="bottom">
+                  <mt-popup v-model="manufacturerVisible" :visible-item-count="manufacturerLength" class="area-class" >
                     <mt-picker :slots="manufacturerList" valueKey='manufacturer' @change="selectManufacturer"></mt-picker>
                   </mt-popup>
                 </span> 
@@ -231,7 +231,7 @@
                 <span class="storage_body_line_info">
                 <input class="goodsCode" v-model="tbBarter[index].goodsCode" maxlength="255" style="z-index:9999"
                   type="text" placeholder="请输入条码">
-                   <mt-popup v-model="saleGoodsVisible" class="area-class" position="bottom">
+                   <mt-popup v-model="saleGoodsVisible" class="area-class">
                     <mt-picker :slots="saleGoodsList" :visible-item-count="saleGoodsLength" 
                      valueKey='goodsCode' @change="selectSaleGoods"></mt-picker>
                   </mt-popup>                   
@@ -242,7 +242,7 @@
               <div class="storage_body_line bgc_opcity addold">
                 <span class="storage_body_line_title">旧料品类</span>
                 <span class="storage_body_line_info">
-                  <mt-popup v-model="oldTypeVisible" class="area-class" position="bottom">
+                  <mt-popup v-model="oldTypeVisible" class="area-class" >
                     <mt-picker :slots="oldTypeList" :visible-item-count="oldTypeLength" 
                     :show-toolbar="false" valueKey='goodsType' @change="selectOldType"></mt-picker>
                   </mt-popup>                     
@@ -267,7 +267,7 @@
                   <span class="storage_body_line_info">
                   <input class="oldpriceType" v-model="tbBarter[index].oldpriceType" maxlength="255" style="z-index:9999"
                     type="text"  @click="setOldPriceType(index)"  placeholder="请点击选择价格类型" >
-                    <mt-popup v-model="priceTypeVisible" class="area-class" position="bottom">
+                    <mt-popup v-model="priceTypeVisible" class="area-class" >
                       <mt-picker :visible-item-count="priceTypeLength" :slots="priceTypeList" valueKey='priceType' @change="selectOldPriceType"></mt-picker>
                     </mt-popup>                   
                   </span>                
@@ -304,7 +304,7 @@
                   <div class="storage_body_line bgc_opcity addold">
                     <span class="storage_body_line_title">换货商品</span>
                     <span class="storage_body_line_info">
-                      <mt-popup v-model="barterGoodsVisible" class="area-class" position="bottom">
+                      <mt-popup v-model="barterGoodsVisible" class="area-class" >
                         <mt-picker :slots="barterGoodsList" :visible-item-count="barterGoodsLength"
                          :show-toolbar="false" valueKey='barterGoodsCode' @change="selectBarterGoods"></mt-picker>
                       </mt-popup>                     
@@ -391,7 +391,7 @@
               </div>
 
               <div class="Info_title storage_body_line" >
-                <button style=" width: 100%;color: #fff;display: block;border: 0;background-color: #c9c9c9;line-height:4.4rem" type="button"  class="" 
+                <button style=" width: 100%;color: #fff;background-color: #c9c9c9;font: inherit;" type="button"  class="" 
                 @click="deletebarter(index)">删除<img class="botton_delete" src="../static/image/botton_delete.png" /></button>
               </div>
 
@@ -416,7 +416,7 @@
             <div class="storage_body_line bgc_opcity">
               <span class="storage_body_line_title">赠&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;品</span> 
               <span class="storage_body_line_info">
-                <mt-popup v-model="giveVisible" class="area-class" position="bottom">
+                <mt-popup v-model="giveVisible" class="area-class">
                   <mt-picker :slots="selectGiveList" :visible-item-count="giveLength"
                   :show-toolbar="false" valueKey='giveName' @change="selectGive"></mt-picker>
                 </mt-popup>                     
@@ -431,7 +431,7 @@
             </div>
 
             <div class="Info_title storage_body_line" >
-              <button style=" width: 100%;color: #fff;display: block;border: 0;background-color: #c9c9c9;line-height:4.4rem" type="button"  class="" @click="deleteGive(index)">删除
+              <button style=" width: 100%;color: #fff;background-color: #c9c9c9;font: inherit;" type="button"  class="" @click="deleteGive(index)">删除
               <img class="botton_delete" src="../static/image/botton_delete.png" /></button>
             </div>
             </div>
@@ -444,7 +444,7 @@
           <span class="storage_body_line_info">
           <input placeholder="点击选择代金券" maxlength="11" style="z-index:9999" type="text" readonly="true"
           v-model="voucherCode" @click="exchangeVisible = true">
-            <mt-popup v-model="exchangeVisible" class="area-class" :visible-item-count="exchangeLength" position="bottom">
+            <mt-popup v-model="exchangeVisible" class="area-class" :visible-item-count="exchangeLength" >
               <mt-picker :slots="exchangeList" valueKey='manufacturer' @change="selectExchange"></mt-picker>
             </mt-popup>
           </span> 
@@ -479,7 +479,7 @@
             <div class="col-md-12" style="margin-bottom:0!important;" v-show="voucherNum > 0">
               现&ensp;金&ensp;劵 <span style="margin-left:15px;">{{voucherNum}}</span>
             </div>
-            <div class="col-md-12"  style="margin-bottom:0!important;" v-show="prestoreSum > 0">
+            <div class="col-md-12"  style="margin-bottom:0!important;"  v-show="prestoreCount > 0">
               预存金额 <span style="margin-left:15px;">{{prestoreSum}}</span>
             </div>
             <div class="col-md-12" id="depositDiv" v-if="reserveSum > 0" style="margin-bottom:0!important;">
@@ -736,16 +736,13 @@ export default {
   },
   computed: {
     receivable: function () {
-      let receivable = Number(this.strikePriceSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
-      return receivable.toString()
+      return Number(this.strikePriceSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
     },
     totalBill: function () {
-      let totalBill = Number(this.spendSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
-      return totalBill.toString()
+      return Number(this.spendSum) + Number(this.barterMoneySum) + Number(this.depreciationSum) + Number(this.voucherNum) + Number(this.prestoreSum)
     },
     prestoreSum: function () {
-      let prestoreSum = 0 - validate.isEmpty(this.prestore) ? 0 : this.prestore
-      return prestoreSum.toString()
+      return 0 - (validate.isEmpty(this.prestore) ? 0 : this.prestore)
     },
     spendSum: function () {
       var spendSum = 0
@@ -753,7 +750,7 @@ export default {
         let receMoney = validate.isEmpty(item.receMoney) ? 0 : item.receMoney
         spendSum += Number(receMoney)
       }
-      return spendSum.toString()
+      return spendSum
     },
     differPriceSum: function () {
       var differPriceSum = 0
@@ -761,7 +758,7 @@ export default {
         let differPrice = validate.isEmpty(item.differPrice) ? 0 : item.differPrice
         differPriceSum += Number(differPrice)
       }
-      return differPriceSum.toString()
+      return differPriceSum
     },
     depreciationSum: function () {
       let depreciation = 0
@@ -770,7 +767,7 @@ export default {
           depreciation += Number(old.depreciation)
         }
       }
-      return depreciation.toString()
+      return depreciation
     },
     barterMoneySum: function () {
       let barterMoneySum = 0
@@ -790,19 +787,23 @@ export default {
             oldPrice = Math.round(unitPrice * barterWeight)
             old.oldPrice = oldPrice
             // 折旧费
-            old.depreciation = Math.round(unitDepreciation * barterWeight)
+            if (unitDepreciation !== 0 && barterWeight !== 0) {
+              old.depreciation = Math.round(unitDepreciation * barterWeight)
+            } else {
+              old.depreciation = ''
+            }
 
             if (barterWeight === 0 && barterMoney > 0 && unitPrice > 0) {
               // old.barterWeight = number.accDiv(barterMoney, unitPrice).toFixed(2)
             }
           }
-
-          old.barterMoney = Math.round(oldPrice * barterDiscount / 100 + feePrice)
-          barterMoneySum += old.barterMoney
+          let barterMoney2 = Math.round(oldPrice * barterDiscount / 100 + feePrice)
+          old.barterMoney = barterMoney2 === 0 ? '' : barterMoney2
+          barterMoneySum += barterMoney2
         }
       }
       barterMoneySum = 0 - barterMoneySum
-      return barterMoneySum.toString()
+      return barterMoneySum
     },
     strikePriceSum: function () {
       let strikePriceSum = 0
@@ -834,14 +835,14 @@ export default {
 
         strikePriceSum += Number(item.strikePrice)
       }
-      return strikePriceSum.toString()
+      return strikePriceSum
     },
     reserveSum: function () {
       let deposit = 0
       for (let item of this.tbgoodsStr) {
         deposit += Number(item['goods']['deposit'])
       }
-      return deposit.toString()
+      return deposit
     }
   },
   created: function () {
@@ -1123,7 +1124,7 @@ export default {
     },
     selectGive: function (picker, values) {
       if (!validate.isEmpty(values[0])) {
-        this.giveList[this.giveIndex].giveId = values[0]['id']
+        this.giveList[this.giveIndex].giveId = values[0]['giveId']
         this.giveList[this.giveIndex].giveName = values[0]['giveName']
       }
     },
@@ -1188,13 +1189,13 @@ export default {
       // 销售信息
       for (let item of this.tbgoodsStr) {
         item.number = item.number.toString()
-        item.spendSum = this.spendSum
+        item.spendSum = this.spendSum.toString()
         item.voucherNum = this.voucherNum.toString()
-        item.receivable = this.receivable
+        item.receivable = this.receivable.toString()
         item.barterMoneySum = Math.abs(this.barterMoneySum).toString()
-        item.prestoreSum = this.prestoreSum
-        item.discountSum = this.discountSum
-        item.totalBill = this.totalBill
+        item.prestoreSum = this.prestoreSum.toString()
+        item.discountSum = this.discountSum.toString()
+        item.totalBill = this.totalBill.toString()
         item.orderRemarks = this.orderRemarks
         item.strikePrice = item.strikePrice.toString()
         item.receMoney = item.receMoney.toString()
@@ -1205,7 +1206,7 @@ export default {
         barter.goodsCode = barter.goodsCode.toUpperCase()
         barter.certNo = barter.certNo.toUpperCase()
         for (let old of barter.tbOld) {
-          barterWeight = old.barterWeight
+          barterWeight = old.barterWeight.toString()
 
           old.barterMode = barter.barterMode
           old.isOneself = barter.isOneself
@@ -1213,6 +1214,7 @@ export default {
           old.oldType = barter.oldType
           old.oldTypeName = barter.oldTypeName
           old.barterMoney = old.barterMoney.toString()
+          old.depreciation = old.depreciation.toString()
           old.oldPrice = old.oldPrice.toString()
         }
 
