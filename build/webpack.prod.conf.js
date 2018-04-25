@@ -7,6 +7,8 @@
 // 4.配置webpack插件
 // 5.gzip模式下的webpack插件配置
 // 6.webpack-bundle分析
+//引入多页面支持
+const multipageHelper = require('./multipage-helper')
 const path = require('path')
 const utils = require('./utils')
 const webpack = require('webpack')

@@ -372,7 +372,7 @@ li {
 .Attribute_list>li{margin-bottom:0.3rem;}
 .storage_img_line_info{ width: 70%;}
 .storage_body_line_info{ width: 70%;}
-.storage_body_line{z-index:999;}
+// .storage_body_line{z-index:999;}
 /*select��������*/
     .select_value_box{
     /* text-align: center; */ 
@@ -468,7 +468,11 @@ input {color:#000;width:auto;}
 label{    font-weight: normal;margin-right: 20px;font-size: 18px;}
 button{    outline: none;}
 .fileUpload{margin:0;}
-.storage_img_line{padding:10px 0;position: relative;z-index: 999;}
+.storage_img_line{
+	padding:10px 0;
+	position: relative;
+	// z-index: 999;
+}
 .product{padding: 15px 0 ;margin-left: 15px;margin-right: 15px;}
 .page_hd{height: 50px;line-height: 50px;margin-bottom: 15px;}
 .page_back{ width: 50px;height: 50px;}

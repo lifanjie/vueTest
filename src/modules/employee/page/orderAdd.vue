@@ -1347,6 +1347,7 @@ export default {
           id: id
         },
         r => {
+          this.$store.commit('addOrders', -1)
           if (this.tbgoodsStr.length === 1) {
             this.$router.push({path: '/productList'})
           }

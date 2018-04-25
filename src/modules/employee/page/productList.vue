@@ -40,29 +40,22 @@
         </div>
       </div>
     </div>
-
-    <myFooter ref="myFooter"></myFooter>
-
   </div>
 
   
 </template>
-
-
 
 <script>
 import Vue from 'vue'
 import { validate } from 'utils/validate'
 import { commonUtil } from 'utils/commonUtil'
 import {focus} from 'utils/directives'
-import myFooter from '../components/footer'
 import { Toast } from 'mint-ui'
 
 Vue.component(Toast)
 Vue.use(focus)
 
 export default {
-  components: {myFooter},
   data () {
     return {
       goodsType: {goodsType: '全部'},
@@ -139,7 +132,6 @@ export default {
       )
     },
     addShopping: function (goodsId) {
-      this.$refs.myFooter.loadShopping()
       commonUtil.indicatorOpen('添加到购物车...')
       this.$axios.post(
         'goods/addShopping',
@@ -147,7 +139,7 @@ export default {
           goodsId: goodsId
         },
         r => {
-          this.$refs.myFooter.addCount()
+          this.$store.commit('addOrders', 1)
         },
         r => {
           Toast(r)

@@ -46,13 +46,12 @@
     <div class="con_footer" >
       <a class="submit_button"><button type="button"  class="button_style2 " @click="sureOrder()" >提交订单</button></a>
 		</div> 
-    <myFooter ref="myFooter"></myFooter>
+
 
   </div>
 </template>
 
 <script>
-import myFooter from '../components/footer'
 import Vue from 'vue'
 import { Toast } from 'mint-ui'
 Vue.component(Toast)
@@ -63,7 +62,6 @@ export default {
       goodsList: []
     }
   },
-  components: {myFooter},
   created: function () {
     this.loadOrder()
   },
@@ -90,8 +88,11 @@ export default {
           id: id
         },
         r => {
-          this.$refs.myFooter.minusCount()
+          this.$store.commit('addOrders', -1)
           this.goodsList.splice(index, 1)
+          if (this.goodsList.length === 0) {
+            this.$router.push({path: '/productList'})
+          }
         },
         r => {
           if (r.code === '101') {

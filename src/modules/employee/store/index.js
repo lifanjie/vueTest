@@ -1,21 +1,31 @@
 // 我们组装模块并导出 store 的地方
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from 'vuex-persistedstate' // 将vuex的state保存在localstorage
 
 Vue.use(Vuex)
 
 const state = {
-  orgId: '',
-  openId: ''
+  pays: 0,
+  orders: 0
 }
 
 const mutations = {
-  setOrgId (state, orgId) {
-    state.orgId = orgId
+  setPays (state, pays) {
+    state.pays = pays
+    localStorage.setItem('pays', state.pays)
   },
-  setOpenId (state, openId) {
-    state.openId = openId
+  addPays (state, pays) {
+    state.pays += pays
+    localStorage.setItem('pays', state.pays)
+  },
+  setOrders (state, orders) {
+    state.orders = orders
+    localStorage.setItem('orders', state.orders)
+  },
+  addOrders (state, orders) {
+    state.orders += orders
+    localStorage.setItem('orders', state.orders)
   }
 }
 

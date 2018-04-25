@@ -8,14 +8,14 @@
         </router-link>
         <a @click="showPay()">
         <div class="nav_icon" id="payNum">
-          <span class="tab-sub J-count" v-show="isOrder">{{order}}</span>
+          <span class="tab-sub J-count" v-show="payNum > 0">{{payNum}}</span>
           <img src="../static/image/icon_b (2).png"   />
         </div>
         <span class="nav_name">支付</span>
         </a>
         <a  @click="showOrder()"> 
         <div class="nav_icon" id="orderNum">
-          <span class="tab-sub J-count" v-show="isCount">{{count}}</span>
+          <span class="tab-sub J-count" v-show="orderNum > 0">{{orderNum}}</span>
           <img src="../static/image/icon_b (3).png"  />
         </div>
         <span class="nav_name">订单</span>
@@ -31,108 +31,63 @@
 
 <script>
 import Vue from 'vue'
-import { validate } from 'utils/validate'
 import { Toast } from 'mint-ui'
 
 Vue.component(Toast)
 
 export default {
-  data () {
-    return {
-      count: '',
-      isCount: false,
-      order: '',
-      isOrder: false
+  computed: {
+    payNum: function () {
+      return this.$store.state.pays
+    },
+    orderNum: function () {
+      return this.$store.state.orders
     }
   },
   created: function () {
-    this.loadOrder()
-    this.loadShopping()
+    this.loadPays()
+    this.loadOrders()
   },
   methods: {
-    loadShopping: function () {
+    loadOrders: function () {
       this.$axios.post(
         'goods/shopping/listCount',
         {},
         r => {
-          localStorage.setItem('shoppingCount', r.data)
-          this.showCount()
+          let orders = Number(r.data)
+          this.$store.commit('setOrders', orders)
         },
         r => {
           if (r.code === '101') {
             this.$router.push({path: '/login'})
           }
-          localStorage.setItem('shoppingCount', '')
-          this.showCount()
         }
       )
     },
-    loadOrder: function () {
+    loadPays: function () {
       this.$axios.post(
         'goods/order/listCount',
         {},
         r => {
-          localStorage.setItem('orderCount', r.data)
-          this.showCount()
+          let pays = Number(r.data)
+          this.$store.commit('setPays', pays)
         },
         r => {
           if (r.code === '101') {
             this.$router.push({path: '/login'})
           }
-          localStorage.setItem('orderCount', '')
-          this.showCount()
         }
       )
     },
-    addCount: function () {
-      let shoppingCount = localStorage.getItem('shoppingCount')
-      if (validate.isEmpty(shoppingCount)) {
-        localStorage.setItem('shoppingCount', '1')
-      } else if (!Number.isNaN(shoppingCount)) {
-        shoppingCount = Number(shoppingCount) + 1
-        localStorage.setItem('shoppingCount', shoppingCount)
-      }
-      this.showCount()
-    },
-    minusCount: function () {
-      let shoppingCount = localStorage.getItem('shoppingCount')
-      if (!Number.isNaN(shoppingCount) && shoppingCount !== '0') {
-        shoppingCount = Number(shoppingCount) - 1
-        localStorage.setItem('shoppingCount', shoppingCount)
-      }
-      this.showCount()
-
-      // 如果清空了购物车，则返回首页
-      if (!this.isCount) {
-        this.$router.push({path: '/productList'})
-      }
-    },
-    showCount: function () {
-      let shoppingCount = localStorage.getItem('shoppingCount')
-      if (!validate.isEmpty(shoppingCount) && shoppingCount !== '0') {
-        this.count = shoppingCount
-        this.isCount = true
-      } else {
-        this.isCount = false
-      }
-
-      let orderCount = localStorage.getItem('orderCount')
-      if (!validate.isEmpty(orderCount) && orderCount !== '0') {
-        this.order = orderCount
-        this.isOrder = true
-      } else {
-        this.isOrder = false
-      }
-    },
     showOrder: function () {
-      if (this.isCount) {
+      if (this.orderNum > 0) {
         this.$router.push({path: '/goodsCart'})
       } else {
         Toast('购物车是空的')
       }
     },
     showPay: function () {
-      if (this.isOrder) {
+      if (this.payNum > 0) {
         this.$router.push({path: '/orderList'})
       } else {
         Toast('没有未支付订单')
