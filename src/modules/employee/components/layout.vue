@@ -2,7 +2,7 @@
   <div>
     <router-view></router-view>
     <keep-alive>
-    <myFooter v-show="isFooter"></myFooter>
+    <myFooter></myFooter>
     </keep-alive> 
   </div>
 </template>
@@ -20,7 +20,9 @@ export default {
     }
   },
   created: function () {
+    this.$nextTick(function () {
 
+    })
   }
 }
 </script>

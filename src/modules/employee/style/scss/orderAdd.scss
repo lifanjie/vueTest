@@ -370,8 +370,8 @@ li {
     border-bottom: 2px #999 solid;
 }
 .Attribute_list>li{margin-bottom:0.3rem;}
-.storage_img_line_info{ width: 70%;}
-.storage_body_line_info{ width: 70%;}
+ .storage_img_line_info{ width: 45%;}
+ .storage_body_line_info{ width: 55%;}
 // .storage_body_line{z-index:999;}
 /*select��������*/
     .select_value_box{
@@ -429,6 +429,7 @@ label{width:60px;color:#aaa;font-weight: normal;}
 }
 
  @media screen and (min-width: 760px){
+
 .button_style2{
 	display: inline-block;
 	-webkit-border-radius: 2px;
@@ -555,12 +556,12 @@ a.exchange_buy{width: 160px;height: 40px;line-height: 40px;border-radius: 20px;l
 }
 .storage_body_line_info{
 	display: inline-block;
-	width: 70%;
+	width: 55%;
 	color: #b3b3b3;
 }
 .storage_img_line_info{
 	display: inline-block;
-	width: 70%;
+	width: 45%;
 	color: #b3b3b3;
 }
 .storage_img_line_upload{
@@ -591,3 +592,12 @@ a.exchange_buy{width: 160px;height: 40px;line-height: 40px;border-radius: 20px;l
   margin-right: auto;
   margin-left: auto;
 }
+
+// .mint-popup area-class {
+// 	width: 50%;
+// }
+
+// .popupButton{
+// 	background-color: #26a2ff;
+// 	color: #fff;
+// }

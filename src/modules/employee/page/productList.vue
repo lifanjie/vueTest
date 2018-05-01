@@ -158,9 +158,6 @@ export default {
 #productList {
    font-family: "Microsoft YaHei";
    position: absolute;
-   width: 100%;
-   height: 100%;
-	 background-color: #f3f3f3;
 	 padding-bottom: 90px;
 }
 </style>

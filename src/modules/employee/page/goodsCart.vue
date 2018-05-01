@@ -7,6 +7,7 @@
           <router-link to="/productList"  slot="left">
             <mt-button icon="back">返回</mt-button>
           </router-link>
+          <mt-button @click="sureOrder()" slot="right">提交</mt-button>
         </mt-header>
       </div>	
 
@@ -43,9 +44,6 @@
  
 		</div>
    
-    <div class="con_footer" >
-      <a class="submit_button"><button type="button"  class="button_style2 " @click="sureOrder()" >提交订单</button></a>
-		</div> 
 
 
   </div>
@@ -110,14 +108,6 @@ export default {
 </script>
 
 <style lang="scss">
-#goodsCart {
-   font-family: "Microsoft YaHei";
-   position: absolute;
-   width: 100%;
-   height: 100%;
-	 background-color: #f3f3f3;
-	 padding-bottom: 90px;
-}
 </style>
 
 <style lang="scss" scoped>

@@ -13,13 +13,15 @@ const vueLoaderConfig = require('./vue-loader.conf')
 //引入多页面支持
 const multipageHelper = require('./multipage-helper')
 
+const vuxLoader = require('vux-loader')
+
 // 获取绝对路径
 //“__dirname”是node.js中的一个全局变量，它指向当前执行脚本所在的目录
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-module.exports = {
+const webpackConfig = {
   entry: multipageHelper.getEntries(), //设置入口集合
   // webpack入口文件
   // entry: {
@@ -38,7 +40,7 @@ module.exports = {
   },
   // 模块resolve的规则
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json','.less'],
     // 别名，方便引用模块，例如有了别名之后，
     // import Vue from 'vue/dist/vue.common.js'可以写成 import Vue from 'vue'
     alias: {
@@ -108,3 +110,5 @@ module.exports = {
     ]
   }
 }
+
+module.exports = vuxLoader.merge(webpackConfig, { plugins: ['vux-ui'] }) 

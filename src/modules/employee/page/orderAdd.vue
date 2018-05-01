@@ -165,8 +165,9 @@
               <span class="storage_body_line_title">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</span> 
               <span class="storage_body_line_info beizhu">
                 <input class="remarks" v-model="tbgoodsStr[index].remarks" type="text" placeholder="请输入备注" maxlength="200" />  
-                <img class="search" style="height: 35px;vertical-align: middle;" v-if="isRemarks" src="../static/image/search.png"/>       
+                <popup-picker :show.sync="goodsremarksVisible" :data="selremarksList"  @on-change="selGoodsRemarks"  value-text-align="left"></popup-picker>                       
               </span>
+              <img class="search" style="height: 35px;vertical-align: middle;" @click="setGoodsRemarks(index)"  v-if="isRemarks" src="../static/image/search.png"/> 
             </div>
 
             <div class="storage_img_line" >
@@ -217,39 +218,27 @@
 
               <div class="storage_body_line bgc_opcity" v-if="isManufacturer">
 					      <span class="storage_body_line_title">品牌</span>
-                <span class="storage_body_line_info">
-                <input placeholder="点击选择品牌" maxlength="11" style="z-index:9999" type="text" readonly="true"
-                v-model="tbBarter[index].oldmanufacturer" @click="setManufacturer(index)">
-                  <mt-popup v-model="manufacturerVisible" :visible-item-count="manufacturerLength" class="area-class" >
-                    <mt-picker :slots="manufacturerList" valueKey='manufacturer' @change="selectManufacturer"></mt-picker>
-                  </mt-popup>
+                <span class="storage_body_line_info" @click="setManufacturer(index)">
+                  <popup-picker placeholder="请选择品牌" :data="selmanufacturerList" v-model="tbBarter[index].seloldmanufacturer"  @on-change="selectManufacturer"  value-text-align="left"></popup-picker>                    
                 </span> 
 				      </div>
 
               <div class="storage_body_line bgc_opcity goodsCodeDiv">
                 <span class="storage_body_line_title">回收条码</span>
-                <span class="storage_body_line_info">
+                <span class="storage_body_line_info beizhu">
                 <input class="goodsCode" v-model="tbBarter[index].goodsCode" maxlength="255" style="z-index:9999"
-                  type="text" placeholder="请输入条码">
-                   <mt-popup v-model="saleGoodsVisible" class="area-class">
-                    <mt-picker :slots="saleGoodsList" :visible-item-count="saleGoodsLength" 
-                     valueKey='goodsCode' @change="selectSaleGoods"></mt-picker>
-                  </mt-popup>                   
-                <img class="search" style="height: 35px;vertical-align: middle;" @click="setSaleGoods(index)" src="../static/image/search.png" />
+                type="text" placeholder="请输入条码">
+                <popup-picker :show.sync="saleGoodsVisible" :data="selsaleGoodsList"  @on-change="selectSaleGoods"  value-text-align="left"></popup-picker>               
                 </span>
+                <img class="search" style="height: 35px;vertical-align: middle;" @click="setSaleGoods(index)" src="../static/image/search.png" />
               </div>
 				
               <div class="storage_body_line bgc_opcity addold">
                 <span class="storage_body_line_title">旧料品类</span>
-                <span class="storage_body_line_info">
-                  <mt-popup v-model="oldTypeVisible" class="area-class" >
-                    <mt-picker :slots="oldTypeList" :visible-item-count="oldTypeLength" 
-                    :show-toolbar="false" valueKey='goodsType' @change="selectOldType"></mt-picker>
-                  </mt-popup>                     
-                  <input class="barterWeight" type="text" readonly="true" @click="setOldType(index)" v-model="tbBarter[index].oldTypeName" 
-                  placeholder="请输入抵扣重量"  maxlength="11" @blur="">
-                  <button type="button" class="button_style2 button_jisuan" @click="insertOld(index)">抵换</button>         
-                </span>                                       
+                <span class="storage_body_line_info" @click="setOldType(index)">
+                  <popup-picker placeholder="请选择旧料品类" :data="seloldTypeList" v-model="tbBarter[index].seloldType"  @on-change="selectOldType"  value-text-align="left"></popup-picker>                    
+                </span>  
+                <button type="button" class="button_style2 button_jisuan" @click="insertOld(index)">抵换</button>                                      
               </div>
 
      
@@ -257,6 +246,7 @@
                 <span class="storage_body_line_title">总&ensp;重&ensp;量</span> 
                 <span class="storage_body_line_info">
                   <input class="barterWeightNum" v-model="tbBarter[index].barterWeightNum" type="number" placeholder="请输入总重量" maxlength="11" >
+                  
                 </span>          
               </div>
 
@@ -264,12 +254,8 @@
 
                 <div class="storage_body_line bgc_opcity" v-show="isPriceType">
                   <span class="storage_body_line_title">价格类型</span>
-                  <span class="storage_body_line_info">
-                  <input class="oldpriceType" v-model="tbBarter[index].oldpriceType" maxlength="255" style="z-index:9999"
-                    type="text"  @click="setOldPriceType(index)"  placeholder="请点击选择价格类型" >
-                    <mt-popup v-model="priceTypeVisible" class="area-class" >
-                      <mt-picker :visible-item-count="priceTypeLength" :slots="priceTypeList" valueKey='priceType' @change="selectOldPriceType"></mt-picker>
-                    </mt-popup>                   
+                  <span class="storage_body_line_info" @click="setOldPriceType(index)">
+                  <popup-picker placeholder="请选择价格类型" :data="selpriceTypeList" v-model="tbBarter[index].seloldpriceType"  @on-change="selectOldPriceType"  value-text-align="left"></popup-picker>                                       
                   </span>                
                 </div>
 
@@ -303,15 +289,11 @@
 
                   <div class="storage_body_line bgc_opcity addold">
                     <span class="storage_body_line_title">换货商品</span>
-                    <span class="storage_body_line_info">
-                      <mt-popup v-model="barterGoodsVisible" class="area-class" >
-                        <mt-picker :slots="barterGoodsList" :visible-item-count="barterGoodsLength"
-                         :show-toolbar="false" valueKey='barterGoodsCode' @change="selectBarterGoods"></mt-picker>
-                      </mt-popup>                     
-                      <input class="barterWeight" type="text" readonly="true" @click="setBarterGoods(index,index2)" 
-                      v-model="tbBarter[index].tbOld[index2].barterGoodsCode" placeholder="请输入抵扣重量"  maxlength="11">                      
-                      <button type="button" class="button_style2 button_jisuan" @click="deleteOld(index,index2)">删除</button>
+                    <span class="storage_body_line_info" @click="setBarterGoods(index,index2)">
+                      <popup-picker placeholder="请选择换货商品" :data="selbarterGoodsList" 
+                      v-model="tbBarter[index].tbOld[index2].selbarterGoods"  @on-change="selectBarterGoods"  value-text-align="left"></popup-picker>       
                     </span>
+                    <button type="button" class="button_style2 button_jisuan" @click="deleteOld(index,index2)">删除</button>
                   </div>
                  
                   <div class="storage_body_line bgc_opcity" v-show="tbBarter[index].isOneself === '按克'">
@@ -383,8 +365,9 @@
                     <span class="storage_body_line_title">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</span>
                     <span class="storage_body_line_info">
                       <input class="barterRemarks"  type="text" placeholder="请输入备注" v-model="tbBarter[index].tbOld[index2].barterRemarks" maxlength="200">      
-                      <img class="search" style="height: 35px;vertical-align: middle;" v-if="isRemarks" src="../static/image/search.png"/>
+                      <popup-picker :show.sync="barterremarksVisible" :data="selremarksList"  @on-change="selBarterRemarks"  value-text-align="left"></popup-picker>                       
                     </span>
+                    <img class="search" style="height: 35px;vertical-align: middle;" @click="setBarterRemarks(index,index2)" v-if="isRemarks" src="../static/image/search.png"/>
                   </div>
 
                 </div>
@@ -415,13 +398,8 @@
             <div class="GiveInfo" v-for="(item,index) in giveList">  
             <div class="storage_body_line bgc_opcity">
               <span class="storage_body_line_title">赠&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;品</span> 
-              <span class="storage_body_line_info">
-                <mt-popup v-model="giveVisible" class="area-class">
-                  <mt-picker :slots="selectGiveList" :visible-item-count="giveLength"
-                  :show-toolbar="false" valueKey='giveName' @change="selectGive"></mt-picker>
-                </mt-popup>                     
-                <input class="giveName" type="text" readonly="true" @click="setGive(index)" v-model="giveList[index].giveName" 
-                placeholder="点击选择赠品"  maxlength="11" >
+              <span class="storage_body_line_info" @click="setGive(index)">
+                <popup-picker placeholder="请选择赠品" :data="selgiveList" v-model="giveList[index].selgiveName"  @on-change="selectGive"  value-text-align="left"></popup-picker>       
               </span>                        
             </div>
 
@@ -439,15 +417,13 @@
 
         </div>
 
-        <div class="storage_body_line" v-show="exchangeList[0].values.length > 0">
+        <div class="storage_body_line">
           <span class="storage_body_line_title">代&ensp;金&ensp;劵</span> 
           <span class="storage_body_line_info">
-          <input placeholder="点击选择代金券" maxlength="11" style="z-index:9999" type="text" readonly="true"
-          v-model="voucherCode" @click="exchangeVisible = true">
-            <mt-popup v-model="exchangeVisible" class="area-class" :visible-item-count="exchangeLength" >
-              <mt-picker :slots="exchangeList" valueKey='manufacturer' @change="selectExchange"></mt-picker>
-            </mt-popup>
+          <input placeholder="点击选择代金券" maxlength="11" style="z-index:9999" type="text" v-model="voucherCode" >
+            <popup-picker :show.sync="exchangeVisible" :data="selexchangeList"  @on-change="selectExchange"  value-text-align="left"></popup-picker> 
           </span> 
+          <img class="search" style="height: 35px;vertical-align: middle;" @click="exchangeVisible = true" src="../static/image/search.png" />      
         </div>
 
         <div class="storage_body_line" v-show="prestoreCount > 0">
@@ -461,7 +437,9 @@
           <span class="storage_body_line_title">订单备注</span> 
           <span class="storage_body_line_info beizhu">
             <input type="text" v-model="orderRemarks" placeholder="请输入订单备注" maxlength="120">
+            <popup-picker :show.sync="ordersremarksVisible" :data="selremarksList"  @on-change="selordersRemarks"  value-text-align="left"></popup-picker>  
           </span>
+          <img class="search" style="height: 35px;vertical-align: middle;" @click="setordersRemarks()"  v-if="isRemarks" src="../static/image/search.png"/> 
         </div> 
 
         <div class="storage_body_line" style="border-top:1px solid #e5e5e5;">
@@ -621,12 +599,16 @@ import {Toast, Picker} from 'mint-ui'
 import { validate } from 'utils/validate'
 import { number } from 'utils/number'
 import {focus} from 'utils/directives'
+import { PopupPicker } from 'vux'
 
 Vue.component(Toast)
 Vue.component(Picker.name, Picker)
 Vue.use(focus)
 
 export default {
+  components: {
+    PopupPicker
+  },
   data () {
     return {
       checkGoodsId: '',
@@ -636,6 +618,7 @@ export default {
       headPic: '',
       orderRemarks: '',
       discountSum: '',
+      giveLength: 0,
       prestoreCount: 0,
       prestore: '',
       thumbHeadPic: '',
@@ -650,85 +633,35 @@ export default {
       diamondColorList: [],
       cleanlinessList: [],
       giveList: [],
-      priceType: [],
+      selgiveList: [[]],
       isPriceType: false,
-      priceTypeVisible: false,
-      priceTypeList: [
-        {
-          flex: 1,
-          values: [],
-          className: 'priceType',
-          textAlign: 'center'
-        }
-      ],
-      manufacturerList: [
-        {
-          flex: 1,
-          values: [],
-          className: 'manufacturer',
-          textAlign: 'center'
-        }
-      ],
-      oldTypeList: [
-        {
-          flex: 1,
-          values: [],
-          className: 'goodsType',
-          textAlign: 'center'
-        }
-      ],
-      barterGoodsList: [
-        {
-          flex: 1,
-          values: [],
-          className: 'barterGoods',
-          textAlign: 'center'
-        }
-      ],
-      barterGoods: [],
-      saleGoodsList: [
-        {
-          flex: 1,
-          values: [],
-          className: 'goodsCode',
-          textAlign: 'center'
-        }
-      ],
-      exchangeList: [
-        {
-          flex: 1,
-          values: [],
-          className: 'code',
-          textAlign: 'center'
-        }
-      ],
-      selectGiveList: [
-        {
-          flex: 1,
-          values: [],
-          className: 'giveName',
-          textAlign: 'center'
-        }
-      ],
-      priceTypeLength: 8,
-      oldTypeLength: 8,
-      saleGoodsLength: 8,
-      manufacturerLength: 8,
-      barterGoodsLength: 8,
-      giveLength: 8,
-      exchangeLength: 8,
+      priceTypeList: [],
+      selpriceTypeList: [[]],
+      manufacturerList: [],
+      selmanufacturerList: [[]],
+      oldTypeList: [],
+      seloldTypeList: [[]],
+      barterGoodsList: [],
+      selbarterGoodsList: [[]],
+      saleGoodsList: [],
+      selsaleGoodsList: [[]],
+      exchangeList: [],
+      selexchangeList: [[]],
       giveIndex: '',
-      giveVisible: false,
+      goodsremarksVisible: false,
+      barterremarksVisible: false,
+      ordersremarksVisible: false,
       exchangeVisible: false,
       saleGoodsVisible: false,
       barterGoodsVisible: false,
-      manufacturerVisible: false,
       isManufacturer: false,
-      oldTypeVisible: false,
       oldTypeIndex: '',
+      remarksIndex: '',
+      ordersIndex: '',
       barterGoodsIndex: '',
       remarksList: [],
-      isRemarks: true,
+      selremarksList: [[]],
+      isRemarks: false,
       isExcludeFee: true,
       tbgoodsStr: [],
       tbBarter: []
@@ -785,7 +718,7 @@ export default {
           if (isOneself === '按克') {
             // 旧料标价
             oldPrice = Math.round(unitPrice * barterWeight)
-            old.oldPrice = oldPrice
+            old.oldPrice = oldPrice > 0 ? oldPrice : ''
             // 折旧费
             if (unitDepreciation !== 0 && barterWeight !== 0) {
               old.depreciation = Math.round(unitDepreciation * barterWeight)
@@ -883,49 +816,73 @@ export default {
               fee: '',
               feePrice: goods.fee,
               remarks: '',
+              selremarks: [],
               photo: '',
               photosrc: '',
               realWeight: goods.weight
             })
 
-            this.barterGoods.push({
+            this.barterGoodsList.push({
               barterGoodsCode: goods.goodsCode + '-' + goods.goodsTypeName,
               barterType: goods.goodsType,
               barterGoods: goods.id,
               barterIsWeightCal: goods.isWeightCal,
-              weight: goods.weight
+              weight: goods.weight,
+              select: 0
             })
           }
 
-          this.barterGoodsList[0].values = this.barterGoods
-          this.barterGoodsLength = this.barterGoods.length < 8 ? this.barterGoods.length : 8
+          // 设置换货商品选择
+          for (let elem of this.barterGoodsList) {
+            this.selbarterGoodsList[0].push(elem.barterGoodsCode)
+          }
+
+          // 设置旧料类别选择
           this.goodsTypeList = r.data.goodsTypeList
-          this.oldTypeList[0].values = this.goodsTypeList
-          this.oldTypeLength = this.goodsTypeList.length < 8 ? this.goodsTypeList.length : 8
+          this.oldTypeList = this.goodsTypeList
+          for (let elem of this.oldTypeList) {
+            this.seloldTypeList[0].push(elem.goodsType)
+          }
 
           this.barterModeList = r.data.barterModeList
           this.isOneselfList = r.data.isOneselfList
           this.diamondColorList = r.data.diamondColorList
           this.cleanlinessList = r.data.cleanlinessList
 
-          this.selectGiveList[0].values = r.data.giveList
-          this.giveLength = r.data.giveList.length < 8 ? r.data.giveList.length : 8
+          // 设置赠品选择
+          this.giveList = r.data.giveList
+          this.giveLength = this.giveList.length
+          for (let elem of this.giveList) {
+            this.selgiveList[0].push(elem.giveName)
+          }
 
-          this.priceType = r.data.priceType
-          if (validate.isEmpty(this.priceType)) {
+          // 价格类型选
+          this.priceTypeList = r.data.priceType
+          if (!validate.isEmpty(this.priceTypeList)) {
             this.isPriceType = true
-            this.priceTypeList[0].values = r.data.priceType
-            this.priceTypeLength = r.data.priceType.length < 8 ? r.data.priceType.length : 8
           }
-          if (validate.isEmpty(r.data.manufacturer)) {
+          for (let item of this.priceTypeList) {
+            this.selpriceTypeList[0].push(item.priceType)
+          }
+
+          // 品牌选择
+          if (!validate.isEmpty(r.data.manufacturer)) {
             this.isManufacturer = true
-            this.manufacturerList[0].values = r.data.manufacturer
-            this.manufacturerLength = r.data.manufacturer.length < 8 ? r.data.manufacturer.length : 8
+            this.manufacturerList = r.data.manufacturer
           }
+          for (let item of this.manufacturerList) {
+            this.selmanufacturerList[0].push(item.manufacturer)
+          }
+
+          // 订单备注选择
           this.remarksList = r.data.orderRemarks
-          if (validate.isEmpty(this.remarksList)) {
-            this.isRemarks = false
+          if (!validate.isEmpty(this.remarksList)) {
+            this.isRemarks = true
           }
+          for (let item of this.remarksList) {
+            this.selremarksList[0].push(item.remarks)
+          }
+
           if (validate.isEmpty(r.data.isExcludeFee) || r.data.isExcludeFee === '0') {
             // 商品售价不含工费
             this.isExcludeFee = false
@@ -998,8 +955,11 @@ export default {
           mobile: this.mobile
         },
         r => {
-          this.saleGoodsList[0].values = r.data
-          this.saleGoodsLength = r.data.length < 8 ? r.data.length : 8
+          this.saleGoodsList = r.data
+          for (let item of this.saleGoodsList) {
+            this.selsaleGoodsList[0].push(item.goodsCode + '-' + item.goodsTypeName)
+          }
+          console.log(JSON.stringify(this.selsaleGoodsList[0]))
         },
         r => {
           if (r.code === '101') {
@@ -1017,8 +977,10 @@ export default {
           couponType: 'cash'
         },
         r => {
-          this.exchangeList[0].values = r.data
-          this.exchangeLength = r.data.length < 8 ? r.data.length : 8
+          this.exchangeList = r.data
+          for (let item of this.exchangeList) {
+            this.selexchangeList.push(item.code)
+          }
         },
         r => {
           if (r.code === '101') {
@@ -1069,10 +1031,24 @@ export default {
       )
     },
     selectExchange: function (picker, values) {
-      if (!validate.isEmpty(values[0])) {
-        this.voucherId = values[0]['id']
-        this.voucherCode = values[0]['code']
-        this.voucherNum = values[0]['price']
+      if (!validate.isEmpty(values)) {
+        for (let item of this.exchangeList) {
+          if (item.code === values.toString()) {
+            this.voucherId = item.id
+            this.voucherCode = item.code
+            this.voucherNum = item.price
+          }
+        }
+      }
+    },
+    setBarterRemarks: function (index, index2) {
+      this.oldTypeIndex = index
+      this.barterGoodsIndex = index2
+      this.barterremarksVisible = true
+    },
+    selBarterRemarks: function (values) {
+      if (!validate.isEmpty(values)) {
+        this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterRemarks = values.toString()
       }
     },
     setBarterGoods: function (index, index2) {
@@ -1080,95 +1056,137 @@ export default {
       this.barterGoodsIndex = index2
       this.barterGoodsVisible	 = true
     },
-    selectBarterGoods: function (picker, values) {
-      if (!validate.isEmpty(values[0])) {
-        this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterGoodsCode = values[0]['barterGoodsCode']
-        this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterType = values[0]['barterType']
-        this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterGoods = values[0]['barterGoods']
-        this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal = values[0]['barterIsWeightCal']
-        this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = values[0]['weight']
+    selectBarterGoods: function (values) {
+      if (!validate.isEmpty(values)) {
+        for (let [index, item] of this.barterGoodsList.entries()) {
+          if (item.barterGoodsCode === values.toString()) {
+            this.barterGoodsList[index].select = 1
+            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].selbarterGoods[0] = values.toString()
+            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterType = item.barterType
+            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterGoods = item.barterGoods
+            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal = item.barterIsWeightCal
+            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = item.weight
 
-        let barterIsWeightCal = validate.isEmpty(this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal) ? 0 : this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal
-        let barterWeight = validate.isEmpty(this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight) ? 0 : this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight
-        let isOneself = this.tbBarter[this.oldTypeIndex].isOneself
-        let barterWeightNum = this.tbBarter[this.oldTypeIndex].barterWeightNum
-      // 剩余重量
-        let surplusWeight = 0
-        for (let [index, elem] of this.tbBarter[this.oldTypeIndex].tbOld.entries()) {
-          if (index !== this.barterGoodsIndex) {
-            surplusWeight += Number(elem.barterWeight)
-          }
-        }
+            let barterIsWeightCal = validate.isEmpty(this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal) ? 0 : this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal
+            let barterWeight = validate.isEmpty(this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight) ? 0 : this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight
+            let isOneself = this.tbBarter[this.oldTypeIndex].isOneself
+            let barterWeightNum = this.tbBarter[this.oldTypeIndex].barterWeightNum
 
-        surplusWeight = number.accSub(barterWeightNum, surplusWeight)
+            // 剩余重量
+            let surplusWeight = 0
+            for (let [index, elem] of this.tbBarter[this.oldTypeIndex].tbOld.entries()) {
+              if (index !== this.barterGoodsIndex) {
+                surplusWeight += Number(elem.barterWeight)
+              }
+            }
 
-        if (isOneself === '按克') {
-          // 换货商品按件卖的
-          if (barterIsWeightCal === '0') {
-            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = surplusWeight
-          } else {
-            if (Number(surplusWeight) >= Number(barterWeight)) {
-              this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = barterWeight
+            surplusWeight = number.accSub(barterWeightNum, surplusWeight)
+
+            if (isOneself === '按克') {
+            // 换货商品按件卖的
+              if (barterIsWeightCal === '0') {
+                this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = surplusWeight
+              } else {
+                if (Number(surplusWeight) >= Number(barterWeight)) {
+                  this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = barterWeight
+                } else {
+                  this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = surplusWeight
+                }
+              }
             } else {
-              this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = surplusWeight
+              this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = barterWeightNum
             }
           }
-        } else {
-          this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = barterWeightNum
         }
+      }
+    },
+    setordersRemarks: function (indx) {
+      this.ordersremarksVisible = true
+    },
+    selordersRemarks: function (values) {
+      if (!validate.isEmpty(values)) {
+        this.orderRemarks = values.toString()
       }
     },
     setGive: function (index) {
       this.giveIndex = index
-      this.giveVisible = true
     },
-    selectGive: function (picker, values) {
-      if (!validate.isEmpty(values[0])) {
-        this.giveList[this.giveIndex].giveId = values[0]['giveId']
-        this.giveList[this.giveIndex].giveName = values[0]['giveName']
+    selectGive: function (values) {
+      if (!validate.isEmpty(values)) {
+        for (let item of this.giveList) {
+          if (item.giveName === values.toString()) {
+            this.giveList[this.giveIndex].giveId = item.giveId
+            this.giveList[this.giveIndex].giveName = item.giveName
+          }
+        }
       }
     },
     setSaleGoods: function (index) {
       this.oldTypeIndex = index
       this.saleGoodsVisible = true
     },
-    selectSaleGoods: function (picker, values) {
-      if (!validate.isEmpty(values[0])) {
-        this.tbBarter[this.oldTypeIndex].goodsCode = values[0]['goodsCode']
+    selectSaleGoods: function (values) {
+      if (!validate.isEmpty(values)) {
+        for (let item of this.saleGoodsList) {
+          let goods = item.goodsCode + '-' + item.goodsTypeName
+          if (goods === values.toString()) {
+            this.tbBarter[this.oldTypeIndex].goodsCode = item.goodsCode
+            this.tbBarter[this.oldTypeIndex].barterWeightNum = item.goodsWeight
+            // 钻石的旧料信息
+            this.tbBarter[this.oldTypeIndex].certNo = item.certNo
+            this.tbBarter[this.oldTypeIndex].mainStone = item.mainStone
+            this.tbBarter[this.oldTypeIndex].color = item.color
+            this.tbBarter[this.oldTypeIndex].cleanliness = item.cleanliness
+            // 旧料信息
+            this.selectOldType(item.goodsTypeName)
+          }
+        }
+      }
+    },
+    setGoodsRemarks: function (index) {
+      this.ordersIndex = index
+      this.goodsremarksVisible = true
+    },
+    selGoodsRemarks: function (values) {
+      if (!validate.isEmpty(values)) {
+        this.tbgoodsStr[this.ordersIndex].remarks = values.toString()
       }
     },
     setManufacturer: function (index) {
       this.oldTypeIndex = index
-      this.manufacturerVisible = true
     },
-    selectManufacturer: function (picker, values) {
-      if (!validate.isEmpty(values[0])) {
-        this.tbBarter[this.oldTypeIndex].oldmanufacturer = values[0]['manufacturer']
+    selectManufacturer: function (values) {
+      if (!validate.isEmpty(values)) {
+        this.tbBarter[this.oldTypeIndex].oldmanufacturer = values.toString()
       }
     },
     setOldPriceType: function (index) {
       this.oldTypeIndex = index
-      this.priceTypeVisible = true
     },
-    selectOldPriceType: function (picker, values) {
-      if (!validate.isEmpty(values[0])) {
-        this.tbBarter[this.oldTypeIndex].oldpriceType = values[0]['priceType']
+    selectOldPriceType: function (values) {
+      if (!validate.isEmpty(values)) {
+        this.tbBarter[this.oldTypeIndex].oldpriceType = values.toString()
       }
     },
     setOldType: function (index) {
       this.oldTypeIndex = index
-      this.oldTypeVisible = true
     },
-    selectOldType: function (picker, values) {
-      if (!validate.isEmpty(values[0])) {
-        this.tbBarter[this.oldTypeIndex].oldType = values[0]['id']
-        this.tbBarter[this.oldTypeIndex].oldTypeName = values[0]['goodsType']
-        this.tbBarter[this.oldTypeIndex].oldIsWeightCal = values[0]['isWeightCal']
+    selectOldType: function (values) {
+      if (!validate.isEmpty(values)) {
+        for (let item of this.oldTypeList) {
+          if (item.goodsType === values.toString()) {
+            this.tbBarter[this.oldTypeIndex].seloldType.length = 0
+            this.tbBarter[this.oldTypeIndex].seloldType.push(values.toString())
+            this.tbBarter[this.oldTypeIndex].oldType = item.id
+            this.tbBarter[this.oldTypeIndex].oldTypeName = item.goodsType
+            this.tbBarter[this.oldTypeIndex].oldIsWeightCal = item.isWeightCal
 
-        if (this.tbBarter[this.oldTypeIndex].oldIsWeightCal === '1') {
-          this.tbBarter[this.oldTypeIndex].isOneself = '按克'
-        } else {
-          this.tbBarter[this.oldTypeIndex].isOneself = '标价'
+            if (this.tbBarter[this.oldTypeIndex].oldIsWeightCal === '1') {
+              this.tbBarter[this.oldTypeIndex].isOneself = '按克'
+            } else {
+              this.tbBarter[this.oldTypeIndex].isOneself = '标价'
+            }
+          }
         }
       }
     },
@@ -1267,6 +1285,7 @@ export default {
       this.giveList.push({
         giveId: '',
         giveName: '',
+        selgiveName: [],
         giveCount: ''
       })
     },
@@ -1276,6 +1295,7 @@ export default {
     deleteOld: function (index, index2) {
       this.tbBarter[index].tbOld.splice(index2, 1)
     },
+    // 添加抵换记录
     insertOld: function (index) {
       if (validate.isEmpty(this.tbBarter[index].barterWeightNum)) {
         Toast('总重量不能为空')
@@ -1285,6 +1305,7 @@ export default {
       this.tbBarter[index].tbOld.push({
         depreciation: '',
         unitDepreciation: '',
+        selbarterGoods: [],
         barterGoodsCode: '',
         barterGoods: '',
         barterType: '',
@@ -1301,16 +1322,20 @@ export default {
         barterRemarks: ''
       })
 
-      // 初始化旧料品类选择
-
-      for (let [index, elem] of this.saleGoodsList[0].values.entries()) {
-        if (elem.isSuJin === '1') {
-          this.saleGoodsList[0].defaultIndex = index
+      this.oldTypeIndex = index
+      this.barterGoodsIndex = this.tbBarter[this.oldTypeIndex].tbOld.length - 1
+      // 设置默认的换货商品
+      var barterGoodsCode = this.barterGoodsList[0].barterGoodsCode
+      for (let item of this.barterGoodsList) {
+        if (item.select === 0) {
+          barterGoodsCode = item.barterGoodsCode
+          break
         }
       }
 
-      this.barterGoodsIndex = this.tbBarter[index].tbOld.length - 1
+      this.selectBarterGoods(barterGoodsCode)
     },
+    // 添加换货记录
     insertBarter: function () {
       this.tbBarter.push({
         tbOld: [],
@@ -1319,21 +1344,17 @@ export default {
         goodsCode: '',
         barterWeightNum: '',
         oldType: '',
+        seloldType: [],
         oldTypeName: '',
         oldpriceType: '',
+        seloldpriceType: [],
         oldmanufacturer: '',
+        seloldmanufacturer: [],
         certNo: '',
         mainStone: '',
         color: '',
         cleanliness: ''
       })
-
-      // 初始化旧料品类选择
-      for (let [index, elem] of this.oldTypeList[0].values.entries()) {
-        if (elem.isSuJin === '1') {
-          this.oldTypeList[0].defaultIndex = index
-        }
-      }
 
       this.oldTypeIndex = this.tbBarter.length - 1
     },
@@ -1369,17 +1390,6 @@ export default {
 
 }
 </script>
-
-<style lang="scss">
-#orderAdd {
-   font-family: "Microsoft YaHei";
-   position: absolute;
-   width: 100%;
-   height: 100%;
-	 background-color: #f3f3f3;
-	 padding-bottom: 90px;
-}
-</style>
 
 <style lang="scss" scoped>
   @import "../style/scss/orderAdd";
