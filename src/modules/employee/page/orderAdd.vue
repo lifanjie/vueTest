@@ -821,7 +821,7 @@ export default {
 
         if (nowPrice > 0 && realWeight > 0) {
             // 按克销售
-          item.receMoney = Math.round(nowPrice * realWeight * number + feePrice)
+          item.receMoney = Math.round((nowPrice * realWeight + feePrice) * number)
         } else {
             // 按件销售
           item.receMoney = Math.round(number * tagPrice * discount / 100)
