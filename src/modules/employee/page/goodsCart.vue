@@ -7,6 +7,7 @@
           <router-link to="/productList"  slot="left">
             <mt-button icon="back">返回</mt-button>
           </router-link>
+          <mt-button @click="sureOrder()" slot="right">提交</mt-button>
         </mt-header>
       </div>	
 
@@ -43,16 +44,12 @@
  
 		</div>
    
-    <div class="con_footer" >
-      <a class="submit_button"><button type="button"  class="button_style2 " @click="sureOrder()" >提交订单</button></a>
-		</div> 
-    <myFooter ref="myFooter"></myFooter>
+
 
   </div>
 </template>
 
 <script>
-import myFooter from '../components/footer'
 import Vue from 'vue'
 import { Toast } from 'mint-ui'
 Vue.component(Toast)
@@ -63,7 +60,6 @@ export default {
       goodsList: []
     }
   },
-  components: {myFooter},
   created: function () {
     this.loadOrder()
   },
@@ -90,8 +86,11 @@ export default {
           id: id
         },
         r => {
-          this.$refs.myFooter.minusCount()
+          this.$store.commit('addOrders', -1)
           this.goodsList.splice(index, 1)
+          if (this.goodsList.length === 0) {
+            this.$router.push({path: '/productList'})
+          }
         },
         r => {
           if (r.code === '101') {
@@ -109,14 +108,6 @@ export default {
 </script>
 
 <style lang="scss">
-#goodsCart {
-   font-family: "Microsoft YaHei";
-   position: absolute;
-   width: 100%;
-   height: 100%;
-	 background-color: #f3f3f3;
-	 padding-bottom: 90px;
-}
 </style>
 
 <style lang="scss" scoped>
