@@ -21,7 +21,7 @@
       <cell title="客流信息" is-link>
         <img slot="icon" class="img-icon" src="../static/image/icon_d_14.png">
       </cell>
-      <cell title="盘 点" is-link>
+      <cell title="盘 点" is-link link="/countPlan">
         <img slot="icon" class="img-icon" src="../static/image/icon_1_03.png">
       </cell>
       <cell title="兑 换" is-link>
@@ -82,10 +82,6 @@ export default {
 .weui-cell_access .weui-cell__ft:after{
   height: 12px !important;
   width: 12px !important;
-}
-
-.vux-label {
-  margin-left: 0.5em !important;
 }
 
 </style>

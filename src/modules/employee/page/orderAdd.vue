@@ -416,7 +416,7 @@
 
         </div>
 
-        <div class="storage_body_line">
+        <div class="storage_body_line" v-show="exchangeList.length > 0">
           <span class="storage_body_line_title">代&ensp;金&ensp;劵</span> 
           <span class="storage_body_line_info">
           <input placeholder="点击选择代金券" maxlength="11" style="z-index:9999" type="text" v-model="voucherCode" >
@@ -676,7 +676,7 @@ export default {
       return 0 - (validate.isEmpty(this.prestore) ? 0 : this.prestore)
     },
     spendSum: function () {
-      var spendSum = 0
+      let spendSum = 0
       for (let item of this.tbgoodsStr) {
         let receMoney = validate.isEmpty(item.receMoney) ? 0 : item.receMoney
         spendSum += Number(receMoney)
@@ -684,7 +684,7 @@ export default {
       return spendSum
     },
     differPriceSum: function () {
-      var differPriceSum = 0
+      let differPriceSum = 0
       for (let item of this.tbgoodsStr) {
         let differPrice = validate.isEmpty(item.differPrice) ? 0 : item.differPrice
         differPriceSum += Number(differPrice)
@@ -976,7 +976,7 @@ export default {
         r => {
           this.exchangeList = r.data
           for (let item of this.exchangeList) {
-            this.selexchangeList.push(item.code)
+            this.selexchangeList[0].push(item.code)
           }
         },
         r => {

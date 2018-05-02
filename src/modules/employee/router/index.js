@@ -11,6 +11,7 @@ import reserve from '@/employee/page/reserve'
 import orderAdd from '@/employee/page/orderAdd'
 import storageSuccess from '@/employee/page/storageSuccess'
 import layout from '@/employee/components/layout'
+import countPlan from '@/employee/page/countPlan'
 
 Vue.use(Router)
 
@@ -41,6 +42,7 @@ export default new Router({
     // { path: '/goodsCart', component: goodsCart, name: 'goodsCart', desc: '提交订单' },
     { path: '/orderAdd', component: orderAdd, name: 'orderAdd', desc: '订单录入' },
     {path: '/storageSuccess', component: storageSuccess, name: 'storageSuccess', desc: '下单成功'},
+    {path: '/countPlan', component: countPlan, name: 'countPlan', desc: '盘点'},
     {
       path: '/reserve',
       component: reserve

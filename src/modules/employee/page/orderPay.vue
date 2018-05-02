@@ -3,7 +3,7 @@
     <div class="tab-content">
       <div class="page-field">
         <mt-header fixed title="支付">
-          <router-link to="/productList"  slot="left">
+          <router-link to="/more"  slot="left">
             <mt-button icon="back">返回</mt-button>
           </router-link>          
         </mt-header>
