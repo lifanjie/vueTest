@@ -88,7 +88,7 @@ export default {
     },
     showPay: function () {
       if (this.payNum > 0) {
-        this.$router.push({path: '/orderList'})
+        this.$router.push({path: '/orderPay'})
       } else {
         Toast('没有未支付订单')
       }

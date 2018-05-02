@@ -1,0 +1,85 @@
+.img-icon{
+  width:30px;
+  display:block;
+  margin-right:5px;
+}
+
+@media screen and (min-width: 760px){
+  .img-icon{
+    width:50px;
+    display:block;
+    margin-right:5px;
+  }
+
+  .loginName_box>img{
+    width:50px;
+  }
+
+  #loginName{font-size:22px;}
+
+  .out_button{
+    height: 70px;
+    line-height: 70px;
+    font-size: 22px;
+    bottom: 80px;
+  }
+}
+
+@media screen and (max-width: 759px){
+  .loginName_box>img{
+    width:30px;
+  }
+
+  #loginName{font-size:18px;}
+
+  .out_button{
+    height: 44px;
+    line-height: 44px;
+    font-size: 18px;
+    bottom: 60px;
+  }
+}
+
+.more_head_img{position:relative;}
+.more_head_img>img{width:100%;}
+
+.more_head{
+	background-color: #fff;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 20px;
+	color: #333;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.more_head img{
+	width: 1.6rem;
+	position: relative;
+	top:-0.2rem;
+}
+
+.loginName_box{
+	color:#fff;
+	font-size:18px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    height: 58px;
+    margin: auto;
+    text-align: center;
+}
+
+.out_button{
+  color: #666;
+  background-color: #fff;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  border-bottom: 1px solid #e5e5e5;
+}

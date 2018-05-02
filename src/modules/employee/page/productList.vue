@@ -157,7 +157,7 @@ export default {
 <style lang="scss">
 #productList {
    font-family: "Microsoft YaHei";
-   position: absolute;
+  //  position: absolute;
 	 padding-bottom: 90px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="storageSuccess">
     <div class="storgeContainer registered_success">
        <div class="row">
            <div class="col-md-12 registered_success_title">

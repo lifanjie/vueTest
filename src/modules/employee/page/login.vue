@@ -109,6 +109,7 @@ export default {
           // 设置全局变量
           localStorage.setItem('orgId', r.data.office.id)
           localStorage.setItem('userId', r.data.id)
+          localStorage.setItem('userName', r.data.name)
           localStorage.setItem('faceBoxIp', r.data.office.faceBoxIp)
           // 首页地址
           // 开通人脸识别

@@ -187,9 +187,9 @@
           <div class="storage_body_line">
             <span class="storage_body_line_title" >换货记录</span> 
             <span class="storage_img_line_info huanhuoNo" >
-            <div style="text-align: right;padding-right: 10px;">
-              <input type="text" readOnly="true"  maxlength="50" class="input_button" id="barterNo" style="width:15px!important;color:#999;">
-                <button type="button" class="button_style2 button_jisuan" @click="insertBarter()">新增</button>
+            <div style="text-align: right;padding-right: 2px;">
+              <input type="text" readOnly="true"  maxlength="50" class="input_button" v-model="tbBarter.length" style="width:15px!important;color:#999;">
+              <button type="button" class="button_style2 button_jisuan" @click="insertBarter()">新增</button>
             </div>
             </span> 											
           </div>						
@@ -232,7 +232,7 @@
                 </span>
                 <img class="search" style="height: 35px;vertical-align: middle;" @click="setSaleGoods(index)" src="../static/image/search.png" />
               </div>
-				
+			
               <div class="storage_body_line bgc_opcity addold">
                 <span class="storage_body_line_title">旧料品类</span>
                 <span class="storage_body_line_info" @click="setOldType(index)">
@@ -241,7 +241,6 @@
                 <button type="button" class="button_style2 button_jisuan" @click="insertOld(index)">抵换</button>                                      
               </div>
 
-     
               <div class="storage_body_line bgc_opcity">
                 <span class="storage_body_line_title">总&ensp;重&ensp;量</span> 
                 <span class="storage_body_line_info">
@@ -595,14 +594,13 @@
 
 <script>
 import Vue from 'vue'
-import {Toast, Picker} from 'mint-ui'
+import { Toast } from 'mint-ui'
 import { validate } from 'utils/validate'
 import { number } from 'utils/number'
 import {focus} from 'utils/directives'
 import { PopupPicker } from 'vux'
 
 Vue.component(Toast)
-Vue.component(Picker.name, Picker)
 Vue.use(focus)
 
 export default {
@@ -763,7 +761,6 @@ export default {
             // 按件销售
           item.receMoney = Math.round(number * tagPrice * discount / 100)
         }
-
         item.strikePrice = item.receMoney - differPrice
 
         strikePriceSum += Number(item.strikePrice)
@@ -1030,7 +1027,7 @@ export default {
         }
       )
     },
-    selectExchange: function (picker, values) {
+    selectExchange: function (values) {
       if (!validate.isEmpty(values)) {
         for (let item of this.exchangeList) {
           if (item.code === values.toString()) {
@@ -1206,17 +1203,14 @@ export default {
     sureOrder: function () {
       // 销售信息
       for (let item of this.tbgoodsStr) {
-        item.number = item.number.toString()
-        item.spendSum = this.spendSum.toString()
-        item.voucherNum = this.voucherNum.toString()
-        item.receivable = this.receivable.toString()
-        item.barterMoneySum = Math.abs(this.barterMoneySum).toString()
-        item.prestoreSum = this.prestoreSum.toString()
-        item.discountSum = this.discountSum.toString()
-        item.totalBill = this.totalBill.toString()
+        item.spendSum = this.spendSum
+        item.voucherNum = this.voucherNum
+        item.receivable = this.receivable
+        item.barterMoneySum = Math.abs(this.barterMoneySum)
+        item.prestoreSum = this.prestoreSum
+        item.discountSum = this.discountSum
+        item.totalBill = this.totalBill
         item.orderRemarks = this.orderRemarks
-        item.strikePrice = item.strikePrice.toString()
-        item.receMoney = item.receMoney.toString()
       }
       // 换货信息
       for (let barter of this.tbBarter) {
@@ -1224,19 +1218,15 @@ export default {
         barter.goodsCode = barter.goodsCode.toUpperCase()
         barter.certNo = barter.certNo.toUpperCase()
         for (let old of barter.tbOld) {
-          barterWeight = old.barterWeight.toString()
-
+          barterWeight += Number(old.barterWeight)
           old.barterMode = barter.barterMode
           old.isOneself = barter.isOneself
           old.goodsCode = barter.goodsCode
           old.oldType = barter.oldType
           old.oldTypeName = barter.oldTypeName
-          old.barterMoney = old.barterMoney.toString()
-          old.depreciation = old.depreciation.toString()
-          old.oldPrice = old.oldPrice.toString()
         }
 
-        if (barter.barterWeightNum !== barterWeight) {
+        if (barter.barterWeightNum !== barterWeight.toString()) {
           Toast(`${barter.oldTypeName}的抵扣重量合计不等于总重量`)
           return
         }
@@ -1258,7 +1248,7 @@ export default {
           return
         }
       }
-
+      console.log(JSON.stringify(this.tbgoodsStr))
       // 保存订单
       this.$axios.post(
         'orders/add',
@@ -1271,6 +1261,7 @@ export default {
           tbgiveStr: JSON.stringify(this.giveList)
         },
         r => {
+          this.$store.commit('setOrders', 0)
           this.$router.push({path: '/storageSuccess'})
         },
         r => {
