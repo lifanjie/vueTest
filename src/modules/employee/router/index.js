@@ -12,6 +12,8 @@ import orderAdd from '@/employee/page/orderAdd'
 import storageSuccess from '@/employee/page/storageSuccess'
 import layout from '@/employee/components/layout'
 import countPlan from '@/employee/page/countPlan'
+import exchangeGift from '@/employee/page/exchangeGift'
+import exchangeCash from '@/employee/page/exchangeCash'
 
 Vue.use(Router)
 
@@ -43,6 +45,8 @@ export default new Router({
     { path: '/orderAdd', component: orderAdd, name: 'orderAdd', desc: '订单录入' },
     {path: '/storageSuccess', component: storageSuccess, name: 'storageSuccess', desc: '下单成功'},
     {path: '/countPlan', component: countPlan, name: 'countPlan', desc: '盘点'},
+    {path: '/exchangeGift', component: exchangeGift, name: 'exchangeGift', desc: '礼品兑换'},
+    {path: '/exchangeCash', component: exchangeCash, name: 'exchangeCash', desc: '返现'},
     {
       path: '/reserve',
       component: reserve

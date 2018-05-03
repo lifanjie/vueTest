@@ -116,21 +116,14 @@ input:-webkit-autofill {
 	/* -webkit-backface-visibility: hidden; */
 }
 
-.product_search {
-	position: relative;
-	height: 40px;
-	overflow: hidden;
-	background-color: #fff;
-}
-
 .product {
-position: relative;
-    /* height: 13.6rem; */
-    overflow: hidden;
-    background-color: #f3f3f3;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    padding: 10px 0;
+	position: relative;
+	/* height: 13.6rem; */
+	overflow: hidden;
+	background-color: #f3f3f3;
+	margin-left: 1rem;
+	margin-right: 1rem;
+	padding: 10px 0;
 }
 
 .product_title {

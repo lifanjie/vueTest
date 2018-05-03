@@ -631,20 +631,20 @@ export default {
       diamondColorList: [],
       cleanlinessList: [],
       giveList: [],
-      selgiveList: [[]],
+      selgiveList: [['']],
       isPriceType: false,
       priceTypeList: [],
-      selpriceTypeList: [[]],
+      selpriceTypeList: [['']],
       manufacturerList: [],
-      selmanufacturerList: [[]],
+      selmanufacturerList: [['']],
       oldTypeList: [],
-      seloldTypeList: [[]],
+      seloldTypeList: [['']],
       barterGoodsList: [],
-      selbarterGoodsList: [[]],
+      selbarterGoodsList: [['']],
       saleGoodsList: [],
-      selsaleGoodsList: [[]],
+      selsaleGoodsList: [['']],
       exchangeList: [],
-      selexchangeList: [[]],
+      selexchangeList: [['']],
       giveIndex: '',
       goodsremarksVisible: false,
       barterremarksVisible: false,
@@ -658,7 +658,7 @@ export default {
       ordersIndex: '',
       barterGoodsIndex: '',
       remarksList: [],
-      selremarksList: [[]],
+      selremarksList: [['']],
       isRemarks: false,
       isExcludeFee: true,
       tbgoodsStr: [],
@@ -830,6 +830,7 @@ export default {
           }
 
           // 设置换货商品选择
+          this.selbarterGoodsList[0].splice(0, this.selbarterGoodsList[0].length)
           for (let elem of this.barterGoodsList) {
             this.selbarterGoodsList[0].push(elem.barterGoodsCode)
           }
@@ -837,6 +838,8 @@ export default {
           // 设置旧料类别选择
           this.goodsTypeList = r.data.goodsTypeList
           this.oldTypeList = this.goodsTypeList
+
+          this.seloldTypeList[0].splice(0, this.seloldTypeList[0].length)
           for (let elem of this.oldTypeList) {
             this.seloldTypeList[0].push(elem.goodsType)
           }
@@ -849,6 +852,7 @@ export default {
           // 设置赠品选择
           this.giveList = r.data.giveList
           this.giveLength = this.giveList.length
+          this.selgiveList[0].splice(0, this.selgiveList[0].length)
           for (let elem of this.giveList) {
             this.selgiveList[0].push(elem.giveName)
           }
@@ -858,6 +862,7 @@ export default {
           if (!validate.isEmpty(this.priceTypeList)) {
             this.isPriceType = true
           }
+          this.selpriceTypeList[0].splice(0, this.selpriceTypeList[0].length)
           for (let item of this.priceTypeList) {
             this.selpriceTypeList[0].push(item.priceType)
           }
@@ -867,6 +872,7 @@ export default {
             this.isManufacturer = true
             this.manufacturerList = r.data.manufacturer
           }
+          this.selmanufacturerList[0].splice(0, this.selmanufacturerList[0].length)
           for (let item of this.manufacturerList) {
             this.selmanufacturerList[0].push(item.manufacturer)
           }
@@ -876,6 +882,7 @@ export default {
           if (!validate.isEmpty(this.remarksList)) {
             this.isRemarks = true
           }
+          this.selremarksList[0].splice(0, this.selremarksList[0].length)
           for (let item of this.remarksList) {
             this.selremarksList[0].push(item.remarks)
           }
@@ -953,10 +960,10 @@ export default {
         },
         r => {
           this.saleGoodsList = r.data
+          this.selsaleGoodsList[0].splice(0, this.selsaleGoodsList[0].length)
           for (let item of this.saleGoodsList) {
             this.selsaleGoodsList[0].push(item.goodsCode + '-' + item.goodsTypeName)
           }
-          console.log(JSON.stringify(this.selsaleGoodsList[0]))
         },
         r => {
           if (r.code === '101') {
@@ -975,6 +982,7 @@ export default {
         },
         r => {
           this.exchangeList = r.data
+          this.selexchangeList[0].splice(0, this.selexchangeList[0].length)
           for (let item of this.exchangeList) {
             this.selexchangeList[0].push(item.code)
           }
@@ -1044,7 +1052,7 @@ export default {
       this.barterremarksVisible = true
     },
     selBarterRemarks: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterRemarks = values.toString()
       }
     },
@@ -1054,7 +1062,7 @@ export default {
       this.barterGoodsVisible	 = true
     },
     selectBarterGoods: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         for (let [index, item] of this.barterGoodsList.entries()) {
           if (item.barterGoodsCode === values.toString()) {
             this.barterGoodsList[index].select = 1
@@ -1101,7 +1109,7 @@ export default {
       this.ordersremarksVisible = true
     },
     selordersRemarks: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         this.orderRemarks = values.toString()
       }
     },
@@ -1109,7 +1117,7 @@ export default {
       this.giveIndex = index
     },
     selectGive: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         for (let item of this.giveList) {
           if (item.giveName === values.toString()) {
             this.giveList[this.giveIndex].giveId = item.giveId
@@ -1123,7 +1131,7 @@ export default {
       this.saleGoodsVisible = true
     },
     selectSaleGoods: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         for (let item of this.saleGoodsList) {
           let goods = item.goodsCode + '-' + item.goodsTypeName
           if (goods === values.toString()) {
@@ -1145,7 +1153,7 @@ export default {
       this.goodsremarksVisible = true
     },
     selGoodsRemarks: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         this.tbgoodsStr[this.ordersIndex].remarks = values.toString()
       }
     },
@@ -1153,7 +1161,7 @@ export default {
       this.oldTypeIndex = index
     },
     selectManufacturer: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         this.tbBarter[this.oldTypeIndex].oldmanufacturer = values.toString()
       }
     },
@@ -1161,7 +1169,7 @@ export default {
       this.oldTypeIndex = index
     },
     selectOldPriceType: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         this.tbBarter[this.oldTypeIndex].oldpriceType = values.toString()
       }
     },
@@ -1169,7 +1177,7 @@ export default {
       this.oldTypeIndex = index
     },
     selectOldType: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         for (let item of this.oldTypeList) {
           if (item.goodsType === values.toString()) {
             this.tbBarter[this.oldTypeIndex].seloldType.length = 0
@@ -1248,7 +1256,7 @@ export default {
           return
         }
       }
-      console.log(JSON.stringify(this.tbgoodsStr))
+
       // 保存订单
       this.$axios.post(
         'orders/add',

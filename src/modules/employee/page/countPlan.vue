@@ -13,7 +13,7 @@
       <x-input title="商品条码" ref="goodsCode"  @on-enter="saveCountPlan()" placeholder="请输入商品条码" v-model="goodsCode" type="text" class="weui-vcode">
         <x-button slot="right" type="primary" @click.native="saveCountPlan()" mini>盘点</x-button>
       </x-input>  
-        <cell-form-preview :list="countPlanList"></cell-form-preview>           
+      <cell-form-preview :list="countPlanList"></cell-form-preview>           
     </group>
 
     <div id="returnlist" v-for="item in messages">
@@ -36,8 +36,8 @@ export default {
   data () {
     return {
       countPlan: [],
-      selcountPlan: [[]],
-      countPlanValue: [],
+      selcountPlan: [['']],
+      countPlanValue: [''],
       messages: [],
       color: '#00a7df',
       countPlanId: '',
@@ -91,7 +91,7 @@ export default {
       )
     },
     setCountPlan: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         for (let item of this.countPlan) {
           if (item.countplantitle === values.toString()) {
             this.countPlanId = item.id
@@ -107,12 +107,18 @@ export default {
         {},
         r => {
           this.countPlan = r.data
-          for (let item of this.countPlan) {
-            this.selcountPlan[0].push(item.countplantitle)
-          }
 
-          if (this.selcountPlan[0].length > 0) {
-            this.setCountPlan(this.selcountPlan[0][0])
+          // 清空数组
+          this.selcountPlan[0].splice(0, this.selcountPlan[0].length)
+          if (this.countPlan.length > 0) {
+            for (let item of this.countPlan) {
+              this.selcountPlan[0].push(item.code)
+            }
+            if (this.selcountPlan[0].length > 0) {
+              this.setCountPlan(this.selcountPlan[0][0])
+            }
+          } else {
+            this.selcountPlan[0].splice(0, this.selcountPlan[0].length, '')
           }
         }
       )
