@@ -8,7 +8,7 @@
       </mt-header>
     </div>
 
-    <group>
+    <group label-width="4.5em" label-align="left">
       <x-input title="客户电话"  @on-enter="getGiftList()" placeholder="请输入客户电话" v-model="mobile" type="tel" class="weui-vcode">
         <x-button slot="right" type="primary" @click.native="getGiftList()" mini>验证</x-button>
       </x-input>        
@@ -130,16 +130,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/scss/exchangeGift"
-</style>
-
-<style lang="less">
-.vux-popup-picker-select-box{
-  margin-left: 20px !important;
-}
-
-.vux-cell-value{
-  color:black !important;
-}
 </style>
 
 

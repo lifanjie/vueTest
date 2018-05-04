@@ -13,25 +13,25 @@
     </div>
 
     <group label-width="4.5em" label-align="left">
-      <!-- <cell title="销售报表"  is-link>
+      <!-- <cell class="weui-vcode" title="销售报表"  is-link>
         <img slot="icon" class="img-icon" src="../static/image/icon_d_14.png">
       </cell>       -->
-      <cell title="客流信息" is-link>
+      <cell class="weui-vcode" title="客流信息" is-link>
         <img slot="icon" class="img-icon" src="../static/image/icon_d_14.png">
       </cell>
-      <cell title="盘 点" is-link link="/countPlan">
+      <cell class="weui-vcode" title="盘 点" is-link link="/countPlan">
         <img slot="icon" class="img-icon" src="../static/image/icon_1_03.png">
       </cell>
-      <cell title="兑 换" is-link link="/exchangeGift">
+      <cell class="weui-vcode" title="兑 换" is-link link="/exchangeGift">
         <img slot="icon" class="img-icon" src="../static/image/icon_1_03.png">
       </cell>
-      <cell title="返 现" is-link link="/exchangeCash">
+      <cell class="weui-vcode" title="返 现" is-link link="/exchangeCash">
         <img slot="icon" class="img-icon" src="../static/image/icon_1_03.png">
       </cell>
-      <cell title="音频注释" is-link>
+      <cell class="weui-vcode" title="音频注释" is-link>
         <img slot="icon" class="img-icon" src="../static/image/icon_d_16.png">
       </cell>
-      <cell title="常见问题" is-link>
+      <cell class="weui-vcode" title="常见问题" is-link>
         <img slot="icon" class="img-icon" src="../static/image/icon_d_16.png">
       </cell>
     </group>

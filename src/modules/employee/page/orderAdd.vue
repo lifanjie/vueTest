@@ -62,7 +62,7 @@
           </mt-header>
         </div>
 
-       <group>
+      
          
           <div class="storage_choose_place GoodsInfo" v-for="(item,index) in tbgoodsStr">
 
@@ -92,7 +92,7 @@
               </div> 	
             </div>
               
-           
+            <group :gutter=0 label-width="4.5em" label-align="left">
            
               <x-input title="数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量" v-if="item.goods.number > 1" placeholder="请输入数量" 
                 v-model="tbgoodsStr[index].number" type="number" class="weui-vcode"></x-input>  
@@ -119,320 +119,204 @@
               <x-input title="优惠金额"  placeholder="请输入优惠金额"
                   v-model="tbgoodsStr[index].differPrice" type="number" class="weui-vcode"></x-input>      
 
-              <x-input title="销售金额"  placeholder="请输入销售金额" style="color:#fb366b;"
-                  v-model="tbgoodsStr[index].strikePrice" type="number" :readonly="true" class="weui-vcode"></x-input>    
+              <x-input title="销售金额"  placeholder="请输入销售金额" 
+                  v-model="tbgoodsStr[index].strikePrice" type="number" :readonly="true" class="weui-vcode red"></x-input>    
 
-              <x-input title="已收订金" v-if="item.goods.isReserve === '1'" style="color:#fb366b;"
-                  v-model="item.goods.deposit" type="number" :readonly="true" class="weui-vcode"></x-input>   
+              <x-input title="已收订金" v-if="item.goods.isReserve === '1'" 
+                  v-model="item.goods.deposit" type="number" :readonly="true" class="weui-vcode red"></x-input>   
 
-              <x-input title="备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注"  placeholder="请输入备注" value-align="left"
+              <x-input title="商品备注"  placeholder="请输入商品备注" value-align="left"
                   v-model="tbgoodsStr[index].remarks" type="text" class="weui-vcode">
                   <img slot="right-full-height" @click="setGoodsRemarks(index)"  v-if="isRemarks" src="../static/image/search.png">
               </x-input> 
               <popup-picker :show.sync="goodsremarksVisible" :show-cell="false" :data="selremarksList"  @on-change="selGoodsRemarks"  value-text-align="left"></popup-picker>
 
-              <cell title="商品图片" value-align="left">
+              <cell class="weui-vcode" title="商品图片" value-align="left">
                   <div class="fileUpload btn btn-primary">
                     <span></span>
                     <input type="file" class="upload" name="myfiles"  @change="uploadGoodsPicture(item.id,index,$event)"/>
                   </div>
                   <img v-show="item.photosrc != ''" :src="item.photosrc"  />	
               </cell>
-             
+            </group> 
           </div>
-         </group> 
-         
 
-         <group> 
-
-
-        <cell title="换货记录" >
-           <div class="badge-value">
-         <badge text="1"></badge>
-          <x-button slot="right" type="primary"  @click.native="insertBarter()"  mini>新增</x-button>
-          
-        </div>
-        </cell> 
-
-     <div class="barterInfo" v-for="(item,index) in tbBarter" >  
-
-              <div class="storage_body_line bgc_opcity">
-                <span class="storage_body_line_title ">换货方式</span> 
-                  <span>
-                    <label v-for="barterMode in barterModeList">
-                      <input class="barterMode" type="radio" v-model="tbBarter[index].barterMode" :value="barterMode.value">{{barterMode.label}}
-                    </label> 
-                  </span>
-              </div>
-
-              <div class="storage_body_line bgc_opcity">
-                <span class="storage_body_line_title ">回收方式</span> 
-                  <span>
-                    <label v-for="isOneself in isOneselfList">
-                      <input class="isOneself" @click="" type="radio" 
-                      v-model="tbBarter[index].isOneself" :value="isOneself.value">{{isOneself.label}}
-                    </label>
-                  </span>        
-              </div>
-
-              <div class="storage_body_line bgc_opcity" v-if="isManufacturer">
-					      <span class="storage_body_line_title">品牌</span>
-                <span class="storage_body_line_info" @click="setManufacturer(index)">
-                  <popup-picker placeholder="请选择品牌" :data="selmanufacturerList"  v-model="tbBarter[index].seloldmanufacturer"  @on-change="selectManufacturer"  value-text-align="left"></popup-picker>                    
-                </span> 
-				      </div>
-
-              <div class="storage_body_line bgc_opcity goodsCodeDiv">
-                <span class="storage_body_line_title">回收条码</span>
-                <span class="storage_body_line_info beizhu">
-                <input class="goodsCode" v-model="tbBarter[index].goodsCode" maxlength="255" style="z-index:9999"
-                type="text" placeholder="请输入条码">
-                <popup-picker :show.sync="saleGoodsVisible" :show-cell="false" :data="selsaleGoodsList"  @on-change="selectSaleGoods"  value-text-align="left"></popup-picker>               
-                </span>
-                <img class="search" style="height: 35px;vertical-align: middle;" @click="setSaleGoods(index)" src="../static/image/search.png" />
-              </div>
-			
-              <div class="storage_body_line bgc_opcity addold">
-                <span class="storage_body_line_title">旧料品类</span>
-                <span class="storage_body_line_info" @click="setOldType(index)">
-                  <popup-picker placeholder="请选择旧料品类" :data="seloldTypeList" v-model="tbBarter[index].seloldType"  @on-change="selectOldType"  value-text-align="left"></popup-picker>                    
-                </span>  
-                <button type="button" class="button_style2 button_jisuan" @click="insertOld(index)">抵换</button>                                      
-              </div>
-
-              <div class="storage_body_line bgc_opcity">
-                <span class="storage_body_line_title">总&ensp;重&ensp;量</span> 
-                <span class="storage_body_line_info">
-                  <input class="barterWeightNum" v-model="tbBarter[index].barterWeightNum" type="number" placeholder="请输入总重量" maxlength="11" >
-                  
-                </span>          
-              </div>
-
-              <div class="diamond" v-show="tbBarter[index].oldTypeName === '钻石'">   
-
-                <div class="storage_body_line bgc_opcity" v-show="isPriceType">
-                  <span class="storage_body_line_title">价格类型</span>
-                  <span class="storage_body_line_info" @click="setOldPriceType(index)">
-                  <popup-picker placeholder="请选择价格类型" :data="selpriceTypeList" v-model="tbBarter[index].seloldpriceType"  @on-change="selectOldPriceType"  value-text-align="left"></popup-picker>                                       
-                  </span>                
-                </div>
-
-                <div class="storage_body_line bgc_opcity">
-                  <span class="storage_body_line_title">证&ensp;书&ensp;号</span> 
-                  <span class="storage_body_line_info">
-                    <input class="certNo" type="text" placeholder="请输入证书号" v-model="tbBarter[index].certNo" maxlength="64">  
-                  </span>                       
-                </div>
-          
-                <div class="storage_body_line bgc_opcity">
-                  <span class="storage_body_line_title">主&ensp;石&ensp;重</span> 
-                  <span class="storage_body_line_info">
-                    <input class="mainStone" v-model="tbBarter[index].mainStone"type="number" placeholder="请输入主石重" maxlength="64" >  
-                  </span>                  
-                </div>
-
-                <div class="storage_body_line bgc_opcity">
-                  <span class="storage_body_line_title">颜&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色</span>
-                </div>
-
-                <div class="storage_body_line bgc_opcity">
-                  <span class="storage_body_line_title">净&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</span>
-                </div>
-
-              </div>
-
-              <div class="xinzeng_old_List">
-
-                <div style="margin-top: 5px;" v-for="(item2,index2) in tbBarter[index].tbOld">
-
-                  <div class="storage_body_line bgc_opcity addold">
-                    <span class="storage_body_line_title">换货商品</span>
-                    <span class="storage_body_line_info" @click="setBarterGoods(index,index2)">
-                      <popup-picker placeholder="请选择换货商品" :data="selbarterGoodsList"
-                      v-model="tbBarter[index].tbOld[index2].selbarterGoods"  @on-change="selectBarterGoods"  value-text-align="left"></popup-picker>       
-                    </span>
-                    <button type="button" class="button_style2 button_jisuan" @click="deleteOld(index,index2)">删除</button>
-                  </div>
-                 
-                  <div class="storage_body_line bgc_opcity" v-show="tbBarter[index].isOneself === '按克'">
-                    <span class="storage_body_line_title">抵扣重量</span> 
-                    <span class="storage_body_line_info">
-                      <input class="barterWeight" type="number" placeholder="请输入抵扣重量"  maxlength="11" 
-                      v-model="tbBarter[index].tbOld[index2].barterWeight" > 
-                    </span>              
-                  </div>
-
-                  <div class="storage_body_line bgc_opcity" v-show="tbBarter[index].isOneself === '按克'">
-                    <span class="storage_body_line_title">旧料单价</span> 
-                    <span class="storage_body_line_info">
-                    <input class="unitPrice" placeholder="金重*单价=换货金额" maxlength="11" type="number"
-                    v-model="tbBarter[index].tbOld[index2].unitPrice">  
-                    </span>       
-                  </div>
-
-                  <div class="storage_body_line bgc_opcity" v-show="tbBarter[index].isOneself === '标价'">
-                    <span class="storage_body_line_title">回收标价</span> 
-                    <span class="storage_body_line_info">
-                      <input type="number" placeholder="请输入回收标价" class="oldPrice" maxlength="11" 
-                      v-model="tbBarter[index].tbOld[index2].oldPrice">
-                    </span>  
-                  </div>
-                          
-                  <div class="storage_body_line bgc_opcity">
-                    <span class="storage_body_line_title">折扣(%)</span> 
-                    <span class="storage_body_line_info">
-                      <input class="barterDiscount" type="number" placeholder="折扣*标价=换货金额" maxlength="11" 
-                      v-model="tbBarter[index].tbOld[index2].barterDiscount">
-                    </span>    
-                  </div>
-
-                  <div class="storage_body_line bgc_opcity" v-if="isExcludeFee">
-                    <span class="storage_body_line_title">工费</span> 
-                    <span class="storage_body_line_info">
-                      <input class="feePrice" type="number" placeholder="请输入工费" maxlength="11"  
-                      v-model="tbBarter[index].tbOld[index2].feePrice">   
-                    </span>        
-                  </div>
-
-                  <div class="storage_body_line bgc_opcity">
-                    <span class="storage_body_line_title">换货金额</span> 
-                    <span class="storage_body_line_info">
-                      <input class="barterMoney" type="number" placeholder="请输入换货金额" maxlength="11"  
-                      :readonly="tbBarter[index].isOneself === '标价'" style="color:#fb366b;"
-                      v-model="tbBarter[index].tbOld[index2].barterMoney">
-                    </span>          
-                  </div>
-                          
-                  <div class="storage_body_line bgc_opcity" v-show="tbBarter[index].isOneself === '按克'">
-                    <span class="storage_body_line_title ">折旧单价</span> 
-                    <span class="storage_body_line_info">
-                    <input class="unitDepreciation" type="number" placeholder="请输入折旧费单价"  maxlength="11" 
-                    v-model="tbBarter[index].tbOld[index2].unitDepreciation">
-                    </span>
-                  </div>
-
-                  <div class="storage_body_line bgc_opcity">
-                    <span class="storage_body_line_title ">折&ensp;旧&ensp;费</span> 
-                    <span class="storage_body_line_info">
-                      <input class="depreciationMoney" type="number" placeholder="请输入折旧费" maxlength="11"
-                      v-model="tbBarter[index].tbOld[index2].depreciation">
-                    </span>  
-                  </div>
-
-                  <div class="storage_body_line bgc_opcity">
-                    <span class="storage_body_line_title">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</span>
-                    <span class="storage_body_line_info">
-                      <input class="barterRemarks"  type="text" placeholder="请输入备注" v-model="tbBarter[index].tbOld[index2].barterRemarks" maxlength="200">      
-                      <popup-picker :show.sync="barterremarksVisible" :show-cell="false" :data="selremarksList"  @on-change="selBarterRemarks"  value-text-align="left"></popup-picker>                       
-                    </span>
-                    <img class="search" style="height: 35px;vertical-align: middle;" @click="setBarterRemarks(index,index2)" v-if="isRemarks" src="../static/image/search.png"/>
-                  </div>
-
-                </div>
-              </div>
-
-              <div class="Info_title storage_body_line" >
-                <button style=" width: 100%;color: #fff;background-color: #c9c9c9;font: inherit;" type="button"  class="" 
-                @click="deletebarter(index)">删除<img class="botton_delete" src="../static/image/botton_delete.png" /></button>
-              </div>
-
-			      </div>         
- 
- 
-       </group> 
-        
-          
-          <!-- <div class="storage_body_line">
-            <span class="storage_body_line_title" >换货记录</span> 
-            <span class="storage_img_line_info huanhuoNo" >
-            <div style="text-align: right;padding-right: 2px;">
-              <input type="text" readOnly="true"  maxlength="50" class="input_button" v-model="tbBarter.length" style="width:15px!important;color:#999;">
-              <button type="button" class="button_style2 button_jisuan" @click="insertBarter()">新增</button>
+        <group :gutter=10 label-width="4.5em" label-align="left"> 
+          <cell title="换货记录" class="weui-vcode">
+            <div class="badge-value">
+              <badge :text="tbBarter.length"></badge>
+              <x-button slot="right" type="primary"  @click.native="insertBarter()"  mini>添加换货</x-button>
             </div>
-            </span> 											
-          </div>						 -->
-         
-          <div id="xinzeng_huanhuo_List" style="background-color: #ececec;">
+          </cell> 
+        </group> 
+
+        
+        <div v-for="(item,index) in tbBarter" >  
+        
+          <group :gutter=0 label-width="4.5em" label-align="left"> 
+
+            <cell title="换货方式" value-align="left" class="weui-vcode">
+              <label v-for="barterMode in barterModeList">
+                <input class="barterMode" type="radio" v-model="tbBarter[index].barterMode" :value="barterMode.value">{{barterMode.label}}
+              </label>
+            </cell>       
+
+            <cell title="回收方式" value-align="left" class="weui-vcode">
+              <label v-for="isOneself in isOneselfList">
+                <input class="isOneself" @click="" type="radio" 
+                v-model="tbBarter[index].isOneself" :value="isOneself.value">{{isOneself.label}}
+              </label>
+            </cell>  
+          
+            <popup-picker title="品牌" placeholder="请选择品牌" v-if="isManufacturer" @click.native="setManufacturer(index)" :data="selmanufacturerList" 
+            v-model="tbBarter[index].seloldmanufacturer"  @on-change="selectManufacturer"  value-text-align="left"></popup-picker>                    
+
+  
+            <x-input title="回收条码"  placeholder="请输入回收条码" value-align="left"
+              v-model="tbBarter[index].goodsCode" type="text" class="weui-vcode">
+            <img slot="right-full-height" @click="setSaleGoods(index)" src="../static/image/search.png">
+            </x-input> 
+            <popup-picker :show.sync="saleGoodsVisible" :show-cell="false" :data="selsaleGoodsList"  @on-change="selectSaleGoods"  value-text-align="left"></popup-picker>               
+
+            <popup-picker title="旧料品类" placeholder="请选择旧料品类" @click.native="setOldType(index)" :data="seloldTypeList" 
+            v-model="tbBarter[index].seloldType"  @on-change="selectOldType"  value-text-align="left">
+            </popup-picker>                    
+
+            <x-input title="总&ensp;重&ensp;量"  placeholder="请输入商品条码"  v-model="tbBarter[index].barterWeightNum" type="number" class="weui-vcode"></x-input> 
+
+
+            <div class="diamond" v-show="tbBarter[index].oldTypeName === '钻石'">   
+
+              <popup-picker v-show="isPriceType" title="价格类型" placeholder="请选择价格类型" @click.native="setOldPriceType(index)" :data="selpriceTypeList" 
+              v-model="tbBarter[index].seloldpriceType"  @on-change="selectOldPriceType"  value-text-align="left"></popup-picker>                    
+              
+              <x-input title="证&ensp;书&ensp;号" placeholder="请输入证书号" v-model="tbBarter[index].certNo" type="text" class="weui-vcode"></x-input> 
+
+              <x-input title="主&ensp;石&ensp;重" placeholder="请输入主石重" v-model="tbBarter[index].mainStone" type="number" class="weui-vcode"></x-input> 
+        
+              <x-input title="颜&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色" placeholder="请输入颜色" v-model="tbBarter[index].color" type="text" class="weui-vcode"></x-input> 
+              
+              <x-input title="净&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度" placeholder="请输入净度" v-model="tbBarter[index].cleanliness" type="text" class="weui-vcode"></x-input> 
+              
+            </div>
+
+            <cell title="抵换记录" class="weui-vcode">
+              <div class="badge-value">
+                <badge :text="tbBarter[index].tbOld.length"></badge>
+                <x-button slot="right-full-height" type="primary" @click.native="insertOld(index)" mini>添加抵换</x-button>
+              </div>
+            </cell>          
+
+          </group> 
+
+        <div v-for="(item2,index2) in tbBarter[index].tbOld">
             
-       
+          <group :gutter=5 label-width="4.5em" label-align="left"> 
+         
+            <popup-picker title="换货商品" placeholder="请选择换货商品" @click.native="setBarterGoods(index,index2)" :data="selbarterGoodsList" 
+            v-model="tbBarter[index].tbOld[index2].selbarterGoods"  @on-change="selectBarterGoods"  value-text-align="left"></popup-picker>            
 
-          </div>														
-		
+            <x-input title="抵扣重量" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入抵扣重量" 
+            v-model="tbBarter[index].tbOld[index2].barterWeight" type="number" class="weui-vcode"></x-input> 
 
-        <div class="storage_body_line_box" v-if="giveLength > 0">
-          <div class="storage_body_line">
-            <span class="storage_body_line_title" >赠品记录</span> 
-            <span class="storage_img_line_info zengpinNo">
-            <div style="text-align: right;padding-right: 10px;">
-              <input type="text" readOnly="true"  maxlength="50" class="input_button" id="giveNo"  style="width: 15px!important; color: #999;">
-              <button type="button" class="button_style2 button_jisuan" @click="insertGive()">新增</button>
-            </div>
-            </span>											
-          </div>	
+            <x-input title="旧料单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="金重*单价=换货金额" 
+            v-model="tbBarter[index].tbOld[index2].unitPrice" type="number" class="weui-vcode"></x-input> 
 
-          <div id="xinzeng_zengpin_List">
-            <div class="GiveInfo" v-for="(item,index) in giveList">  
-            <div class="storage_body_line bgc_opcity">
-              <span class="storage_body_line_title">赠&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;品</span> 
-              <span class="storage_body_line_info" @click="setGive(index)">
-                <popup-picker placeholder="请选择赠品" :data="selgiveList" v-model="giveList[index].selgiveName"  @on-change="selectGive"  value-text-align="left"></popup-picker>       
-              </span>                        
-            </div>
+            <x-input title="回收标价" v-show="tbBarter[index].isOneself === '标价'" placeholder="请输入回收标价" 
+            v-model="tbBarter[index].tbOld[index2].oldPrice" type="number" class="weui-vcode"></x-input>  
 
-            <div class="storage_body_line bgc_opcity">
-              <span class="storage_body_line_title">数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量</span> 
-                <input type="number" placeholder="请输入数量" class="giveCount" maxlength="11" v-model="giveList[index].giveCount">
-            </div>
+            <x-input title="折扣(%)" placeholder="折扣*标价=换货金额" 
+            v-model="tbBarter[index].tbOld[index2].barterDiscount" type="number" class="weui-vcode"></x-input> 
 
-            <div class="Info_title storage_body_line" >
-              <button style=" width: 100%;color: #fff;background-color: #c9c9c9;font: inherit;" type="button"  class="" @click="deleteGive(index)">删除
-              <img class="botton_delete" src="../static/image/botton_delete.png" /></button>
-            </div>
-            </div>
-          </div>
+            <x-input title="工费" placeholder="请输入工费" v-if="isExcludeFee"
+            v-model="tbBarter[index].tbOld[index2].feePrice" type="number" class="weui-vcode"></x-input>   
+
+            <x-input title="换货金额" placeholder="请输入换货金额" :readonly="tbBarter[index].isOneself === '标价'"
+            v-model="tbBarter[index].tbOld[index2].barterMoney" type="number" class="weui-vcode red">
+            <x-button slot="right" type="primary" @click.native="deleteOld(index,index2)" mini>删除抵换</x-button>
+            </x-input>                 
+
+            <x-input title="折旧单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入折旧费单价" 
+            v-model="tbBarter[index].tbOld[index2].unitDepreciation" type="number" class="weui-vcode"></x-input> 
+
+            <x-input title="折&ensp;旧&ensp;费" placeholder="请输入折旧费" 
+            v-model="tbBarter[index].tbOld[index2].depreciation" type="number" class="weui-vcode"></x-input> 
+
+            <x-input title="换货备注"  placeholder="请输入换货备注" value-align="left"
+                v-model="tbBarter[index].tbOld[index2].barterRemarks" type="text" class="weui-vcode">
+                <img slot="right-full-height" @click="setBarterRemarks(index,index2)"  v-if="isRemarks" src="../static/image/search.png">
+            </x-input> 
+            <popup-picker :show.sync="barterremarksVisible" :show-cell="false" :data="selremarksList"  @on-change="selBarterRemarks"  value-text-align="left"></popup-picker>
+          
+          </group>
 
         </div>
 
-        <div class="storage_body_line">
-          <span class="storage_body_line_title">代&ensp;金&ensp;劵</span> 
-          <span class="storage_body_line_info">
-          <input placeholder="请输入代金券" maxlength="11" style="z-index:9999" type="text" v-model="voucherCode" >
-            <popup-picker :show.sync="exchangeVisible" :show-cell="false" :data="selexchangeList"  @on-change="selectExchange"  value-text-align="left"></popup-picker> 
-          </span> 
-          <img class="search" v-show="exchangeList.length > 0" style="height: 35px;vertical-align: middle;" @click="exchangeVisible = true" src="../static/image/search.png" />      
+        <div class="Info_title storage_body_line" >
+          <button style=" width: 100%;color: #fff;background-color: #c9c9c9;font: inherit;" type="button"  class="" 
+          @click="deletebarter(index)">删除换货<img class="botton_delete" src="../static/image/botton_delete.png" /></button>
         </div>
+    </div>
 
-        <div class="storage_body_line">
-          <span class="storage_body_line_title">抵扣金额</span> 
-          <span class="storage_body_line_info">
-            <input type="number" placeholder="请输入抵扣金额" v-model="voucherNum" maxlength="11">
-          </span>  
-        </div>         
+    <group :gutter=10 label-width="4.5em" label-align="left"> 
+      <cell title="赠品记录" class="weui-vcode">
+        <div class="badge-value">
+          <badge :text="giveList.length"></badge>
+          <x-button slot="right-full-height" type="primary" @click.native="insertGive()" mini>添加赠品</x-button>
+        </div>
+      </cell> 
+    </group>
+    
+    <div v-for="(item,index) in giveList">  
+      <group :gutter=0 label-width="4.5em" label-align="left">
+        <popup-picker title="赠&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;品" placeholder="请选择赠品"
+          @click.native="setGive(index)" :data="selgiveList" 
+        v-model="giveList[index].selgiveName"  @on-change="selectGive"  value-text-align="left">
+        </popup-picker>                    
 
-        <div class="storage_body_line" v-show="prestoreCount > 0">
-          <span class="storage_body_line_title">预存金额</span> 
-          <span class="storage_body_line_info">
-            <input type="number" :placeholder="'可用预存金额:'+prestoreCount" v-model="prestore"  maxlength="11">
-          </span>  
-        </div>  
-        
-        <div class="storage_body_line">
-          <span class="storage_body_line_title">订单备注</span> 
-          <span class="storage_body_line_info beizhu">
-            <input type="text" v-model="orderRemarks" placeholder="请输入订单备注" maxlength="120">
-            <popup-picker :show.sync="ordersremarksVisible" :show-cell="false" :data="selremarksList"  @on-change="selordersRemarks"  value-text-align="left"></popup-picker>  
-          </span>
-          <img class="search" style="height: 35px;vertical-align: middle;" @click="setordersRemarks()"  v-if="isRemarks" src="../static/image/search.png"/> 
-        </div> 
+        <x-input title="数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量" placeholder="请输入数量" 
+        v-model="giveList[index].giveCount" type="number" class="weui-vcode">
+          <x-button slot="right" type="primary" @click.native="deleteGive(index)" mini>删除赠品</x-button>
+        </x-input> 
+      </group> 
+    </div>
 
-        <div class="storage_body_line" style="border-top:1px solid #e5e5e5;">
-          <span class="storage_body_line_title">总折扣</span> 
-          <span class="storage_body_line_info "> 
-            <input type="number" placeholder="总折扣(%)" v-model="discountSum" @blur="setDiscountSum()" class="input_button" maxlength="11">	
-          </span>  									
-        </div> 
+    <group :gutter=10 label-width="4.5em" label-align="left">
 
-        <div class="container my_total_assets_list">
+      <x-input title="代&ensp;金&ensp;劵"  placeholder="请输入代金券" value-align="left"
+        v-model="voucherCode" type="text">
+      <img slot="right-full-height" v-show="exchangeList.length > 0"  @click="exchangeVisible = true"  src="../static/image/search.png">
+      </x-input> 
+      <popup-picker :show.sync="exchangeVisible" :show-cell="false" :data="selexchangeList"  @on-change="selectExchange" 
+      value-text-align="left"></popup-picker>               
+
+      <x-input title="抵扣金额" placeholder="请输入抵扣金额" v-model="voucherNum" type="number" class="weui-vcode"></x-input>
+
+    </group>    
+    
+    <group :gutter=10 label-width="4.5em" label-align="left">
+
+      <x-input title="预存金额" v-show="prestoreCount > 0" :placeholder="'可用预存金额:'+prestoreCount" v-model="prestore" type="number" class="weui-vcode"></x-input>
+
+      <x-input title="总折扣" placeholder="总折扣(%)" v-model="discountSum" type="number" @on-blur="setDiscountSum()" class="weui-vcode"></x-input>
+
+      <x-input title="订单备注"  placeholder="请输入订单备注" value-align="left"
+          v-model="orderRemarks" type="text" class="weui-vcode">
+          <img slot="right-full-height" @click="setordersRemarks()"  v-show="isRemarks" src="../static/image/search.png">
+      </x-input> 
+      <popup-picker :show.sync="ordersremarksVisible" :show-cell="false" :data="selremarksList"  @on-change="selordersRemarks"  value-text-align="left"></popup-picker>
+   
+    </group>
+
+    <group :gutter=10 label-width="4.5em" label-align="left">
+      <cell title="实收金额" value-align="left" class="red" value="￥1024"></cell>
+      <cell-form-preview  align-items="center" :list="preview"></cell-form-preview>
+    </group>    
+
+
+
+
+        <!-- <div class="container my_total_assets_list">
           <div class="row">
             <div class="col-md-12" style="margin-bottom:0!important;">
               商品金额 <span style="margin-left:15px;">{{strikePriceSum}}</span>
@@ -459,7 +343,7 @@
               实收金额 <span id="receivable" style="margin-left:15px;color:#fb366b;">{{receivable}}</span>
             </div>
           </div>
-        </div> 
+        </div>  -->
 
         <div class="add_new_address2 sure_button" @click="sureOrder()">
           <div class="add_new_address_body " >
@@ -582,7 +466,7 @@ import { Toast } from 'mint-ui'
 import { validate } from 'utils/validate'
 import { number } from 'utils/number'
 import {focus} from 'utils/directives'
-import { Cell, Group, XInput, XButton, PopupPicker, Badge } from 'vux'
+import { Cell, Group, XInput, XButton, PopupPicker, Badge, Checker, CheckerItem, Divider, CellFormPreview } from 'vux'
 
 Vue.component(Toast)
 Vue.use(focus)
@@ -594,7 +478,11 @@ export default {
     XInput,
     PopupPicker,
     XButton,
-    Badge
+    Badge,
+    Checker,
+    CheckerItem,
+    Divider,
+    CellFormPreview
   },
   data () {
     return {
@@ -655,6 +543,30 @@ export default {
     }
   },
   computed: {
+    preview: function () {
+      return [{
+        label: '商品金额',
+        value: this.strikePriceSum
+      }, {
+        label: '抵扣金额',
+        value: this.getVoucherNum
+      }, {
+        label: '预存金额',
+        value: ''
+      }, {
+        label: '已收金额',
+        value: ''
+      }, {
+        label: '换货金额',
+        value: ''
+      }, {
+        label: '折旧费',
+        value: ''
+      }, {
+        label: '优惠金额',
+        value: ''
+      }]
+    },
     getVoucherNum: function () {
       return 0 - Number(this.voucherNum)
     },
@@ -1384,4 +1296,14 @@ export default {
 
 <style lang="scss" scoped>
   @import "../style/scss/orderAdd";
+</style>
+
+<style lang="less">
+
+.red .weui-cell__ft,
+.red .weui-cell__bd{
+  color: #fb366b;
+}
+
+
 </style>

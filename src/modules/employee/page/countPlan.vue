@@ -8,12 +8,12 @@
       </mt-header>
     </div>
 
-    <group>
-      <popup-picker title="盘点计划" placeholder="请选择盘点计划" :data="selcountPlan" v-model="countPlanValue" @on-change="setCountPlan" value-text-align="left"></popup-picker>                    
+    <group label-width="4.5em" label-align="left">
+      <popup-picker class="weui-vcode"  title="盘点计划" placeholder="请选择盘点计划" :data="selcountPlan" v-model="countPlanValue" @on-change="setCountPlan" value-text-align="left"></popup-picker>                    
       <x-input title="商品条码" ref="goodsCode"  @on-enter="saveCountPlan()" placeholder="请输入商品条码" v-model="goodsCode" type="text" class="weui-vcode">
         <x-button slot="right" type="primary" @click.native="saveCountPlan()" mini>盘点</x-button>
       </x-input>  
-      <cell-form-preview :list="countPlanList"></cell-form-preview>           
+      <cell-form-preview :list="countPlanList" class="weui-vcode"></cell-form-preview>           
     </group>
 
     <div id="returnlist" v-for="item in messages">
@@ -179,15 +179,6 @@ export default {
 @import "../style/scss/countPlan";
 </style>
 
-<style lang="less">
-.vux-popup-picker-select-box{
-  margin-left: 20px !important;
-}
-
-.vux-cell-value{
-  color:black !important;
-}
-</style>
 
 
 
