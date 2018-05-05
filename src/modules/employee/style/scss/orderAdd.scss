@@ -186,19 +186,6 @@ li {
   border-radius: 4px;
 }
 
-.next_btn {
-	background-color: #CC3300;
-	text-align: center;
-	display: block;
-	border-radius: 2px;
-	webKit-border-radius: 2px;
-	color: #fff;
-	font-size: 14px;
-	height: 44px;
-	line-height: 44px;
-	width: 95%;
-	margin: 10px auto;
-}
 
 .button_style1 {
 	display: inline-block;
@@ -604,6 +591,11 @@ a.exchange_buy{width: 160px;height: 40px;line-height: 40px;border-radius: 20px;l
 	float: right!important;
 }
 
+
+.btn_wrap {
+  padding: 0 1rem;
+  margin-top: 2rem;
+}
 
 
 

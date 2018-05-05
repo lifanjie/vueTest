@@ -1,6 +1,14 @@
 <template>
   <div>
-    <div class="more_head">
+    <!-- <div class="page-field">
+      <mt-header fixed title="更多">
+        <router-link to="/productList"  slot="left">
+          <mt-button icon="back">返回</mt-button>
+        </router-link>
+      </mt-header>
+    </div> -->
+
+<div class="more_head">
       <span>更多</span>
     </div>
     <div class="more_head_img">
@@ -12,7 +20,7 @@
          
     </div>
 
-    <group label-width="4.5em" label-align="left">
+    <group :gutter=0 label-width="4.5em" label-align="left">
       <!-- <cell class="weui-vcode" title="销售报表"  is-link>
         <img slot="icon" class="img-icon" src="../static/image/icon_d_14.png">
       </cell>       -->
@@ -36,18 +44,23 @@
       </cell>
     </group>
 
-    <div class="out_button" @click="outlogin()">退出登陆</div>
+    <group :gutter=10 label-width="4.5em" label-align="left">
+      <x-button class="footer_button" @click.native="outlogin()">退出登陆</x-button>
+    </group>
+
+
 
   </div>
 </template>
 
 <script>
-import { Group, Cell } from 'vux'
+import { Group, Cell, XButton } from 'vux'
 
 export default {
   components: {
     Group,
-    Cell
+    Cell,
+    XButton
   },
   data () {
     return {

@@ -47,9 +47,6 @@ export default new Router({
     {path: '/countPlan', component: countPlan, name: 'countPlan', desc: '盘点'},
     {path: '/exchangeGift', component: exchangeGift, name: 'exchangeGift', desc: '礼品兑换'},
     {path: '/exchangeCash', component: exchangeCash, name: 'exchangeCash', desc: '返现'},
-    {
-      path: '/reserve',
-      component: reserve
-    }
+    {path: '/reserve', component: reserve, name: 'reserve', desc: '预定'}
   ]
 })

@@ -216,18 +216,24 @@ button{
         margin-bottom: 55px;
     }
 
-    .mint-header{
+    .mint-header,.footer_button{
        height: 48px;
        font-size: 18px;
     }
+
+
 }    
 
 @media screen and (max-width: 759px){
-    .mint-header{
+    .mint-header,.footer_button{
         height: 40px;
         font-size: 14px;
     }
 } 
+
+.footer_button{
+    background-color: #FFFFFF !important;
+}
 
 @media screen and (max-width:359.9px){ html{font-size:10px;} }
 @media screen and (min-width:360px) and (max-width:374.9px){ html{font-size:11.5px;} }

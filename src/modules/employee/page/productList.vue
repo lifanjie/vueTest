@@ -1,25 +1,29 @@
 <template>
   <div id="productList">
-    <div class="product_search">
-      <div class="select_value_box">
+      <div class="product_search">  
+       <div class="select_value_box">
       <span class="select_value" >{{goodsType.goodsType}}</span>
       <span class="sanjiao_xia" ></span>
-      </div>
-      <select id="goodsType" v-model="goodsType" @change="initGoodsType()">
+      </div> 
+       <select id="goodsType" v-model="goodsType" @change="initGoodsType()">
         <option value="">全部</option>
         <option class="select_value_li" v-for="item in goodsTypeList" :value="item">{{item.goodsType}}</option>
-      </select>
-      <input type="text" placeholder='搜索条码' @keydown.13="queryGoods()" v-focus="isfocus"  v-model="searchKey" autocapitalize="off" autocorrect="off" id="searchKey" />
+      </select> 
+     <input type="text" placeholder='请输入商品条码' @keydown.13="queryGoods()" v-focus="isfocus"  v-model="searchKey" autocapitalize="off" autocorrect="off" id="searchKey" />
       <img id="clear" src="../static/image/close.png" 
       style="width: 20px;height: 20px;margin-top: 15px;margin-right: 15px;" />
-      <button type="button" id="queryGoods" @click="queryGoods()">Search </button>
-    </div>
+      <button type="button" id="queryGoods" @click="queryGoods()">Search</button> 
+
+   
+    </div>  
+
+
 
     <div id="tempList">
       <div v-for="item in goodsList" class="product">
         <span class="product_title">【{{item.goodsTypeName}}】{{item.goodsName}}<span v-if="item.number==='0'" style="color:red;">无货</span></span>
         <div class="product_detail_box">
-          <router-link :to="{ path: '/productDetail', query: { id: item.id}}" style="position: relative;">	
+          <router-link class="goodsDetail" :to="{ path: '/productDetail', query: { id: item.id}}" style="position: relative;">	
             <img v-if="item.images === ''" class="hideimage goodsImg" src="../static/image/storage_camera1_03.png" style="width:65px;height:53px;">
             <img v-else class="goodsImg" :src="item.images">
           </router-link>
@@ -34,7 +38,9 @@
           <img src="../static/image/icon_c (3).png">
           </span>
           <span v-if="item.isReserve ==='0'" @click="reserve(item.id)" class="reserve">
-          <img src="../static/image/icon_c (6).png">
+            <router-link :to="{ path: '/reserve', query: { id: item.id}}">	
+              <img src="../static/image/icon_c (6).png">
+           </router-link>
           </span>
           </div>
         </div>
@@ -51,18 +57,23 @@ import { validate } from 'utils/validate'
 import { commonUtil } from 'utils/commonUtil'
 import {focus} from 'utils/directives'
 import { Toast } from 'mint-ui'
+import { Search } from 'vux'
 
 Vue.component(Toast)
 Vue.use(focus)
 
 export default {
+  components: {
+    Search
+  },
   data () {
     return {
       goodsType: {goodsType: '全部'},
       searchKey: '',
       isfocus: true,
       goodsTypeList: [],
-      goodsList: []
+      goodsList: [],
+      results: []
     }
   },
   created: function () {
@@ -70,6 +81,20 @@ export default {
     this.queryGoods2()
   },
   methods: {
+    getResult: function (val) {
+      console.log('on-change', val)
+      this.results = val ? this.aa(this.value) : []
+    },
+    aa: function (val) {
+      let rs = []
+      for (let i = 0; i < 20; i++) {
+        rs.push({
+          title: `${val} result: ${i + 1} `,
+          other: i
+        })
+      }
+      return rs
+    },
     initGoodsType: function () {
       if (validate.isEmpty(this.goodsType)) {
         this.goodsType = {goodsType: '全部'}
@@ -166,6 +191,15 @@ export default {
 <style lang="scss" scoped>
   @import "../style/scss/productList";
 </style>
+
+<style lang="less">
+.weui-search-bar__cancel-btn{
+  display: none !important;
+}
+</style>
+
+
+
 
 
 

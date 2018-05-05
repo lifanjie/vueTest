@@ -12,44 +12,26 @@
           </mt-header>
         </div>
 
-        <div class="page-part">
-          <div class="storage_body_line" style="border-top:1px solid #e5e5e5;">
-            <span class="storage_body_line_title">客户电话</span> 
-            <span class="storage_body_line_info dianhuahaoma"> 
-            <input type="number" placeholder="请输入客户电话"  class="mobile" v-model="mobile" maxlength="11" @blur="getcusInfo()">
-            </span>
-					</div>
-
-          <div class="storage_body_line">
-            <span class="storage_body_line_title">客户姓名</span> 
-            <span class="storage_body_line_info xingming"> 
-            <input type="text" placeholder="请输入客户姓名" v-model="username" class="username" maxlength="20" />
-            </span>
-          </div>
-
- 					<div class="storage_img_line">
-						<span class="storage_img_line_title">客户头像</span> 
-            <span class="storage_img_line_info touxiang" style="width:70%;">
+        <group :gutter=0 label-width="4.5em" label-align="left">
+          <x-input title="客户电话" placeholder="请输入客户电话" @on-blur="getcusInfo()" v-model="mobile" type="text" class="weui-vcode"></x-input> 
+          <x-input title="客户姓名" placeholder="请输入客户姓名" v-model="username" type="text" class="weui-vcode"></x-input> 
+          <cell class="weui-vcode" title="客户头像" value-align="left">
               <div class="fileUpload btn btn-primary" id="fileUpload">
-                <span></span> 
-                <input id="uploadBtn" type="file"
-                class="upload" name="myfiles" @change="uploadPicture" />
+                <span></span>
+                <input id="uploadBtn" type="file" class="upload" name="myfiles"  @change="uploadPicture"/>
               </div>
-              <img :src="headPic" v-show="isHeadPic" alt="" id="viewImg" class="storage_img_line_img"/>
-            </span> 
-					</div>
+              <img :src="headPic" v-show="isHeadPic" id="viewImg"/>	
+          </cell>  
+        </group>
 
-          <div class="add_new_address3">
-            <a class="page_next2" @click="cusOver()" style="display:block;">
-            <div class="add_new_address_body" style="background-color: #ccc!important;background-image: none!important;">跳过</div>
-            </a> 
-            <a class="page_next" data-page="page_b" style="display:block;" @click="cusNext()">
-            <div class="add_new_address_body">下一步</div>
-            </a> 
-          </div>          
+        <div class="sure_div">
+          <x-button @click.native="cusOver()" class="sure_button next_btn">跳过</x-button>
+        </div>  
 
-        </div>
-        
+        <div class="sure_div">
+          <x-button  @click.native="cusNext()" class="sure_button sure_btn">下一步</x-button>
+        </div>                
+
       </mt-tab-container-item>
 
       <mt-tab-container-item id="tab-container2">
@@ -62,7 +44,9 @@
           </mt-header>
         </div>
 
-      
+        <p style="text-align:center;" v-if="tbgoodsStr === 0">
+          <span style="vertical-align:middle;display:inline-block;font-size:14px;">加载中&nbsp;&nbsp;</span><inline-loading></inline-loading>
+        </p>
          
           <div class="storage_choose_place GoodsInfo" v-for="(item,index) in tbgoodsStr">
 
@@ -209,54 +193,55 @@
 
           </group> 
 
-        <div v-for="(item2,index2) in tbBarter[index].tbOld">
-            
-          <group :gutter=5 label-width="4.5em" label-align="left"> 
-         
-            <popup-picker title="换货商品" placeholder="请选择换货商品" @click.native="setBarterGoods(index,index2)" :data="selbarterGoodsList" 
-            v-model="tbBarter[index].tbOld[index2].selbarterGoods"  @on-change="selectBarterGoods"  value-text-align="left"></popup-picker>            
-
-            <x-input title="抵扣重量" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入抵扣重量" 
-            v-model="tbBarter[index].tbOld[index2].barterWeight" type="number" class="weui-vcode"></x-input> 
-
-            <x-input title="旧料单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="金重*单价=换货金额" 
-            v-model="tbBarter[index].tbOld[index2].unitPrice" type="number" class="weui-vcode"></x-input> 
-
-            <x-input title="回收标价" v-show="tbBarter[index].isOneself === '标价'" placeholder="请输入回收标价" 
-            v-model="tbBarter[index].tbOld[index2].oldPrice" type="number" class="weui-vcode"></x-input>  
-
-            <x-input title="折扣(%)" placeholder="折扣*标价=换货金额" 
-            v-model="tbBarter[index].tbOld[index2].barterDiscount" type="number" class="weui-vcode"></x-input> 
-
-            <x-input title="工费" placeholder="请输入工费" v-if="isExcludeFee"
-            v-model="tbBarter[index].tbOld[index2].feePrice" type="number" class="weui-vcode"></x-input>   
-
-            <x-input title="换货金额" placeholder="请输入换货金额" :readonly="tbBarter[index].isOneself === '标价'"
-            v-model="tbBarter[index].tbOld[index2].barterMoney" type="number" class="weui-vcode red">
-            <x-button slot="right" type="primary" @click.native="deleteOld(index,index2)" mini>删除抵换</x-button>
-            </x-input>                 
-
-            <x-input title="折旧单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入折旧费单价" 
-            v-model="tbBarter[index].tbOld[index2].unitDepreciation" type="number" class="weui-vcode"></x-input> 
-
-            <x-input title="折&ensp;旧&ensp;费" placeholder="请输入折旧费" 
-            v-model="tbBarter[index].tbOld[index2].depreciation" type="number" class="weui-vcode"></x-input> 
-
-            <x-input title="换货备注"  placeholder="请输入换货备注" value-align="left"
-                v-model="tbBarter[index].tbOld[index2].barterRemarks" type="text" class="weui-vcode">
-                <img slot="right-full-height" @click="setBarterRemarks(index,index2)"  v-if="isRemarks" src="../static/image/search.png">
-            </x-input> 
-            <popup-picker :show.sync="barterremarksVisible" :show-cell="false" :data="selremarksList"  @on-change="selBarterRemarks"  value-text-align="left"></popup-picker>
+          <div v-for="(item2,index2) in tbBarter[index].tbOld">
+              
+            <group :gutter=5 label-width="4.5em" label-align="left"> 
           
-          </group>
+              <popup-picker title="换货商品" placeholder="请选择换货商品" @click.native="setBarterGoods(index,index2)" :data="selbarterGoodsList" 
+              v-model="tbBarter[index].tbOld[index2].selbarterGoods"  @on-change="selectBarterGoods"  value-text-align="left"></popup-picker>            
+
+              <x-input title="抵扣重量" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入抵扣重量" 
+              v-model="tbBarter[index].tbOld[index2].barterWeight" type="number" class="weui-vcode"></x-input> 
+
+              <x-input title="旧料单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="金重*单价=换货金额" 
+              v-model="tbBarter[index].tbOld[index2].unitPrice" type="number" class="weui-vcode"></x-input> 
+
+              <x-input title="回收标价" v-show="tbBarter[index].isOneself === '标价'" placeholder="请输入回收标价" 
+              v-model="tbBarter[index].tbOld[index2].oldPrice" type="number" class="weui-vcode"></x-input>  
+
+              <x-input title="折扣(%)" placeholder="折扣*标价=换货金额" 
+              v-model="tbBarter[index].tbOld[index2].barterDiscount" type="number" class="weui-vcode"></x-input> 
+
+              <x-input title="工费" placeholder="请输入工费" v-if="isExcludeFee"
+              v-model="tbBarter[index].tbOld[index2].feePrice" type="number" class="weui-vcode"></x-input>   
+
+              <x-input title="换货金额" placeholder="请输入换货金额" :readonly="tbBarter[index].isOneself === '标价'"
+              v-model="tbBarter[index].tbOld[index2].barterMoney" type="number" class="weui-vcode red">
+              <x-button slot="right" type="primary" @click.native="deleteOld(index,index2)" mini>删除抵换</x-button>
+              </x-input>                 
+
+              <x-input title="折旧单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入折旧费单价" 
+              v-model="tbBarter[index].tbOld[index2].unitDepreciation" type="number" class="weui-vcode"></x-input> 
+
+              <x-input title="折&ensp;旧&ensp;费" placeholder="请输入折旧费" 
+              v-model="tbBarter[index].tbOld[index2].depreciation" type="number" class="weui-vcode"></x-input> 
+
+              <x-input title="换货备注"  placeholder="请输入换货备注" value-align="left"
+                  v-model="tbBarter[index].tbOld[index2].barterRemarks" type="text" class="weui-vcode">
+                  <img slot="right-full-height" @click="setBarterRemarks(index,index2)"  v-if="isRemarks" src="../static/image/search.png">
+              </x-input> 
+              <popup-picker :show.sync="barterremarksVisible" :show-cell="false" :data="selremarksList"  @on-change="selBarterRemarks"  value-text-align="left"></popup-picker>
+            
+            </group>
+
+          </div>
+
+          <div class="Info_title storage_body_line" >
+            <button style=" width: 100%;color: #fff;background-color: #c9c9c9;font: inherit;" type="button"  class="" 
+            @click="deletebarter(index)">删除换货<img class="botton_delete" src="../static/image/botton_delete.png" /></button>
+          </div>
 
         </div>
-
-        <div class="Info_title storage_body_line" >
-          <button style=" width: 100%;color: #fff;background-color: #c9c9c9;font: inherit;" type="button"  class="" 
-          @click="deletebarter(index)">删除换货<img class="botton_delete" src="../static/image/botton_delete.png" /></button>
-        </div>
-    </div>
 
     <group :gutter=10 label-width="4.5em" label-align="left"> 
       <cell title="赠品记录" class="weui-vcode">
@@ -309,51 +294,15 @@
     </group>
 
     <group :gutter=10 label-width="4.5em" label-align="left">
-      <cell title="实收金额" value-align="left" class="red" value="￥1024"></cell>
-      <cell-form-preview  align-items="center" :list="preview"></cell-form-preview>
-    </group>    
+      <cell title="实收金额" value-align="left" class="red" :value="receivable"></cell>
+      <cell-form-preview class="previewValue" value-align="left" :list="preview"></cell-form-preview>
+    </group>  
 
+    <div class="sure_div">
+      <x-button  @click.native="sureOrder()" class="sure_button sure_btn">立即下单</x-button>
+    </div>         
 
-
-
-        <!-- <div class="container my_total_assets_list">
-          <div class="row">
-            <div class="col-md-12" style="margin-bottom:0!important;">
-              商品金额 <span style="margin-left:15px;">{{strikePriceSum}}</span>
-            </div>												
-            <div class="col-md-12" style="margin-bottom:0!important;">
-              抵扣金额 <span style="margin-left:15px;">{{getVoucherNum}}</span>
-            </div>
-            <div class="col-md-12"  style="margin-bottom:0!important;"  v-show="prestoreCount > 0">
-              预存金额 <span style="margin-left:15px;">{{prestoreSum}}</span>
-            </div>
-            <div class="col-md-12" id="depositDiv" v-if="reserveSum > 0" style="margin-bottom:0!important;">
-              已收订金 <span id="depositSum" style="margin-left:15px;color:#fb366b;">{{reserveSum}}</span>
-            </div>
-            <div class="col-md-12" style="margin-bottom:0!important;">
-              换货金额 <span style="margin-left:15px;">{{barterMoneySum}}</span>	
-            </div>
-            <div class="col-md-12" style="margin-bottom:0!important;">
-              折&ensp;旧&ensp;费 <span id="depreciationSum" style="margin-left:15px;">{{depreciationSum}}</span>
-            </div>
-            <div class="col-md-12" style="margin-bottom:0!important;">
-              优惠金额 <span id="Discounts" style="margin-left:15px;">{{differPriceSum}}</span>
-            </div>
-            <div class="col-md-12" style="margin-bottom:0!important;">
-              实收金额 <span id="receivable" style="margin-left:15px;color:#fb366b;">{{receivable}}</span>
-            </div>
-          </div>
-        </div>  -->
-
-        <div class="add_new_address2 sure_button" @click="sureOrder()">
-          <div class="add_new_address_body " >
-          立即下单
-          </div>
-        </div>                                                   
-
-    
-
-      </mt-tab-container-item>  
+    </mt-tab-container-item>  
 
       <mt-tab-container-item id="tab-container3">
         <div class="page-field">
@@ -466,7 +415,7 @@ import { Toast } from 'mint-ui'
 import { validate } from 'utils/validate'
 import { number } from 'utils/number'
 import {focus} from 'utils/directives'
-import { Cell, Group, XInput, XButton, PopupPicker, Badge, Checker, CheckerItem, Divider, CellFormPreview } from 'vux'
+import { Cell, Group, XInput, XButton, PopupPicker, Badge, Checker, CheckerItem, Divider, CellFormPreview, InlineLoading } from 'vux'
 
 Vue.component(Toast)
 Vue.use(focus)
@@ -482,7 +431,8 @@ export default {
     Checker,
     CheckerItem,
     Divider,
-    CellFormPreview
+    CellFormPreview,
+    InlineLoading
   },
   data () {
     return {
@@ -493,7 +443,6 @@ export default {
       headPic: '',
       orderRemarks: '',
       discountSum: '',
-      giveLength: 0,
       prestoreCount: 0,
       prestore: '',
       thumbHeadPic: '',
@@ -552,19 +501,19 @@ export default {
         value: this.getVoucherNum
       }, {
         label: '预存金额',
-        value: ''
+        value: this.prestoreSum
       }, {
         label: '已收金额',
-        value: ''
+        value: this.reserveSum
       }, {
         label: '换货金额',
-        value: ''
+        value: this.barterMoneySum
       }, {
         label: '折旧费',
-        value: ''
+        value: this.depreciationSum
       }, {
         label: '优惠金额',
-        value: ''
+        value: this.differPriceSum
       }]
     },
     getVoucherNum: function () {
@@ -755,40 +704,43 @@ export default {
 
           // 设置赠品选择
           this.giveList = r.data.giveList
-          this.giveLength = this.giveList.length
-          this.selgiveList[0].splice(0, this.selgiveList[0].length)
-          for (let elem of this.giveList) {
-            this.selgiveList[0].push(elem.giveName)
+          if (this.giveList.length > 0) {
+            this.selgiveList[0].splice(0, this.selgiveList[0].length)
+            for (let item of this.giveList) {
+              this.selgiveList[0].push(item.giveName)
+            }
           }
 
           // 价格类型选
           this.priceTypeList = r.data.priceType
-          if (!validate.isEmpty(this.priceTypeList)) {
+          if (this.priceTypeList.length > 0) {
             this.isPriceType = true
-          }
-          this.selpriceTypeList[0].splice(0, this.selpriceTypeList[0].length)
-          for (let item of this.priceTypeList) {
-            this.selpriceTypeList[0].push(item.priceType)
+
+            this.selpriceTypeList[0].splice(0, this.selpriceTypeList[0].length)
+            for (let item of this.priceTypeList) {
+              this.selpriceTypeList[0].push(item.priceType)
+            }
           }
 
           // 品牌选择
-          if (!validate.isEmpty(r.data.manufacturer)) {
+          this.manufacturerList = r.data.manufacturer
+          if (this.manufacturerList.length > 0) {
             this.isManufacturer = true
-            this.manufacturerList = r.data.manufacturer
-          }
-          this.selmanufacturerList[0].splice(0, this.selmanufacturerList[0].length)
-          for (let item of this.manufacturerList) {
-            this.selmanufacturerList[0].push(item.manufacturer)
+            this.selmanufacturerList[0].splice(0, this.selmanufacturerList[0].length)
+            for (let item of this.manufacturerList) {
+              this.selmanufacturerList[0].push(item.manufacturer)
+            }
           }
 
           // 订单备注选择
           this.remarksList = r.data.orderRemarks
-          if (!validate.isEmpty(this.remarksList)) {
+          if (this.remarksList.length > 0) {
             this.isRemarks = true
-          }
-          this.selremarksList[0].splice(0, this.selremarksList[0].length)
-          for (let item of this.remarksList) {
-            this.selremarksList[0].push(item.remarks)
+
+            this.selremarksList[0].splice(0, this.selremarksList[0].length)
+            for (let item of this.remarksList) {
+              this.selremarksList[0].push(item.remarks)
+            }
           }
 
           if (validate.isEmpty(r.data.isExcludeFee) || r.data.isExcludeFee === '0') {
@@ -1188,7 +1140,7 @@ export default {
       this.giveList.push({
         giveId: '',
         giveName: '',
-        selgiveName: [],
+        selgiveName: [''],
         giveCount: ''
       })
     },
@@ -1304,6 +1256,5 @@ export default {
 .red .weui-cell__bd{
   color: #fb366b;
 }
-
 
 </style>

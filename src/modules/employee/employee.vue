@@ -17,16 +17,25 @@ export default {
 
 <style lang="less">
 
-// .weui-cell__hd{
-// 	width:85px;
-// }
+.previewValue .weui-form-preview__value{
+  text-align: left !important;
+}
 
-//  @media screen and (min-width: 760px){
+.sure_button{
+  color: #ffffff !important;
 
-// .weui-cell__hd{
-// 		width:85px;
-// 	}
-// }
+}
+.sure_div{
+  margin: 10px;
+}
+
+.sure_btn{
+  background-color: #26a2ff !important;
+}
+
+.next_btn {
+  background-color: #ccc !important;
+}
 
 
 

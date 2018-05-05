@@ -17,12 +17,7 @@
 
   #loginName{font-size:22px;}
 
-  .out_button{
-    height: 70px;
-    line-height: 70px;
-    font-size: 22px;
-    bottom: 80px;
-  }
+
 }
 
 @media screen and (max-width: 759px){
@@ -32,12 +27,7 @@
 
   #loginName{font-size:18px;}
 
-  .out_button{
-    height: 44px;
-    line-height: 44px;
-    font-size: 18px;
-    bottom: 60px;
-  }
+
 }
 
 .more_head_img{position:relative;}
@@ -73,13 +63,4 @@
     text-align: center;
 }
 
-.out_button{
-  color: #666;
-  background-color: #fff;
-  width: 100%;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  border-bottom: 1px solid #e5e5e5;
-}
+
