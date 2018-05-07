@@ -24,21 +24,11 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { Cell, Group, XInput, PopupPicker, XButton } from 'vux'
+
 import { validate } from 'utils/validate'
 import { Toast } from 'mint-ui'
 
-Vue.component(Toast)
-
 export default {
-  components: {
-    Cell,
-    Group,
-    XInput,
-    PopupPicker,
-    XButton
-  },
   data () {
     return {
       mobile: '',

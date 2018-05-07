@@ -23,13 +23,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
 
-import { Cell, Group, XInput, PopupPicker, XButton, CellFormPreview, XTextarea } from 'vux'
 import { validate } from 'utils/validate'
 import { Toast } from 'mint-ui'
-
-Vue.component(Toast)
 
 export default {
 
@@ -64,15 +60,6 @@ export default {
       return list
     }
   },
-  components: {
-    Cell,
-    Group,
-    XInput,
-    PopupPicker,
-    XButton,
-    CellFormPreview,
-    XTextarea
-  },
   created: function () {
     this.selCountPlan()
   },
@@ -93,9 +80,9 @@ export default {
     setCountPlan: function (values) {
       if (!validate.isEmpty(values.toString())) {
         for (let item of this.countPlan) {
-          if (item.countplantitle === values.toString()) {
+          if (item.code === values.toString()) {
             this.countPlanId = item.id
-            this.countPlanValue[0] = item.countplantitle
+            this.countPlanValue[0] = item.code
             this.setCountPlanSum()
           }
         }

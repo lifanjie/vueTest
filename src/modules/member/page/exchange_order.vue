@@ -59,7 +59,6 @@ import Vue from 'vue'
 import myFooter from '../components/footer'
 import { Toast, Navbar, TabItem } from 'mint-ui'
 
-Vue.component(Toast)
 Vue.component(Navbar)
 Vue.component(TabItem)
 

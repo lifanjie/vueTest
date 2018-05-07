@@ -1,6 +1,26 @@
 <template>
   <div>
-    <div id="footer_box">		     
+
+    <!-- <tabbar>
+          <tabbar-item selected link="/productList">
+            <img slot="icon" src="../static/image/icon_a (1).png">
+            <span slot="label">首页</span>
+          </tabbar-item>
+          <tabbar-item @on-item-click="showPay()" :badge="payNum" show-dot>
+            <img slot="icon" src="../static/image/icon_b (2).png">
+            <span slot="label">支付</span>
+          </tabbar-item>
+          <tabbar-item @on-item-click="showOrder()" :badge="orderNum">
+            <img slot="icon" src="../static/image/icon_b (3).png">
+            <span slot="label">订单</span>
+          </tabbar-item>
+          <tabbar-item link="/more">
+            <img slot="icon" src="../static/image/icon_b (4).png">
+            <span slot="label">更多</span>
+          </tabbar-item>
+        </tabbar>     -->
+    
+     <div id="footer_box">		     
       <div class="footer" >
         <router-link to="/productList">
           <div class="nav_icon"><img  src="../static/image/icon_a (1).png"  /></div>
@@ -25,15 +45,14 @@
         <span class=' nav_name'>更多</span>
         </router-link>
       </div>
-    </div>
+    </div> 
+
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import { Toast } from 'mint-ui'
 
-Vue.component(Toast)
+import { Toast } from 'mint-ui'
 
 export default {
   computed: {
@@ -55,9 +74,11 @@ export default {
         {},
         r => {
           let orders = Number(r.data)
+
           this.$store.commit('setOrders', orders)
         },
         r => {
+          this.$store.commit('setOrders', 0)
           if (r.code === '101') {
             this.$router.push({path: '/login'})
           }
@@ -73,6 +94,7 @@ export default {
           this.$store.commit('setPays', pays)
         },
         r => {
+          this.$store.commit('setPays', 0)
           if (r.code === '101') {
             this.$router.push({path: '/login'})
           }

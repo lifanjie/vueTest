@@ -1,64 +1,94 @@
 <template>
   <div id="goodsCart">
 
-			
-    <div class="page-field">
-      <mt-header fixed title="订单">
-        <router-link to="/productList"  slot="left">
-          <mt-button icon="back">返回</mt-button>
-        </router-link>
-        <mt-button @click="sureOrder()" slot="right">提交</mt-button>
-      </mt-header>
-    </div>	
+    <mt-tab-container v-model="active">
 
-    <div class=" billxinxi" v-for="(item,index) in goodsList" >
-      <input type="hidden"  class="GoodsInfo"/>
-      <div class="col-md-13 margin-bottom-15" style="margin-bottom:15px;padding-bottom:15px;">
-        <span class="product_title">【{{item.goodsTypeName}}】{{item.goodsName}}
-        </span>
-        <div class="product">
-          <div>
-          <router-link :to="{ path: '/productDetail', query: { id: item.id}}">	
-          <img v-if="item.images === ''" class="hideimage goodsImg" src="../static/image/storage_camera1_03.png">
-          <img v-else class="goodsImg" :src="item.images" style="width:230px;height:130px;">                      
-          </router-link>
-          <ul class="Attribute_list" style="max-width:140px;">
-          <li>条码：{{item.goodsCode}} </li>
-          <li>净度：{{item.cleanliness}} </li>
-          <li>重量：{{item.weight}} </li>
-          <li>标价：<span style="color:#fb366b;font-size:18px;"> {{item.tagPrice}}</span> </li>
-          </ul>
+      <mt-tab-container-item id="tab-container1">
+        
+        <div class="page-field">
+          <mt-header fixed title="订单">
+            <router-link to="/productList"  slot="left">
+              <mt-button icon="back">返回</mt-button>
+            </router-link>
+            <mt-button @click="sureOrder()" slot="right">提交</mt-button>
+          </mt-header>
+        </div>	
+        
+        <div id="bill_List">
+          <div class=" billxinxi" v-for="(item,index) in goodsList" >
+            <input type="hidden"  class="GoodsInfo"/>
+            <div class="col-md-13 margin-bottom-15" style="margin-bottom:15px;padding-bottom:15px;">
+              <span class="product_title">【{{item.goodsTypeName}}】{{item.goodsName}}
+              </span>
+              <div class="product">
+                <div>
+                <a @click="activeTab('tab-container2',item)">	
+                <img v-if="item.images === ''" class="hideimage goodsImg" src="../static/image/storage_camera1_03.png">
+                <img v-else class="goodsImg" :src="item.images" style="width:230px;height:130px;">                      
+                </a>
+                <ul class="Attribute_list" style="max-width:140px;">
+                <li>条码：{{item.goodsCode}} </li>
+                <li>净度：{{item.cleanliness}} </li>
+                <li>重量：{{item.weight}} </li>
+                <li>标价：<span style="color:#fb366b;font-size:18px;"> {{item.tagPrice}}</span> </li>
+                </ul>
+                </div>
+                <div style="position:absolute;right:5px;bottom:0;">
+                    <ul class="margin-bottom_20">
+                      <li style="margin-bottom:0;">
+                          <button type="button" style="background-color:#aaa; margin-right:5px;" class="button_style2 " @click="deletebill(item.shoppingId,index)">删除</button>
+                      </li>
+                    </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="position:absolute;right:5px;bottom:0;">
-              <ul class="margin-bottom_20">
-                <li style="margin-bottom:0;">
-                    <button type="button" style="background-color:#aaa; margin-right:5px;" class="button_style2 " @click="deletebill(item.shoppingId,index)">删除</button>
-                </li>
-              </ul>
-          </div>
+
         </div>
-      </div>
-    </div>
+
+
+      <!-- <div class="sureOrder_div">
+        <x-button  @click.native="cusNext()" class="sure_button sure_btn">下一步</x-button>
+      </div>                 -->
+
+      </mt-tab-container-item>
+
+      <mt-tab-container-item id="tab-container2">
+        <div class="page-field">
+          <mt-header fixed title="商品信息">
+            <router-link to="" @click.native="activeTab('tab-container1')" slot="left">
+            <mt-button icon="back">返回</mt-button>
+          </router-link>
+          </mt-header>
+        </div>
+
+        <keep-alive>
+          <goodsDetail :goods="goods"></goodsDetail>
+        </keep-alive>         
+      </mt-tab-container-item>
+
+  </mt-tab-container>
+
+			
+
      
   </div>
 
 </template>
 
 <script>
-import Vue from 'vue'
-import { Toast } from 'mint-ui'
-import { Group, Cell, XButton } from 'vux'
 
-Vue.component(Toast)
+import { Toast } from 'mint-ui'
+import goodsDetail from '../components/goodsDetail'
 
 export default {
   components: {
-    Group,
-    Cell,
-    XButton
+    goodsDetail
   },
   data () {
     return {
+      active: 'tab-container1',
+      goods: {},
       goodsList: []
     }
   },
@@ -66,6 +96,10 @@ export default {
     this.loadOrder()
   },
   methods: {
+    activeTab: function (tab, goods) {
+      this.goods = goods
+      this.active = tab
+    },
     loadOrder: function () {
       this.$axios.post(
         'goods/shopping/list',

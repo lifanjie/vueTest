@@ -146,12 +146,6 @@ li {
 	margin: 2rem 3rem 0rem 0rem;
 }
 
-a {
-	color: #ccc;
-}
-
-
-
 
 .product_search button {
 	overflow: visible;
@@ -185,8 +179,13 @@ input:-webkit-autofill {
 	left: -9px;
 }
 
-.product_search input{padding-left:10px;flex:1;    position: relative;
-    z-index: 2;}
+.product_search input{
+	padding-left:10px;
+	flex:1; 
+     
+	  position: relative;
+		z-index: 2;
+	}
 
 .select_value_box{text-align: center;}
 
@@ -227,7 +226,12 @@ body{padding-bottom: 67px;}
     .product_search_box{    margin-bottom: 35px;}
     .product_search{height: 50px;margin:15px 15px 15px 15px; text-align: center;   border: 1px solid #e5e5e5;}
     .product_search select{font-size:16px;    line-height: 50px; height: 50px;float:left;    border: 0;border-right: 1px solid #ccc; width:110px;   padding-left: 15px;padding-right: 31px;}
-    .product_search input{font-size:16px;    line-height: 48px; height: 48px;}
+    .product_search input{
+			font-size:16px;    
+			line-height: 48px; 
+			height: 48px;
+			width: 200px;
+		}
     .product_search button{width: 100px; height: 48px;    font-size: 18px;}
     .product_search button:before{top: 15px;left: -9px;border-width: 10px 10px 10px 0;}
     .product{padding: 10px 0 0;	float:left;

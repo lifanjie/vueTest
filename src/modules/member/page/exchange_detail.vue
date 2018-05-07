@@ -32,10 +32,8 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import {Toast} from 'mint-ui'
 
-Vue.component(Toast)
 export default {
   data () {
     return {

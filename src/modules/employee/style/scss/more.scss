@@ -17,6 +17,11 @@
 
   #loginName{font-size:22px;}
 
+  .more_head{
+    height: 48px;
+    font-size: 18px;
+    line-height: 48px;
+  }
 
 }
 
@@ -27,6 +32,12 @@
 
   #loginName{font-size:18px;}
 
+  .more_head{
+
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+  }
 
 }
 
@@ -35,10 +46,7 @@
 
 .more_head{
 	background-color: #fff;
-	height: 50px;
-	line-height: 50px;
 	text-align: center;
-	font-size: 20px;
 	color: #333;
 	border-bottom: 1px solid #e5e5e5;
 }

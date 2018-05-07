@@ -44,8 +44,8 @@
           </mt-header>
         </div>
 
-        <p style="text-align:center;" v-if="tbgoodsStr === 0">
-          <span style="vertical-align:middle;display:inline-block;font-size:14px;">加载中&nbsp;&nbsp;</span><inline-loading></inline-loading>
+        <p style="text-align:center;margin:10px" v-show="goodsList.length === 0">
+          <span style="vertical-align:middle;display:inline-block;font-size:18px;">加载中&nbsp;&nbsp;</span><inline-loading></inline-loading>
         </p>
          
           <div class="storage_choose_place GoodsInfo" v-for="(item,index) in tbgoodsStr">
@@ -54,7 +54,7 @@
               <span class="product_title">【{{item.goods.goodsTypeName}}】{{item.goods.goodsName}}</span>
               <div class="product">
                 <div>  
-                  <a @click="checkGoods(item.goods.id)" >
+                  <a @click="checkGoods(item.goods)" >
                   <img v-if="item.goods.images === ''" src="../static/image/storage_camera1_03.png" class="goodsImg">
                   <img v-else :src="item.goods.images" style="width:230px;height:130px;">
                   </a>
@@ -104,7 +104,7 @@
                   v-model="tbgoodsStr[index].differPrice" type="number" class="weui-vcode"></x-input>      
 
               <x-input title="销售金额"  placeholder="请输入销售金额" 
-                  v-model="tbgoodsStr[index].strikePrice" type="number" :readonly="true" class="weui-vcode red"></x-input>    
+                  v-model="tbgoodsStr[index].strikePrice" type="number" class="weui-vcode red"></x-input>    
 
               <x-input title="已收订金" v-if="item.goods.isReserve === '1'" 
                   v-model="item.goods.deposit" type="number" :readonly="true" class="weui-vcode red"></x-input>   
@@ -313,93 +313,10 @@
           </mt-header>
         </div>
 
-        <div id="goodsTemplate">
+        <keep-alive>
+          <goodsDetail :goods="goods"></goodsDetail>
+        </keep-alive>         
 
-          <div class="storage_choose_place" v-for="item in goodsList" v-if="item.id === checkGoodsId">
-
-            <div class="storage_body_line ">
-              <span class="storage_body_line_title">品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span> <span
-                class="storage_body_line_info">{{item.goodsName}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">商品分类</span> <span
-                class="storage_body_line_info">{{item.goodsTypeName}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">证&nbsp;&nbsp;书&nbsp;&nbsp;号</span> <span
-                class="storage_body_line_info"> {{item.certNo}}</span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">货&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</span> <span
-                class="storage_body_line_info">{{item.goodsCode}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">金属材质</span> <span
-                class="storage_body_line_info">{{item.materialMetal}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">总重量</span> <span
-                class="storage_body_line_info"> {{item.weight}}</span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费</span> <span
-                class="storage_body_line_info"> {{item.ee}}</span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">精&nbsp;&nbsp;品&nbsp;&nbsp;费</span> <span
-                class="storage_body_line_info"> {{item.qualityCost}}</span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价</span> <span
-                class="storage_body_line_info">{{item.tagPrice}}</span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">主石大小</span> <span
-                class="storage_body_line_info">{{item.mainStone}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">颜&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色</span> <span
-                class="storage_body_line_info">{{item.color}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">净&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</span> <span
-                class="storage_body_line_info">{{item.cleanliness}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">质&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地</span> <span
-                class="storage_body_line_info">{{item.texture}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">形&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状</span> <span
-                class="storage_body_line_info">{{item.shape}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">透&nbsp;&nbsp;明&nbsp;&nbsp;度</span> <span
-                class="storage_body_line_info">{{item.transparency}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">瑕&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;疵</span> <span
-                class="storage_body_line_info">{{item.flaw}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">光&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;泽</span> <span
-                class="storage_body_line_info">{{item.gloss}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">证&nbsp;&nbsp;书&nbsp;&nbsp;费</span> <span
-                class="storage_body_line_info">{{item.certFee}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">指&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;圈</span> <span
-                class="storage_body_line_info">{{item.ringSize}} </span>
-            </div>
-            <div class="storage_body_line">
-              <span class="storage_body_line_title">厂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家</span> <span
-                class="storage_body_line_info">{{item.manufacturer}} </span>
-            </div>							
-          </div>          
-          
-        </div>
       </mt-tab-container-item>  
 
     </mt-tab-container>
@@ -415,28 +332,16 @@ import { Toast } from 'mint-ui'
 import { validate } from 'utils/validate'
 import { number } from 'utils/number'
 import {focus} from 'utils/directives'
-import { Cell, Group, XInput, XButton, PopupPicker, Badge, Checker, CheckerItem, Divider, CellFormPreview, InlineLoading } from 'vux'
+import goodsDetail from '../components/goodsDetail'
 
-Vue.component(Toast)
 Vue.use(focus)
 
 export default {
   components: {
-    Cell,
-    Group,
-    XInput,
-    PopupPicker,
-    XButton,
-    Badge,
-    Checker,
-    CheckerItem,
-    Divider,
-    CellFormPreview,
-    InlineLoading
+    goodsDetail
   },
   data () {
     return {
-      checkGoodsId: '',
       active: 'tab-container1',
       mobile: '',
       username: '',
@@ -450,6 +355,7 @@ export default {
       voucherCode: '',
       voucherId: '',
       voucherNum: null,
+      goods: {},
       goodsList: [],
       goodsTypeList: [],
       barterModeList: [],
@@ -768,6 +674,10 @@ export default {
       }
     },
     getcusInfo: function () {
+      if (validate.isEmpty(this.mobile)) {
+        return
+      }
+
       this.$axios.post(
         'customer/list',
         {
@@ -1126,7 +1036,16 @@ export default {
         },
         r => {
           this.$store.commit('setOrders', 0)
-          this.$router.push({path: '/storageSuccess'})
+          this.$store.commit('setMsg', {
+            title: '下单成功',
+            description: '请去收银台付款',
+            icon: 'success',
+            butType: 'primary',
+            butText: '返回首页',
+            butLink: '/productList'
+          })
+
+          this.$router.push({path: '/msg'})
         },
         r => {
           if (r.code === '101') {
@@ -1237,9 +1156,9 @@ export default {
         }
       )
     },
-    checkGoods: function (checkGoodsId) {
-      this.checkGoodsId = checkGoodsId
+    checkGoods: function (goods) {
       this.active = 'tab-container3'
+      this.goods = goods
     }
   }
 

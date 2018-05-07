@@ -39,10 +39,7 @@
 <script>
 import { validate } from 'utils/validate'
 import { commonUtil } from 'utils/commonUtil'
-import Vue from 'vue'
 import { Toast } from 'mint-ui'
-
-Vue.component(Toast)
 
 export default {
   data () {
@@ -117,31 +114,22 @@ export default {
 
           // 设置登录信息
           this.setLocal(this.username, this.password)
-
-          // 是否绑定平板
-          if (r.data.office.isbind === '1') {
-            this.bindDrivice()
-          } else {
-            this.$router.push({path: '/productList'})
-          }
-        },
-        r => {
-          Toast(r)
-        }
-      )
-    },
-    bindDrivice: function () {
-      this.$axios.post(
-        'check/checkDriveId',
-        {
-          deviceId: this.WebApp.getDeviceID()
-        },
-        r => {
           this.$router.push({path: '/productList'})
         },
         r => {
-          Toast(r)
-          this.$router.push({path: '/errorBind'})
+          if (r.code === '102' || r.code === '103') {
+            this.$store.commit('setMsg', {
+              title: '登录失败',
+              description: r.code === '102' ? '登录账号不属于门店' : '没有移动开单权限',
+              icon: 'warn',
+              butType: 'primary',
+              butText: '返回登录',
+              butLink: '/login'
+            })
+            this.$router.push({path: '/msg'})
+          } else {
+            Toast(r.message)
+          }
         }
       )
     }

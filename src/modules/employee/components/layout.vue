@@ -14,11 +14,6 @@ export default {
   components: {
     myFooter
   },
-  props: {
-    isFooter: {
-      type: Boolean
-    }
-  },
   created: function () {
     this.$nextTick(function () {
 

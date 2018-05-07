@@ -16,7 +16,7 @@
     </group>
     
     <div class="sure_div">
-      <x-button class="sure_button sure_btn">确定</x-button>
+      <x-button @click.native="reserve()" class="sure_button sure_btn">确定</x-button>
     </div>
    
 </div>
@@ -24,18 +24,11 @@
 </template>
 
 <script>
-import Vue from 'vue'
+
 import { Toast } from 'mint-ui'
-import { Group, Cell, XButton, XInput } from 'vux'
-Vue.component(Toast)
+import { validate } from 'utils/validate'
 
 export default {
-  components: {
-    Group,
-    Cell,
-    XButton,
-    XInput
-  },
   data () {
     return {
       mobile: '',
@@ -47,15 +40,45 @@ export default {
   created: function () {
     this.goodsId = this.$route.query.id
   },
-  motheds: {
+  methods: {
     reserve: function () {
+      if (validate.isEmpty(this.mobile)) {
+        Toast('客户电话不能为空')
+        return
+      }
+
+      if (validate.isEmpty(this.username)) {
+        Toast('客户姓名不能为空')
+        return
+      }
+      if (validate.isEmpty(this.money)) {
+        Toast('预存定金不能为空')
+        return
+      }
+
+      if (validate.isEmpty(this.goodsId)) {
+        Toast('请选择商品')
+        return
+      }
       this.$axios.post(
         'goods/reserve',
         {
-          mobile: this.mobile// money: this.money,	// goodsId: this.goodsId
+          mobile: this.mobile,
+          username: this.username,
+          money: this.money,
+          goodsId: this.goodsId
         },
         r => {
-          this.username = r.data.username
+          this.$store.commit('setMsg', {
+            title: '预定成功',
+            description: '请去收银台付款',
+            icon: 'success',
+            butType: 'primary',
+            butText: '返回首页',
+            butLink: '/productList'
+          })
+
+          this.$router.push({path: '/msg'})
         },
         r => {
           if (r.code === '101') {
@@ -67,6 +90,10 @@ export default {
       )
     },
     getcusInfo: function () {
+      if (validate.isEmpty(this.mobile)) {
+        return
+      }
+
       this.$axios.post(
         'customer/list',
         {
@@ -79,8 +106,6 @@ export default {
           if (r.code === '101') {
             this.$router.push({path: '/login'})
           }
-          Toast('请先注册会员')
-          this.username = ''
         }
       )
     }

@@ -126,13 +126,11 @@
   @media screen and (max-width: 759px){
   .icon_sure{width: 18px;position: absolute;right: 0px;top: 15px;}
   .goodsImg {padding-left: 35px;padding-top: 30px;width: 75px;}
-  #bill_List{    margin-bottom: 130px;}
   .margin-bottom-15{margin-bottom:10px!important;}
   }
 
 @media screen and (min-width: 760px){
     .con_footer{height:60px;line-height:60px;bottom: 75px;}
-   // #bill_List{    margin-bottom: 155px;}
     .select_button{font-size:18px;}
     .select_button>img { width: 23px;}
     .icon_sure{width: 23px;position: absolute;right: 15px;top: 12px;}
@@ -160,3 +158,10 @@
   .footer>a{font-size:16px;}
   .nav_icon{width:30px;}
   }
+
+//   .sureOrder_div{
+//     padding: 10px;
+//     position: fixed;
+//     width: 100%;
+//     bottom: 65px;
+//   }

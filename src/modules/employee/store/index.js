@@ -7,10 +7,21 @@ Vue.use(Vuex)
 
 const state = {
   pays: 0,
-  orders: 0
+  orders: 0,
+  msg: {
+    title: '',
+    description: '',
+    icon: '',
+    butType: 'primary',
+    butText: '',
+    butLink: ''
+  }
 }
 
 const mutations = {
+  setMsg (state, msg) {
+    state.msg = msg
+  },
   setPays (state, pays) {
     state.pays = pays
     localStorage.setItem('pays', state.pays)

@@ -89,7 +89,6 @@ import { formatDate } from 'utils/dateUtils'
 
 Vue.component(Field)
 Vue.component(Button)
-Vue.component(Toast)
 Vue.component(DatetimePicker)
 
 export default {

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <audio ref="audio"></audio>
     <router-view></router-view>
   </div>
 </template>
@@ -16,6 +17,11 @@ export default {
 
 
 <style lang="less">
+
+.weui-cell_access .weui-cell__ft:after{
+  height: 12px !important;
+  width: 12px !important;
+}
 
 .previewValue .weui-form-preview__value{
   text-align: left !important;

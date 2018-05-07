@@ -1,4 +1,4 @@
-import Vue from 'vue'
+
 import qs from 'qs'
 import axios from 'axios'
 import { Toast } from 'mint-ui'
@@ -13,7 +13,6 @@ var root = 'http://localhost/jeesite/wechat'
 
 // 如果不设置全局
 axios.defaults.withCredentials = true
-Vue.component(Toast)
 
 // 自定义判断元素类型JS
 function toType (obj) {
