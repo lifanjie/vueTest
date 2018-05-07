@@ -166,7 +166,7 @@
             v-model="tbBarter[index].seloldType"  @on-change="selectOldType"  value-text-align="left">
             </popup-picker>                    
 
-            <x-input title="总&ensp;重&ensp;量"  placeholder="请输入商品条码"  v-model="tbBarter[index].barterWeightNum" type="number" class="weui-vcode"></x-input> 
+            <x-input title="总&ensp;重&ensp;量"  placeholder="请输入总重量"  v-model="tbBarter[index].barterWeightNum" type="number" class="weui-vcode"></x-input> 
 
 
             <div class="diamond" v-show="tbBarter[index].oldTypeName === '钻石'">   
@@ -582,7 +582,7 @@ export default {
               barterGoodsCode: goods.goodsCode + '-' + goods.goodsTypeName,
               barterType: goods.goodsType,
               barterGoods: goods.id,
-              barterIsWeightCal: goods.isWeightCal,
+              barterTagPrice: goods.tagPrice,
               weight: goods.weight,
               select: 0
             })
@@ -835,11 +835,11 @@ export default {
             this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].selbarterGoods[0] = values.toString()
             this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterType = item.barterType
             this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterGoods = item.barterGoods
-            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal = item.barterIsWeightCal
+            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterTagPrice = item.barterTagPrice
             this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = item.weight
 
-            let barterIsWeightCal = validate.isEmpty(this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal) ? 0 : this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterIsWeightCal
-            let barterWeight = validate.isEmpty(this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight) ? 0 : this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight
+            let barterTagPrice = Number(item.barterTagPrice)
+            let barterWeight = Number(item.weight)
             let isOneself = this.tbBarter[this.oldTypeIndex].isOneself
             let barterWeightNum = this.tbBarter[this.oldTypeIndex].barterWeightNum
 
@@ -855,7 +855,7 @@ export default {
 
             if (isOneself === '按克') {
             // 换货商品按件卖的
-              if (barterIsWeightCal === '0') {
+              if (barterTagPrice > 0) {
                 this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = surplusWeight
               } else {
                 if (Number(surplusWeight) >= Number(barterWeight)) {
