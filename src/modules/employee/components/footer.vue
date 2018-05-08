@@ -20,7 +20,7 @@
           </tabbar-item>
         </tabbar>     -->
 
-
+<!-- 
        <div class="ball-container">
           <div v-for="ball in balls">
               <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
@@ -29,7 +29,17 @@
                   </div>
               </transition>
           </div>
-      </div> 
+      </div>  -->
+
+     <div class="ball-container"><!--小球-->
+         <div v-for="ball in balls">
+             <transition name="drop" v-bind:css="false" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+                 <div class="ball"  v-show="ball.show">
+                     <img class="inner inner-hook" src="../static/image/icon_c (3).png">
+                 </div>
+             </transition>
+         </div>
+    </div>      
    
     
      <div id="footer_box">		     
@@ -82,9 +92,7 @@ export default {
       ],
       dropBalls: [],
       left: '0',
-      top: '0',
-      goodsImageL: '0',
-      goodsImageT: '0'
+      top: '0'
     }
   },
   computed: {
@@ -150,10 +158,11 @@ export default {
       }
     },
     drop: function (el) { // 抛物
-      let goodsImage = el.getBoundingClientRect()
-      this.goodsImageL = goodsImage.left
-      this.goodsImageT = goodsImage.top
+      let orderNum = this.$refs.orderNum.getBoundingClientRect()
 
+      this.left = orderNum.left
+      this.top = orderNum.top
+     // console.log(el)
       for (let i = 0; i < this.balls.length; i++) {
         let ball = this.balls[i]
         if (!ball.show) {
@@ -165,37 +174,32 @@ export default {
       }
     },
     beforeDrop (el) { /* 购物车小球动画实现 */
-      let orderNum = this.$refs.orderNum.getBoundingClientRect()
-
-      this.left = orderNum.left + 10
-      this.top = orderNum.top - 50
-
       let count = this.balls.length
       while (count--) {
         let ball = this.balls[count]
         if (ball.show) {
-          let rect = ball.el.getBoundingClientRect() // 元素相对于视口的位置
-          let x = rect.left - 32
+          let rect = ball.el.getBoundingClientRect() // 点击元素相对于视口的位置
+          let x = rect.left - 400
           let y = -(window.innerHeight - rect.top - 22)  // 获取y
-
           el.style.display = ''
           el.style.webkitTransform = 'translateY(' + y + 'px)'  // translateY
           el.style.transform = 'translateY(' + y + 'px)'
           let inner = el.getElementsByClassName('inner-hook')[0]
-          inner.style.width = inner.style.width - 15
-          inner.style.height = inner.style.height - 15
+          inner.style.width = inner.style.width - 25
+          inner.style.height = inner.style.height - 25
           inner.style.webkitTransform = 'translateX(' + x + 'px)'
           inner.style.transform = 'translateX(' + x + 'px)'
         }
       }
     },
     dropping (el, done) { /* 重置小球数量  样式重置 */
-      // let rf = el.offsetHeight
       el.style.webkitTransform = 'translate3d(0,0,0)'
       el.style.transform = 'translate3d(0,0,0)'
       let inner = el.getElementsByClassName('inner-hook')[0]
       inner.style.webkitTransform = 'translate3d(0,0,0)'
       inner.style.transform = 'translate3d(0,0,0)'
+      console.log(inner.style)
+      // transitionend 完成过渡后触发
       el.addEventListener('transitionend', done)
     },
     afterDrop (el) { /* 初始化小球 */
