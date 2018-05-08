@@ -35,5 +35,10 @@ new Vue({
   router,
   store,
   template: '<employee/>',
-  components: { employee }
+  components: { employee },
+  data () {
+    return {
+      eventHub: new Vue()
+    }
+  }
 })

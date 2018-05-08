@@ -35,7 +35,7 @@
               <li>标价：<span style="color:#fb366b"> {{item.tagPrice}}</span> </li>
             </ul>
             <div v-if="item.number>'0'">        
-            <span @click="addShopping(item.id)" class="exchange_add">
+            <span @click="addShopping(item.id,$event)" class="exchange_add">
             <img src="../static/image/icon_c (3).png">
             </span>
             <span v-if="item.isReserve ==='0'" @click="reserve(item.id)" class="reserve">
@@ -190,12 +190,14 @@ export default {
         }
       )
     },
-    addShopping: function (goodsId) {
-      commonUtil.indicatorOpen('添加到购物车...')
+    addShopping: function (goodsId, event) {
+      // commonUtil.indicatorOpen('添加到购物车...')
+
+      this.$root.eventHub.$emit('additem', event.target)
       this.$axios.post(
         'goods/addShopping',
         {
-          goodsId: goodsId
+         // goodsId: goodsId
         },
         r => {
           this.$store.commit('addOrders', 1)

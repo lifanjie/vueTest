@@ -19,6 +19,18 @@
             <span slot="label">更多</span>
           </tabbar-item>
         </tabbar>     -->
+
+
+       <div class="ball-container">
+          <div v-for="ball in balls">
+              <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+                  <div class="ball" :style="{left : left + 'px',top : top + 'px'}" v-show="ball.show">
+                      <img class="inner inner-hook" src="../static/image/icon_c (3).png">
+                  </div>
+              </transition>
+          </div>
+      </div> 
+   
     
      <div id="footer_box">		     
       <div class="footer" >
@@ -34,9 +46,9 @@
         <span class="nav_name">支付</span>
         </a>
         <a  @click="showOrder()"> 
-        <div class="nav_icon" id="orderNum">
-          <span class="tab-sub J-count" v-show="orderNum > 0">{{orderNum}}</span>
-          <img src="../static/image/icon_b (3).png"  />
+        <div class="nav_icon" ref="orderNum" id="orderNum">
+          <span class="tab-sub J-count"  name="drop" v-show="orderNum > 0">{{orderNum}}</span>
+          <img src="../static/image/icon_b (3).png"  />    
         </div>
         <span class="nav_name">订单</span>
         </a>
@@ -55,6 +67,26 @@
 import { Toast } from 'mint-ui'
 
 export default {
+  data () {
+    return {
+      balls: [ // 小球 设为3个
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        }
+      ],
+      dropBalls: [],
+      left: '0',
+      top: '0',
+      goodsImageL: '0',
+      goodsImageT: '0'
+    }
+  },
   computed: {
     payNum: function () {
       return this.$store.state.pays
@@ -64,8 +96,10 @@ export default {
     }
   },
   created: function () {
+   // alert(this.$refs.orderp)
     this.loadPays()
     this.loadOrders()
+    this.$root.eventHub.$on('additem', this.drop)
   },
   methods: {
     loadOrders: function () {
@@ -113,6 +147,62 @@ export default {
         this.$router.push({path: '/orderPay'})
       } else {
         Toast('没有未支付订单')
+      }
+    },
+    drop: function (el) { // 抛物
+      let goodsImage = el.getBoundingClientRect()
+      this.goodsImageL = goodsImage.left
+      this.goodsImageT = goodsImage.top
+
+      for (let i = 0; i < this.balls.length; i++) {
+        let ball = this.balls[i]
+        if (!ball.show) {
+          ball.show = true
+          ball.el = el
+          this.dropBalls.push(ball)
+          return
+        }
+      }
+    },
+    beforeDrop (el) { /* 购物车小球动画实现 */
+      let orderNum = this.$refs.orderNum.getBoundingClientRect()
+
+      this.left = orderNum.left + 10
+      this.top = orderNum.top - 50
+
+      let count = this.balls.length
+      while (count--) {
+        let ball = this.balls[count]
+        if (ball.show) {
+          let rect = ball.el.getBoundingClientRect() // 元素相对于视口的位置
+          let x = rect.left - 32
+          let y = -(window.innerHeight - rect.top - 22)  // 获取y
+
+          el.style.display = ''
+          el.style.webkitTransform = 'translateY(' + y + 'px)'  // translateY
+          el.style.transform = 'translateY(' + y + 'px)'
+          let inner = el.getElementsByClassName('inner-hook')[0]
+          inner.style.width = inner.style.width - 15
+          inner.style.height = inner.style.height - 15
+          inner.style.webkitTransform = 'translateX(' + x + 'px)'
+          inner.style.transform = 'translateX(' + x + 'px)'
+        }
+      }
+    },
+    dropping (el, done) { /* 重置小球数量  样式重置 */
+      // let rf = el.offsetHeight
+      el.style.webkitTransform = 'translate3d(0,0,0)'
+      el.style.transform = 'translate3d(0,0,0)'
+      let inner = el.getElementsByClassName('inner-hook')[0]
+      inner.style.webkitTransform = 'translate3d(0,0,0)'
+      inner.style.transform = 'translate3d(0,0,0)'
+      el.addEventListener('transitionend', done)
+    },
+    afterDrop (el) { /* 初始化小球 */
+      let ball = this.dropBalls.shift()
+      if (ball) {
+        ball.show = false
+        el.style.display = 'none'
       }
     }
   }
