@@ -83,16 +83,16 @@
 
 .ball{
   position: fixed;
-  left: 400px;
+  left: 32px;
   bottom: 22px;
   z-index: 200;
-  transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41); /*贝塞尔曲线*/
+  transition: all 0.2s cubic-bezier(0.49, -0.29, 0.75, 0.41); /*贝塞尔曲线*/
 }
 
-.inner{
+.inner-hook{
      width: 40px;
      height: 40px;
-     transition: all 0.4s linear;
+     transition: all 0.2s linear;
    }
 
 

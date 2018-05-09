@@ -20,22 +20,12 @@
           </tabbar-item>
         </tabbar>     -->
 
-<!-- 
-       <div class="ball-container">
-          <div v-for="ball in balls">
-              <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
-                  <div class="ball" :style="{left : left + 'px',top : top + 'px'}" v-show="ball.show">
-                      <img class="inner inner-hook" src="../static/image/icon_c (3).png">
-                  </div>
-              </transition>
-          </div>
-      </div>  -->
 
-     <div class="ball-container"><!--小球-->
+     <div class="ball-container">
          <div v-for="ball in balls">
              <transition name="drop" v-bind:css="false" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
-                 <div class="ball"  v-show="ball.show">
-                     <img class="inner inner-hook" src="../static/image/icon_c (3).png">
+                 <div class="ball" :style="{left : left + 'px',bottom : bottom + 'px'}" v-show="ball.show">
+                     <img class="inner-hook" :style="{width : width + 'px',height : height + 'px'}" src="../static/image/icon_c (3).png">
                  </div>
              </transition>
          </div>
@@ -56,7 +46,7 @@
         <span class="nav_name">支付</span>
         </a>
         <a  @click="showOrder()"> 
-        <div class="nav_icon" ref="orderNum" id="orderNum">
+        <div class="nav_icon" ref="position" id="orderNum">
           <span class="tab-sub J-count"  name="drop" v-show="orderNum > 0">{{orderNum}}</span>
           <img src="../static/image/icon_b (3).png"  />    
         </div>
@@ -92,7 +82,9 @@ export default {
       ],
       dropBalls: [],
       left: '0',
-      top: '0'
+      bottom: '0',
+      width: '40',
+      height: '40'
     }
   },
   computed: {
@@ -158,16 +150,19 @@ export default {
       }
     },
     drop: function (el) { // 抛物
-      let orderNum = this.$refs.orderNum.getBoundingClientRect()
+      let position = this.$refs.position.getBoundingClientRect()
 
-      this.left = orderNum.left
-      this.top = orderNum.top
-     // console.log(el)
+      this.width = el.width
+      this.height = el.height
+
+      this.left = position.left
+      this.bottom = window.innerHeight - position.top - position.height
       for (let i = 0; i < this.balls.length; i++) {
         let ball = this.balls[i]
         if (!ball.show) {
           ball.show = true
           ball.el = el
+          alert(1)
           this.dropBalls.push(ball)
           return
         }
@@ -179,16 +174,19 @@ export default {
         let ball = this.balls[count]
         if (ball.show) {
           let rect = ball.el.getBoundingClientRect() // 点击元素相对于视口的位置
-          let x = rect.left - 400
-          let y = -(window.innerHeight - rect.top - 22)  // 获取y
+          let x = rect.left - this.left
+          let y = -(window.innerHeight - rect.top - this.bottom)  // 获取y
+
           el.style.display = ''
           el.style.webkitTransform = 'translateY(' + y + 'px)'  // translateY
           el.style.transform = 'translateY(' + y + 'px)'
+
           let inner = el.getElementsByClassName('inner-hook')[0]
-          inner.style.width = inner.style.width - 25
-          inner.style.height = inner.style.height - 25
           inner.style.webkitTransform = 'translateX(' + x + 'px)'
           inner.style.transform = 'translateX(' + x + 'px)'
+
+          // this.width = el.style.width
+          // this.height = el.style.height
         }
       }
     },
@@ -198,13 +196,18 @@ export default {
       let inner = el.getElementsByClassName('inner-hook')[0]
       inner.style.webkitTransform = 'translate3d(0,0,0)'
       inner.style.transform = 'translate3d(0,0,0)'
-      console.log(inner.style)
+      alert(4)
+      // inner.style.width = inner.style.width - 35
+      // inner.style.height = inner.style.height - 35
+
       // transitionend 完成过渡后触发
       el.addEventListener('transitionend', done)
     },
     afterDrop (el) { /* 初始化小球 */
       let ball = this.dropBalls.shift()
+      alert(2)
       if (ball) {
+        alert(3)
         ball.show = false
         el.style.display = 'none'
       }
