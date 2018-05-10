@@ -15,9 +15,7 @@ export default {
     myFooter
   },
   created: function () {
-    this.$nextTick(function () {
 
-    })
   }
 }
 </script>

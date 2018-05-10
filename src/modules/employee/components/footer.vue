@@ -21,16 +21,20 @@
         </tabbar>     -->
 
 
-     <div class="ball-container">
-         <div v-for="ball in balls">
-             <transition name="drop" v-bind:css="false" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
-                 <div class="ball" :style="{left : left + 'px',bottom : bottom + 'px'}" v-show="ball.show">
-                     <img class="inner-hook" :style="{width : width + 'px',height : height + 'px'}" src="../static/image/icon_c (3).png">
-                 </div>
-             </transition>
-         </div>
-    </div>      
-   
+    <div class="ball-container">
+      <div  v-for="ball in balls">
+        <transition name="drop" v-bind:css="false" v-on:before-enter="beforeEnter"
+          v-on:enter="enter" v-on:after-enter="afterEnter"
+         >
+          <div class="ball" :style="{left : left + 'px',bottom : bottom + 'px'}" v-show="ball.show">
+            <div class="inner inner-hook">
+              <img class="inner-hook" :style="{width : width + 'px',height : height + 'px'}" src="../static/image/icon_c (3).png">
+            </div>
+          </div>
+        </transition>
+      </div>
+
+    </div>         
     
      <div id="footer_box">		     
       <div class="footer" >
@@ -96,7 +100,6 @@ export default {
     }
   },
   created: function () {
-   // alert(this.$refs.orderp)
     this.loadPays()
     this.loadOrders()
     this.$root.eventHub.$on('additem', this.drop)
@@ -149,7 +152,7 @@ export default {
         Toast('没有未支付订单')
       }
     },
-    drop: function (el) { // 抛物
+    drop (el) {
       let position = this.$refs.position.getBoundingClientRect()
 
       this.width = el.width
@@ -157,57 +160,48 @@ export default {
 
       this.left = position.left
       this.bottom = window.innerHeight - position.top - position.height
-      for (let i = 0; i < this.balls.length; i++) {
+
+      for (let i = 0, l = this.balls.length; i < l; i++) {
         let ball = this.balls[i]
         if (!ball.show) {
           ball.show = true
           ball.el = el
-          alert(1)
           this.dropBalls.push(ball)
           return
         }
       }
     },
-    beforeDrop (el) { /* 购物车小球动画实现 */
+    beforeEnter (el) {
       let count = this.balls.length
       while (count--) {
         let ball = this.balls[count]
         if (ball.show) {
-          let rect = ball.el.getBoundingClientRect() // 点击元素相对于视口的位置
+          let rect = ball.el.getBoundingClientRect()
           let x = rect.left - this.left
-          let y = -(window.innerHeight - rect.top - this.bottom)  // 获取y
-
+          let y = -(window.innerHeight - rect.top - this.bottom)
           el.style.display = ''
-          el.style.webkitTransform = 'translateY(' + y + 'px)'  // translateY
-          el.style.transform = 'translateY(' + y + 'px)'
-
-          let inner = el.getElementsByClassName('inner-hook')[0]
-          inner.style.webkitTransform = 'translateX(' + x + 'px)'
-          inner.style.transform = 'translateX(' + x + 'px)'
-
-          // this.width = el.style.width
-          // this.height = el.style.height
+          el.style.webkitTransform = `translate3d(0,${y}px,0)`
+          el.style.transform = `translate3d(0,${y}px,0)`
+          let inner = el.querySelector('.inner-hook')
+          inner.style.webkitTransform = `translate3d(${x}px,0,0)`
+          inner.style.transform = `translate3d(${x}px,0,0)`
         }
       }
     },
-    dropping (el, done) { /* 重置小球数量  样式重置 */
-      el.style.webkitTransform = 'translate3d(0,0,0)'
-      el.style.transform = 'translate3d(0,0,0)'
-      let inner = el.getElementsByClassName('inner-hook')[0]
-      inner.style.webkitTransform = 'translate3d(0,0,0)'
-      inner.style.transform = 'translate3d(0,0,0)'
-      alert(4)
-      // inner.style.width = inner.style.width - 35
-      // inner.style.height = inner.style.height - 35
-
-      // transitionend 完成过渡后触发
-      el.addEventListener('transitionend', done)
+    enter (el) {
+      let a = el.offsetHeight // 触发浏览器重绘，offsetWidth、offsetTop等方法都可以触发
+      console.log(a)
+      this.$nextTick(() => {
+        el.style.webkitTransform = 'translate3d(0,0,0)'
+        el.style.transform = 'translate3d(0,0,0)'
+        let inner = el.querySelector('.inner-hook')
+        inner.style.webkitTransform = 'translate3d(0,0,0)'
+        inner.style.transform = 'translate3d(0,0,0)'
+      })
     },
-    afterDrop (el) { /* 初始化小球 */
+    afterEnter (el) {
       let ball = this.dropBalls.shift()
-      alert(2)
       if (ball) {
-        alert(3)
         ball.show = false
         el.style.display = 'none'
       }
@@ -220,4 +214,3 @@ export default {
 <style lang="scss" scoped>
 @import "../style/scss/footer";
 </style>
-            
