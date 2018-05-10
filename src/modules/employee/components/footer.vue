@@ -20,23 +20,17 @@
           </tabbar-item>
         </tabbar>     -->
 
-
     <div class="ball-container">
-      <div  v-for="ball in balls">
-        <transition name="drop" v-bind:css="false" v-on:before-enter="beforeEnter"
-          v-on:enter="enter" v-on:after-enter="afterEnter"
-         >
+      <div v-for="ball in balls">
+        <transition  name="drop" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
           <div class="ball" :style="{left : left + 'px',bottom : bottom + 'px'}" v-show="ball.show">
-            <div class="inner inner-hook">
-              <img class="inner-hook" :style="{width : width + 'px',height : height + 'px'}" src="../static/image/icon_c (3).png">
-            </div>
+              <img class="inner-hook inner" :style="{width : width + 'px',height : height + 'px'}" src="../static/image/icon_c (3).png">
           </div>
         </transition>
-      </div>
+       </div>
+    </div>
 
-    </div>         
-    
-     <div id="footer_box">		     
+    <div id="footer_box">		     
       <div class="footer" >
         <router-link to="/productList">
           <div class="nav_icon"><img  src="../static/image/icon_a (1).png"  /></div>
@@ -73,7 +67,7 @@ import { Toast } from 'mint-ui'
 export default {
   data () {
     return {
-      balls: [ // 小球 设为3个
+      balls: [
         {
           show: false
         },
@@ -105,13 +99,12 @@ export default {
     this.$root.eventHub.$on('additem', this.drop)
   },
   methods: {
-    loadOrders: function () {
+    loadOrders () {
       this.$axios.post(
         'goods/shopping/listCount',
         {},
         r => {
           let orders = Number(r.data)
-
           this.$store.commit('setOrders', orders)
         },
         r => {
@@ -122,7 +115,7 @@ export default {
         }
       )
     },
-    loadPays: function () {
+    loadPays () {
       this.$axios.post(
         'goods/order/listCount',
         {},
@@ -138,14 +131,14 @@ export default {
         }
       )
     },
-    showOrder: function () {
+    showOrder () {
       if (this.orderNum > 0) {
         this.$router.push({path: '/goodsCart'})
       } else {
         Toast('购物车是空的')
       }
     },
-    showPay: function () {
+    showPay () {
       if (this.payNum > 0) {
         this.$router.push({path: '/orderPay'})
       } else {
@@ -153,7 +146,7 @@ export default {
       }
     },
     drop (el) {
-      let position = this.$refs.position.getBoundingClientRect()
+      let position = document.getElementById('orderNum').getBoundingClientRect()
 
       this.width = el.width
       this.height = el.height
@@ -206,6 +199,7 @@ export default {
         el.style.display = 'none'
       }
     }
+
   }
 
 }

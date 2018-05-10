@@ -6,6 +6,8 @@ import 'mint-ui/lib/style.css'
 import employee from './employee.vue'
 import router from './router'
 import store from './store/index'
+import VueJsonp from 'vue-jsonp'
+
 import { Group, Cell, XButton, PopupPicker, XInput, CellFormPreview, Badge, InlineLoading, Msg, Tabbar, TabbarItem } from 'vux'
 
 // 引用API文件
@@ -16,6 +18,7 @@ Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false
 
+Vue.use(VueJsonp)
 Vue.use(MintUI)
 Vue.component('group', Group)
 Vue.component('cell', Cell)

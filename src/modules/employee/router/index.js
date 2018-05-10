@@ -16,6 +16,7 @@ import exchangeGift from '@/employee/page/exchangeGift'
 import exchangeCash from '@/employee/page/exchangeCash'
 import audio from '@/employee/page/audio'
 import msg from '@/employee/components/msg'
+import cusInfo from '@/employee/page/cusInfo'
 
 Vue.use(Router)
 
@@ -33,17 +34,13 @@ export default new Router({
           component: productList,
           name: 'productList',
           desc: '商品选择'
-          // children: [{path: '/productDetail', component: productDetail, name: 'productDetail', desc: '商品详情'}]
         },
          { path: '/goodsCart', component: goodsCart, name: 'goodsCart', desc: '提交订单' },
-        // { path: '/orderAdd', component: orderAdd, name: 'orderAdd', desc: '订单录入' },
         { path: '/more', component: more, name: 'more', desc: '更多' },
         {path: '/orderPay', component: orderPay, name: 'orderPay', desc: '订单支付'}
-        // {path: '/storageSuccess', component: storageSuccess, name: 'storageSuccess', desc: '下单成功'}
       ]
     },
     {path: '/goodsDetail', component: goodsDetail, name: 'goodsDetail', desc: '商品详情'},
-    // { path: '/goodsCart', component: goodsCart, name: 'goodsCart', desc: '提交订单' },
     { path: '/orderAdd', component: orderAdd, name: 'orderAdd', desc: '订单录入' },
     {path: '/storageSuccess', component: storageSuccess, name: 'storageSuccess', desc: '下单成功'},
     {path: '/countPlan', component: countPlan, name: 'countPlan', desc: '盘点'},
@@ -51,6 +48,7 @@ export default new Router({
     {path: '/exchangeCash', component: exchangeCash, name: 'exchangeCash', desc: '返现'},
     {path: '/reserve', component: reserve, name: 'reserve', desc: '预定'},
     {path: '/audio', component: audio, name: 'audio', desc: '话术学习'},
-    {path: '/msg', component: msg, name: 'msg', desc: '提示消息'}
+    {path: '/msg', component: msg, name: 'msg', desc: '提示消息'},
+    {path: '/cusInfo', component: cusInfo, name: 'cusInfo', desc: '客流信息'}
   ]
 })

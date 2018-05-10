@@ -197,7 +197,7 @@ export default {
       this.$axios.post(
         'goods/addShopping',
         {
-         // goodsId: goodsId
+          goodsId: goodsId
         },
         r => {
           this.$store.commit('addOrders', 1)
