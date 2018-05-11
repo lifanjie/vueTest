@@ -47,33 +47,32 @@ import Stomp from 'stompjs'
 export default {
   data () {
     return {
-      cusInfo: []
+      cusInfo: [],
+      client: Stomp.client('ws://' + localStorage.getItem('faceBoxIp') + ':8080/' + 'gs-guide-websocket')
     }
-  },
-  methods:{
-    client(){
-      return Stomp.client('http://'+localStorage.getItem('faceBoxIp')+':8080/'+'gs-guide-websocket')
   },
   created () {
     this.connect()
   },
   methods: {
-    onConnected (frame) {    
-      var topic = '/topic/greetings'  
-      this.client.subscribe(topic, this.responseCallback, this.onFailed)    
-    },   
-    onFailed (frame) {    
-      console.log('Failed: ' + frame)  
-    }, 
-    responseCallback (frame) {  
-      console.log('responseCallback msg=>' + frame.body)    
-      this.formatInfo(JSON.parse(frame.body));
-    },  
-    connect () {  
-      this.client.connect({}, this.onConnected, this.onFailed) 
+    onConnected: function (frame) {
+      console.log('Connected: ' + frame)
+      var topic = '/topic/greetings'
+
+      this.client.subscribe(topic, this.responseCallback, this.onFailed)
+    },
+    onFailed: function (frame) {
+      console.log('Failed: ' + frame)
+    },
+    responseCallback: function (frame) {
+      console.log('responseCallback msg=>' + frame.body)
+      this.formatInfo(JSON.parse(frame.body))
+    },
+    connect: function () {
+      this.client.connect({}, this.onConnected, this.onFailed)
     },
     formatInfo (jsonData) {
-      // 陌生人的时候
+        // 陌生人的时候
       let group = jsonData.face.group
       if (validate.isEmpty(jsonData.member) ||	group !== '1') {
         return
@@ -153,12 +152,13 @@ export default {
           mins: '30', // jsonp key //请求传递参数 2
           group: '1' // 请求传递参数 3
         }
-      ).then(json => {
-        this.formatInfo(json)
-      }).catch(err => {
-        console.log(err)
-      })
+        ).then(json => {
+          this.formatInfo(json)
+        }).catch(err => {
+          console.log(err)
+        })
     }
+
   }
 
 }

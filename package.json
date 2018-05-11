@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "mint-ui": "^2.2.10",
+    "net": "^1.0.2",
+    "stompjs": "^2.3.3",
     "vue": "^2.5.2",
     "vue-jsonp": "^0.1.8",
     "vue-router": "^3.0.1",
