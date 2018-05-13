@@ -246,21 +246,21 @@
     <group :gutter=10 label-width="4.5em" label-align="left"> 
       <cell title="赠品记录" class="weui-vcode">
         <div class="badge-value">
-          <badge :text="giveList.length"></badge>
+          <badge :text="tbgiveStr.length"></badge>
           <x-button slot="right-full-height" type="primary" @click.native="insertGive()" mini>添加赠品</x-button>
         </div>
       </cell> 
     </group>
     
-    <div v-for="(item,index) in giveList">  
+    <div v-for="(item,index) in tbgiveStr">  
       <group :gutter=0 label-width="4.5em" label-align="left">
         <popup-picker title="赠&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;品" placeholder="请选择赠品"
           @click.native="setGive(index)" :data="selgiveList" 
-        v-model="giveList[index].selgiveName"  @on-change="selectGive"  value-text-align="left">
-        </popup-picker>                    
+        v-model="tbgiveStr[index].selgiveName"  @on-change="selectGive"  value-text-align="left">
+        </popup-picker>         
 
         <x-input title="数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量" placeholder="请输入数量" 
-        v-model="giveList[index].giveCount" type="number" class="weui-vcode">
+        v-model="tbgiveStr[index].giveCount" type="number" class="weui-vcode">
           <x-button slot="right" type="primary" @click.native="deleteGive(index)" mini>删除赠品</x-button>
         </x-input> 
       </group> 
@@ -393,6 +393,7 @@ export default {
       selremarksList: [['']],
       isRemarks: false,
       isExcludeFee: true,
+      tbgiveStr: [],
       tbgoodsStr: [],
       tbBarter: []
     }
@@ -886,8 +887,8 @@ export default {
       if (!validate.isEmpty(values.toString())) {
         for (let item of this.giveList) {
           if (item.giveName === values.toString()) {
-            this.giveList[this.giveIndex].giveId = item.giveId
-            this.giveList[this.giveIndex].giveName = item.giveName
+            this.tbgiveStr[this.giveIndex].giveId = item.giveId
+            this.tbgiveStr[this.giveIndex].giveName = item.giveName
           }
         }
       }
@@ -1011,7 +1012,7 @@ export default {
         }
       }
       // 赠品信息
-      for (let give of this.giveList) {
+      for (let give of this.tbgiveStr) {
         if (validate.isEmpty(give.giveId)) {
           Toast('请选择赠品')
           return
@@ -1032,7 +1033,7 @@ export default {
           username: this.username,
           tbBarterStr: JSON.stringify(this.tbBarter),
           tbgoodsStr: JSON.stringify(this.tbgoodsStr),
-          tbgiveStr: JSON.stringify(this.giveList)
+          tbgiveStr: JSON.stringify(this.tbgiveStr)
         },
         r => {
           this.$store.commit('setOrders', 0)
@@ -1056,15 +1057,15 @@ export default {
       )
     },
     insertGive: function () {
-      this.giveList.push({
+      this.tbgiveStr.push({
         giveId: '',
         giveName: '',
-        selgiveName: [''],
+        selgiveName: [],
         giveCount: ''
       })
     },
     deleteGive: function (index) {
-      this.giveList.splice(index, 1)
+      this.tbgiveStr.splice(index, 1)
     },
     deleteOld: function (index, index2) {
       this.tbBarter[index].tbOld.splice(index2, 1)

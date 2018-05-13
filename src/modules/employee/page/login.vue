@@ -18,7 +18,7 @@
           autocapitalize="off" autocorrect="off" @click="isSelectName = true" @keydown="isSelectName = false"
           placeholder="请输入您的账号" autofocus maxlength="20"/>
           <ul class="select_username" v-show="isSelectName">
-            <li class="getname" @click="selectName(key)" v-for="(value,key) in localList" >{{ key }}</li>
+            <li class="getname" @click="selectName(item.username)" v-for="item in localList" >{{item.username}}</li>
           </ul>
 		    </div>
     </div>
@@ -44,7 +44,7 @@ import { Toast } from 'mint-ui'
 export default {
   data () {
     return {
-      localList: {},
+      localList: [],
       username: '',
       password: '',
       isSelectName: false
@@ -63,19 +63,20 @@ export default {
         if (validate.isContains(key, '_login')) {
           username = key.replace(/_login/, '')
           password = localStorage.getItem(key)
-          this.localList[username] = password
+          this.localList.push({
+            username: username,
+            password: password
+          })
         }
       }
-
       // 设置默认的账号密码
       this.username = username
       this.password = password
     },
     setLocal: function (username, password) {
-      var a = 0
-      for (let key in this.localList.keys) {
-        if (a++ === 5 && key !== username) {
-          localStorage.removeItem(username + '_login')
+      for (let [index, item] of this.localList.entries()) {
+        if (index > 3 && item.username !== username) {
+          localStorage.removeItem(item.username + '_login')
         }
       }
 

@@ -48,8 +48,8 @@
 
 
       <!-- <div class="sureOrder_div">
-        <x-button  @click.native="cusNext()" class="sure_button sure_btn">下一步</x-button>
-      </div>                 -->
+        <x-button  @click.native="sureOrder()" class="sure_button sure_btn">提交订单</x-button>
+      </div>                  -->
 
       </mt-tab-container-item>
 
