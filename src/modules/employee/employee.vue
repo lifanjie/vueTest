@@ -43,6 +43,10 @@ export default {
   background-color: #ccc !important;
 }
 
+.weui-form-preview__bd,.weui-form-preview__label{
+  color: black !important;
+}
+
 
 
  .vux-cell-value{

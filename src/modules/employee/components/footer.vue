@@ -133,7 +133,7 @@ export default {
     },
     showOrder () {
       if (this.orderNum > 0) {
-        this.$router.push({path: '/goodsCart'})
+        this.$router.push({path: '/orderAdd'})
       } else {
         Toast('购物车是空的')
       }

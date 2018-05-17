@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import login from '@/employee/page/login'
 import errorBind from '@/employee/page/errorBind'
 import productList from '@/employee/page/productList'
-import goodsCart from '@/employee/page/goodsCart'
+// import goodsCart from '@/employee/page/goodsCart'
 import orderPay from '@/employee/page/orderPay'
 import more from '@/employee/page/more'
 import goodsDetail from '@/employee/components/goodsDetail'
@@ -35,7 +35,7 @@ export default new Router({
           name: 'productList',
           desc: '商品选择'
         },
-         { path: '/goodsCart', component: goodsCart, name: 'goodsCart', desc: '提交订单' },
+        //  { path: '/goodsCart', component: goodsCart, name: 'goodsCart', desc: '提交订单' },
         { path: '/more', component: more, name: 'more', desc: '更多' },
         {path: '/orderPay', component: orderPay, name: 'orderPay', desc: '订单支付'}
       ]

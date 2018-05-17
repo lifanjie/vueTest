@@ -80,9 +80,9 @@ export default {
     setCountPlan: function (values) {
       if (!validate.isEmpty(values.toString())) {
         for (let item of this.countPlan) {
-          if (item.code === values.toString()) {
+          if (item.countplantitle === values.toString()) {
             this.countPlanId = item.id
-            this.countPlanValue[0] = item.code
+            this.countPlanValue[0] = item.countplantitle
             this.setCountPlanSum()
           }
         }
@@ -99,7 +99,7 @@ export default {
           this.selcountPlan[0].splice(0, this.selcountPlan[0].length)
           if (this.countPlan.length > 0) {
             for (let item of this.countPlan) {
-              this.selcountPlan[0].push(item.code)
+              this.selcountPlan[0].push(item.countplantitle)
             }
             if (this.selcountPlan[0].length > 0) {
               this.setCountPlan(this.selcountPlan[0][0])
