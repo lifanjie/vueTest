@@ -46,22 +46,22 @@ const webpackConfig = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src/modules'),
-      'utils': resolve('src/utils'),
+      'utils': resolve('src/utils')
     }
   },
   // 不同类型模块的处理规则
   module: {
     rules: [
-      {
-        // 对src和test文件夹下的.js和.vue文件使用eslint-loader进行代码规范检查
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: [resolve('src'), resolve('test')],
-        options: {
-          formatter: require('eslint-friendly-formatter')
-        }
-      },
+      // {
+      //   // 对src和test文件夹下的.js和.vue文件使用eslint-loader进行代码规范检查
+      //   test: /\.(js|vue)$/,
+      //   loader: 'eslint-loader',
+      //   enforce: 'pre',
+      //   include: [resolve('src'), resolve('test')],
+      //   options: {
+      //     formatter: require('eslint-friendly-formatter')
+      //   }
+      // },
       {
         // 对所有.vue文件使用vue-loader进行编译
         test: /\.vue$/,

@@ -39,39 +39,41 @@
   </div>
 
 </template>
-
 <script>
 import { validate } from 'utils/validate'
-import Stomp from 'stompjs'
+// import Stomp from 'stompjs'
 
 export default {
   data () {
     return {
-      cusInfo: [],
-      client: Stomp.client('ws://' + localStorage.getItem('faceBoxIp') + ':8080/' + 'gs-guide-websocket')
+      cusInfo: []
+     // client: Stomp.client('ws://' + localStorage.getItem('faceBoxIp') + ':8080/' + 'gs-guide-websocket')
     }
   },
   created () {
     this.connect()
   },
   methods: {
-    onConnected: function (frame) {
-      console.log('Connected: ' + frame)
-      var topic = '/topic/greetings'
 
-      this.client.subscribe(topic, this.responseCallback, this.onFailed)
-    },
-    onFailed: function (frame) {
-      console.log('Failed: ' + frame)
-    },
-    responseCallback: function (frame) {
-      console.log('responseCallback msg=>' + frame.body)
-      this.formatInfo(JSON.parse(frame.body))
-    },
+    // onConnected: function (frame) {
+    //   console.log('Connected: ' + frame)
+    //   var topic = '/topic/greetings'
+
+    //   this.client.subscribe(topic, this.responseCallback, this.onFailed)
+    // },
+    // onFailed: function (frame) {
+    //   console.log('Failed: ' + frame)
+    // },
+    // responseCallback: function (frame) {
+    //   console.log('responseCallback msg=>' + frame.body)
+    //   this.formatInfo(JSON.parse(frame.body))
+    // },
     connect: function () {
-      this.client.connect({}, this.onConnected, this.onFailed)
+      // this.client.connect({}, this.onConnected, this.onFailed)
+
     },
     formatInfo (jsonData) {
+      console.log(JSON.stringify(jsonData))
         // 陌生人的时候
       let group = jsonData.face.group
       if (validate.isEmpty(jsonData.member) ||	group !== '1') {
