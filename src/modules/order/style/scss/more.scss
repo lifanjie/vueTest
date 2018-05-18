@@ -1,0 +1,74 @@
+.img-icon{
+  width:30px;
+  display:block;
+  margin-right:10px;
+}
+
+@media screen and (min-width: 760px){
+  .img-icon{
+    width:50px;
+    display:block;
+    margin-right:15px;
+  }
+
+  .loginName_box>img{
+    width:50px;
+  }
+
+  #loginName{font-size:22px;}
+
+  .more_head{
+    height: 48px;
+    font-size: 18px;
+    line-height: 48px;
+  }
+
+}
+
+@media screen and (max-width: 759px){
+  .loginName_box>img{
+    width:30px;
+  }
+
+  #loginName{font-size:18px;}
+
+  .more_head{
+
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+  }
+
+}
+
+.more_head_img{position:relative;}
+.more_head_img>img{width:100%;}
+
+.more_head{
+	background-color: #fff;
+	text-align: center;
+	color: #333;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.more_head img{
+	width: 1.6rem;
+	position: relative;
+	top:-0.2rem;
+}
+
+.loginName_box{
+	color:#fff;
+	font-size:18px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    height: 58px;
+    margin: auto;
+    text-align: center;
+}
+
+

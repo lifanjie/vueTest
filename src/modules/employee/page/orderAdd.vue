@@ -1027,7 +1027,6 @@ export default {
         barter.goodsCode = barter.goodsCode.toUpperCase()
         barter.certNo = barter.certNo.toUpperCase()
         for (let old of barter.tbOld) {
-         // barterWeight += Number(old.barterWeight)
           barterWeight = number.accAdd(barterWeight, old.barterWeight)
           old.barterMode = barter.barterMode
           old.isOneself = barter.isOneself
@@ -1036,7 +1035,6 @@ export default {
           old.oldTypeName = barter.oldTypeName
         }
 
-        console.log(barter.barterWeightNum + '---' + barterWeight.toString())
         if (barter.barterWeightNum !== barterWeight.toString() && this.isAutoBonus) {
           Toast(`${barter.oldTypeName}的抵扣重量合计不等于总重量`)
           return
