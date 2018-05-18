@@ -98,10 +98,54 @@ export default {
     }
   },
   created: function () {
-    this.setGoodsType()
-    this.queryGoods2()
+    this.autoLogin()
   },
   methods: {
+    autoLogin () {
+      let username = this.$route.query.username
+      let password = this.$route.query.password
+      console.log(username + '--' + password)
+      if (validate.isEmpty(username) || validate.isEmpty(password)) {
+        this.setGoodsType()
+        this.queryGoods2()
+      } else {
+        this.$axios.post(
+          'syslogin',
+          {
+            username: username,
+            password: password
+          },
+          r => {
+            console.log('自动登录')
+            // 设置全局变量
+            localStorage.setItem('orgId', r.data.office.id)
+            localStorage.setItem('userId', r.data.id)
+            localStorage.setItem('userName', r.data.name)
+            localStorage.setItem('faceBoxIp', r.data.office.faceBoxIp)
+            // 开通人脸识别
+            localStorage.setItem('isface', r.data.office.isface)
+
+            this.setGoodsType()
+            this.queryGoods2()
+          },
+          r => {
+            if (r.code === '102' || r.code === '103') {
+              this.$store.commit('setMsg', {
+                title: '登录失败',
+                description: r.code === '102' ? '登录账号不属于门店' : '没有移动开单权限',
+                icon: 'warn',
+                butType: 'primary',
+                butText: '返回登录',
+                butLink: '/login'
+              })
+              this.$router.push({path: '/msg'})
+            } else {
+              Toast(r.message)
+            }
+          }
+        )
+      }
+    },
     play: function () {
       this.url = this.goods.audio
       addEventListener('message', () => {

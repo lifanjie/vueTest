@@ -11,17 +11,4 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
-  <!-- <script src="static/js/sockjs.js"></script>
-  <script src="static/js/stomp.js"></script>
-  <script>
-          let socket = new SockJS('http://' + localStorage.getItem('faceBoxIp') + ':8080/' + 'gs-guide-websocket')
-let stompClient = Stomp.over(socket)
-    // return socket;
-stompClient.connect({}, function (frame) {
-  console.log('Connected: ' + frame)
-  stompClient.subscribe('/topic/greetings', function (greeting) {
-	    	this.formatInfo(JSON.parse(greeting.body))
-  })
-})
-  </script> -->
 </html>

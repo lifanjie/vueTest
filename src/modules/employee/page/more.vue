@@ -12,9 +12,12 @@
     <div id="bill_List">
 
       <group :gutter=0 label-width="4.5em" label-align="left">
-        <cell class="weui-vcode" title="客流信息" is-link link="/cusInfo">
+        <a href="http://wx.zuanno.cn/employee/cus_info.html">
+        <cell class="weui-vcode" title="客流信息" is-link>
           <img slot="icon" class="img-icon" src="../static/image/icon_d_14.png">
         </cell>
+        </a>
+
         <cell class="weui-vcode" title="盘 点" is-link link="/countPlan">
           <img slot="icon" class="img-icon" src="../static/image/icon_1_03.png">
         </cell>
@@ -51,6 +54,7 @@ export default {
   },
   created: function () {
     this.userName = localStorage.getItem('userName')
+    console.log(location.href)
   },
   methods: {
     outlogin: function () {

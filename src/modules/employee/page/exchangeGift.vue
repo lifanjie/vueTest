@@ -3,7 +3,7 @@
     <div class="page-field">
       <mt-header fixed title="礼品兑换">
         <router-link to="/more"  slot="left">
-          <mt-button icon="back">礼品兑换</mt-button>
+          <mt-button icon="back">返回</mt-button>
         </router-link>          
       </mt-header>
     </div>

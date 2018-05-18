@@ -18,7 +18,6 @@ Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false
 
-Vue.use(VueJsonp)
 Vue.use(MintUI)
 Vue.component('group', Group)
 Vue.component('cell', Cell)
@@ -31,6 +30,7 @@ Vue.component('inline-loading', InlineLoading)
 Vue.component('msg', Msg)
 Vue.component('tabbar', Tabbar)
 Vue.component('tabbar-item', TabbarItem)
+Vue.use(VueJsonp)
 
 /* eslint-disable no-new */
 new Vue({
