@@ -1028,6 +1028,15 @@ export default {
           old.goodsCode = barter.goodsCode
           old.oldType = barter.oldType
           old.oldTypeName = barter.oldTypeName
+
+          if (validate.isEmpty(old.barterType)) {
+            old.barterType = barter.oldType
+          }
+        }
+
+        if (validate.isEmpty(barter.oldType)) {
+          Toast('旧料品类不能为空')
+          return
         }
 
         let barterWeightNum = Number(barter.barterWeightNum)
