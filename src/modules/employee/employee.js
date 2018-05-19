@@ -7,8 +7,7 @@ import employee from './employee.vue'
 import router from './router'
 import store from './store/index'
 import VueJsonp from 'vue-jsonp'
-
-import { Group, Cell, XButton, PopupPicker, XInput, CellFormPreview, Badge, InlineLoading, Msg, Tabbar, TabbarItem } from 'vux'
+import { Group, Cell, XButton, PopupPicker, XInput, CellFormPreview, Badge, InlineLoading, Msg, Tabbar, TabbarItem, PopupRadio } from 'vux'
 
 // 引用API文件
 import axios from '../../api/api'
@@ -29,6 +28,7 @@ Vue.component('badge', Badge)
 Vue.component('inline-loading', InlineLoading)
 Vue.component('msg', Msg)
 Vue.component('tabbar', Tabbar)
+Vue.component('popup-radio', PopupRadio)
 Vue.component('tabbar-item', TabbarItem)
 Vue.use(VueJsonp)
 

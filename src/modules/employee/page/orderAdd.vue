@@ -158,16 +158,14 @@
             <popup-picker title="品牌" placeholder="请选择品牌" v-if="isManufacturer" @click.native="setManufacturer(index)" :data="selmanufacturerList" 
             v-model="tbBarter[index].seloldmanufacturer"  @on-change="selectManufacturer"  value-text-align="left"></popup-picker>                    
 
-  
             <x-input title="回收条码"  placeholder="请输入回收条码" value-align="left"
               v-model="tbBarter[index].goodsCode" type="text" class="weui-vcode">
             <img slot="right-full-height" @click="setSaleGoods(index)" src="../static/image/search.png">
             </x-input> 
             <popup-picker :show.sync="saleGoodsVisible" :show-cell="false" :data="selsaleGoodsList"  @on-change="selectSaleGoods"  value-text-align="left"></popup-picker>               
 
-            <popup-picker title="旧料品类" placeholder="请选择旧料品类" @click.native="setOldType(index)" :data="seloldTypeList" 
-            v-model="tbBarter[index].seloldType"  @on-change="selectOldType"  value-text-align="left">
-            </popup-picker>                    
+            <popup-radio value-align="left" title="旧料品类" placeholder="请选择旧料品类"  
+             @on-change="selectOldType(index,tbBarter[index].oldTypeName)" :options="seloldTypeList" v-model="tbBarter[index].oldTypeName"></popup-radio>         
 
             <x-input title="总&ensp;重&ensp;量"  placeholder="请输入总重量"  v-model="tbBarter[index].barterWeightNum" type="number" class="weui-vcode"></x-input> 
 
@@ -199,9 +197,14 @@
           <div v-for="(item2,index2) in tbBarter[index].tbOld">
               
             <group :gutter=5 label-width="4.5em" label-align="left"> 
+
+            <popup-radio value-align="left" title="换货商品" v-show="isAutoBonus" placeholder="请选择换货商品"
+             @on-change="selectBarterGoods(index,index2,tbBarter[index].tbOld[index2].barterGoodsCode)" :options="selbarterGoodsList" 
+             v-model="tbBarter[index].tbOld[index2].barterGoodsCode"></popup-radio>         
+              
           
-              <popup-picker title="换货商品" v-show="isAutoBonus" placeholder="请选择换货商品" @click.native="setBarterGoods(index,index2)" :data="selbarterGoodsList" 
-              v-model="tbBarter[index].tbOld[index2].selbarterGoods"  @on-change="selectBarterGoods"  value-text-align="left"></popup-picker>            
+              <!-- <popup-picker title="换货商品" v-show="isAutoBonus" placeholder="请选择换货商品" @click.native="setBarterGoods(index,index2)" :data="selbarterGoodsList" 
+              v-model="tbBarter[index].tbOld[index2].selbarterGoods"  @on-change="selectBarterGoods"  value-text-align="left"></popup-picker>             -->
 
               <x-input title="抵扣重量"  v-show="tbBarter[index].isOneself === '按克' && isAutoBonus" placeholder="请输入抵扣重量" 
               @on-change="tbBarter[index].tbOld[index2].autoEdit = true"
@@ -366,7 +369,6 @@ export default {
       voucherNum: null,
       goods: {},
       goodsList: [],
-      goodsTypeList: [],
       barterModeList: [],
       isOneselfList: [],
       diamondColorList: [],
@@ -379,13 +381,13 @@ export default {
       manufacturerList: [],
       selmanufacturerList: [['']],
       oldTypeList: [],
-      seloldTypeList: [['']],
+      seloldTypeList: [''],
       barterGoodsList: [],
-      selbarterGoodsList: [['']],
+      selbarterGoodsList: [],
       saleGoodsList: [],
       selsaleGoodsList: [['']],
       exchangeList: [],
-      selexchangeList: [['']],
+      selexchangeList: [[' ']],
       giveIndex: '',
       goodsremarksVisible: false,
       barterremarksVisible: false,
@@ -617,20 +619,17 @@ export default {
               select: 0
             })
           }
-
           // 设置换货商品选择
-          this.selbarterGoodsList[0].splice(0, this.selbarterGoodsList[0].length)
+          this.selbarterGoodsList.splice(0, this.selbarterGoodsList.length)
           for (let elem of this.barterGoodsList) {
-            this.selbarterGoodsList[0].push(elem.barterGoodsCode)
+            this.selbarterGoodsList.push(elem.barterGoodsCode)
           }
 
           // 设置旧料类别选择
-          this.goodsTypeList = r.data.goodsTypeList
-          this.oldTypeList = this.goodsTypeList
-
-          this.seloldTypeList[0].splice(0, this.seloldTypeList[0].length)
+          this.oldTypeList = r.data.goodsTypeList
+          this.seloldTypeList.splice(0, this.seloldTypeList.length)
           for (let elem of this.oldTypeList) {
-            this.seloldTypeList[0].push(elem.goodsType)
+            this.seloldTypeList.push(elem.goodsType)
           }
 
           this.barterModeList = r.data.barterModeList
@@ -837,7 +836,7 @@ export default {
       )
     },
     selectExchange: function (values) {
-      if (!validate.isEmpty(values)) {
+      if (!validate.isEmpty(values.toString())) {
         for (let item of this.exchangeList) {
           if (item.code === values.toString()) {
             this.voucherId = item.id
@@ -862,26 +861,26 @@ export default {
       this.barterGoodsIndex = index2
       this.barterGoodsVisible	 = true
     },
-    selectBarterGoods: function (values) {
-      if (!validate.isEmpty(values.toString())) {
+    selectBarterGoods: function (index2, index3, values) {
+      if (!validate.isEmpty(values)) {
         for (let [index, item] of this.barterGoodsList.entries()) {
-          if (item.barterGoodsCode === values.toString()) {
+          if (item.barterGoodsCode === values) {
             this.barterGoodsList[index].select = 1
-            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].selbarterGoods[0] = values.toString()
-            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterType = item.barterType
-            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterGoods = item.barterGoods
-            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterTagPrice = item.barterTagPrice
-            this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = item.weight
+            this.tbBarter[index2].tbOld[index3].barterGoodsCode = values
+            this.tbBarter[index2].tbOld[index3].barterType = item.barterType
+            this.tbBarter[index2].tbOld[index3].barterGoods = item.barterGoods
+            this.tbBarter[index2].tbOld[index3].barterTagPrice = item.barterTagPrice
+            this.tbBarter[index2].tbOld[index3].barterWeight = item.weight
 
-            let barterTagPrice = Number(item.barterTagPrice)
+            let barterTagPrice = item.barterTagPrice
             let barterWeight = Number(item.weight)
-            let isOneself = this.tbBarter[this.oldTypeIndex].isOneself
-            let barterWeightNum = this.tbBarter[this.oldTypeIndex].barterWeightNum
+            let isOneself = this.tbBarter[index2].isOneself
+            let barterWeightNum = this.tbBarter[index2].barterWeightNum
 
             // 剩余重量
             let surplusWeight = 0
-            for (let [index, elem] of this.tbBarter[this.oldTypeIndex].tbOld.entries()) {
-              if (index !== this.barterGoodsIndex) {
+            for (let [index, elem] of this.tbBarter[index2].tbOld.entries()) {
+              if (index !== index3) {
                 surplusWeight += Number(elem.barterWeight)
               }
             }
@@ -889,19 +888,21 @@ export default {
             surplusWeight = number.accSub(barterWeightNum, surplusWeight)
 
             if (isOneself === '按克') {
-            // 换货商品按件卖的
-              if (barterTagPrice > 0) {
-                this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = surplusWeight
+              // 换货商品按件卖的
+              if (!validate.isEmpty(barterTagPrice)) {
+                this.tbBarter[index2].tbOld[index3].barterWeight = surplusWeight
               } else {
                 if (Number(surplusWeight) >= Number(barterWeight)) {
-                  this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = barterWeight
+                  this.tbBarter[index2].tbOld[index3].barterWeight = barterWeight
                 } else {
-                  this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = surplusWeight
+                  this.tbBarter[index2].tbOld[index3].barterWeight = surplusWeight
                 }
               }
             } else {
-              this.tbBarter[this.oldTypeIndex].tbOld[this.barterGoodsIndex].barterWeight = barterWeightNum
+              this.tbBarter[index2].tbOld[index3].barterWeight = barterWeightNum
             }
+
+            console.log(this.tbBarter[index2].tbOld[index3].barterWeight)
           }
         }
       }
@@ -944,7 +945,7 @@ export default {
             this.tbBarter[this.oldTypeIndex].color = item.color
             this.tbBarter[this.oldTypeIndex].cleanliness = item.cleanliness
             // 旧料信息
-            this.selectOldType(item.goodsTypeName)
+            this.selectOldType(this.oldTypeIndex, item.goodsTypeName)
           }
         }
       }
@@ -974,23 +975,17 @@ export default {
         this.tbBarter[this.oldTypeIndex].oldpriceType = values.toString()
       }
     },
-    setOldType: function (index) {
-      this.oldTypeIndex = index
-    },
-    selectOldType: function (values) {
-      if (!validate.isEmpty(values.toString())) {
+    selectOldType: function (index, values) {
+      if (!validate.isEmpty(values)) {
         for (let item of this.oldTypeList) {
-          if (item.goodsType === values.toString()) {
-            this.tbBarter[this.oldTypeIndex].seloldType.length = 0
-            this.tbBarter[this.oldTypeIndex].seloldType.push(values.toString())
-            this.tbBarter[this.oldTypeIndex].oldType = item.id
-            this.tbBarter[this.oldTypeIndex].oldTypeName = item.goodsType
-            this.tbBarter[this.oldTypeIndex].oldIsWeightCal = item.isWeightCal
-
-            if (this.tbBarter[this.oldTypeIndex].oldIsWeightCal === '1') {
-              this.tbBarter[this.oldTypeIndex].isOneself = '按克'
+          if (item.goodsType === values) {
+            this.tbBarter[index].oldType = item.id
+            this.tbBarter[index].oldTypeName = values
+            this.tbBarter[index].oldIsWeightCal = item.isWeightCal
+            if (this.tbBarter[index].oldIsWeightCal === '1') {
+              this.tbBarter[index].isOneself = '按克'
             } else {
-              this.tbBarter[this.oldTypeIndex].isOneself = '标价'
+              this.tbBarter[index].isOneself = '标价'
             }
           }
         }
@@ -1035,7 +1030,9 @@ export default {
           old.oldTypeName = barter.oldTypeName
         }
 
-        if (barter.barterWeightNum !== barterWeight.toString() && this.isAutoBonus) {
+        let barterWeightNum = Number(barter.barterWeightNum)
+        // console.log(barterWeightNum + '--' + barterWeight.toString())
+        if (barterWeightNum.toString() !== barterWeight.toString() && this.isAutoBonus) {
           Toast(`${barter.oldTypeName}的抵扣重量合计不等于总重量`)
           return
         }
@@ -1112,11 +1109,10 @@ export default {
         return
       }
 
-      this.tbBarter[index].tbOld.push({
+      this.tbBarter[index].tbOld.unshift({
         depreciation: '',
         autoEdit2: false,
         unitDepreciation: '',
-        selbarterGoods: [],
         barterGoodsCode: '',
         barterGoods: '',
         barterType: '',
@@ -1135,7 +1131,7 @@ export default {
       })
 
       this.oldTypeIndex = index
-      this.barterGoodsIndex = this.tbBarter[this.oldTypeIndex].tbOld.length - 1
+      this.barterGoodsIndex = 0
 
       if (this.isAutoBonus) {
       // 设置默认的换货商品
@@ -1147,19 +1143,18 @@ export default {
           }
         }
 
-        this.selectBarterGoods(barterGoodsCode)
+        this.selectBarterGoods(this.oldTypeIndex, this.barterGoodsIndex, barterGoodsCode)
       }
     },
     // 添加换货记录
     insertBarter: function () {
-      this.tbBarter.push({
+      this.tbBarter.unshift({
         tbOld: [],
         barterMode: '回收',
         isOneself: '按克',
         goodsCode: '',
         barterWeightNum: '',
         oldType: '',
-        seloldType: [],
         oldTypeName: '',
         oldpriceType: '',
         seloldpriceType: [],
@@ -1171,11 +1166,11 @@ export default {
         cleanliness: ''
       })
 
-      this.oldTypeIndex = this.tbBarter.length - 1
+      this.oldTypeIndex = 0
 
       // 如果不采用自动算提成，自动添加抵换记录
       if (!this.isAutoBonus) {
-        this.insertOld(this.oldTypeIndex)
+        this.insertOld(0)
       }
     },
     deletebarter: function (index) {
