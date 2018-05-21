@@ -14,8 +14,6 @@
           <option class="select_value_li" v-for="item in goodsTypeList" :value="item">{{item.goodsType}}</option>
         </select> 
       <input type="text" placeholder='请输入商品条码' @keydown.13="queryGoods()" v-focus="isfocus"  v-model="searchKey" autocapitalize="off" autocorrect="off" id="searchKey" />
-        <img id="clear" src="../static/image/close.png" 
-        style="width: 20px;height: 20px;margin-top: 15px;margin-right: 15px;" />
         <button type="button" id="queryGoods" @click="queryGoods()">Search</button> 
     
       </div>  
