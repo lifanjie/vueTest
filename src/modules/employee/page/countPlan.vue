@@ -131,19 +131,21 @@ export default {
       }
     },
     saveCountPlan: function () {
-      if (validate.isEmpty(this.goodsCode)) {
-        Toast('商品条码不能为空')
-        return
-      }
+      this.$nextTick(() => {
+        // 这里的代码会在dom渲染完毕运行
+        if (validate.isEmpty(this.goodsCode)) {
+          Toast('商品条码不能为空')
+          return
+        }
 
-      this.goodsCodeInput = this.goodsCode
+        this.goodsCodeInput = this.goodsCode
 
-      this.$axios.post(
+        this.$axios.post(
         'goods/countRecord',
-        {
-          countPlanId: this.countPlanId,
-          goodsCode: this.goodsCodeInput
-        },
+          {
+            countPlanId: this.countPlanId,
+            goodsCode: this.goodsCodeInput
+          },
         r => {
           this.setMessage('OK')
           this.countPlanNumber += 1
@@ -155,7 +157,8 @@ export default {
         }
       )
       // 情况商品货号栏位
-      this.$refs.goodsCode.clear()
+        this.$refs.goodsCode.clear()
+      })
     }
   }
 
