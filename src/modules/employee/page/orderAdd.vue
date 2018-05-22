@@ -62,7 +62,7 @@
                 <ul class="Attribute_list" style="max-width:140px;">
                   <li>条码：{{item.goods.goodsCode}} </li>
                   <li>净度：{{item.goods.cleanliness}} </li>
-                  <li>重量：{{item.goods.weight}} </li>
+                  <li v-show="item.goods.tagPrice === ''">重量：{{item.goods.weight}} </li>
                   <li>标价：
                     <span style="color:#fb366b;font-size:18px;"> {{item.goods.tagPrice}}</span>
                   </li>
@@ -151,12 +151,12 @@
             <popup-picker :show.sync="saleGoodsVisible" :show-cell="false" :data="selsaleGoodsList" @on-change="selectSaleGoods" value-text-align="left">
             </popup-picker>
 
-            <popup-radio value-align="left" title="旧料品类" placeholder="请选择旧料品类" @on-change="selectOldType(index,tbBarter[index].oldTypeName)" :options="seloldTypeList" v-model="tbBarter[index].oldTypeName">              
+            <popup-radio v-show="tbBarter[index].barterMode === '回收'" value-align="left" title="旧料品类" placeholder="请选择旧料品类" @on-change="selectOldType(index,tbBarter[index].oldTypeName)" :options="seloldTypeList" v-model="tbBarter[index].oldTypeName">              
             </popup-radio>
 
             <x-input title="总&ensp;重&ensp;量" placeholder="请输入总重量" v-model="tbBarter[index].barterWeightNum" type="number" class="weui-vcode"></x-input>
 
-            <div class="diamond" v-show="tbBarter[index].oldTypeName === '钻石'">
+            <div class="diamond" v-show="tbBarter[index].material === '钻石' && tbBarter[index].barterMode === '回收'">
 
               <popup-picker v-show="isPriceType" title="价格类型" placeholder="请选择价格类型" @click.native="setOldPriceType(index)" :data="selpriceTypeList" v-model="tbBarter[index].seloldpriceType" @on-change="selectOldPriceType" value-text-align="left"></popup-picker>
 
@@ -943,6 +943,7 @@ export default {
           if (item.goodsType === values) {
             this.tbBarter[index].oldType = item.id
             this.tbBarter[index].oldTypeName = values
+            this.tbBarter[index].material = item.material
             this.tbBarter[index].oldIsWeightCal = item.isWeightCal
             if (this.tbBarter[index].oldIsWeightCal === '1') {
               this.tbBarter[index].isOneself = '按克'
@@ -996,7 +997,7 @@ export default {
           }
         }
 
-        if (validate.isEmpty(barter.oldType)) {
+        if (barter.barterMode === '回收' && validate.isEmpty(barter.oldType)) {
           Toast('旧料品类不能为空')
           return
         }
@@ -1127,6 +1128,7 @@ export default {
         barterWeightNum: '',
         oldType: '',
         oldTypeName: '',
+        material: '',
         oldpriceType: '',
         seloldpriceType: [],
         oldmanufacturer: '',
