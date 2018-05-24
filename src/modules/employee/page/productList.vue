@@ -29,7 +29,7 @@
             <ul>
               <li>条码：{{item.goodsCode}} </li>             
               <li>净度：{{item.cleanliness}} </li>
-              <li v-show="item.tagPrice === ''">重量：{{item.weight}} </li>
+              <li>重量：<span v-show="item.tagPrice === ''">{{item.weight}} </span></li>
               <li>标价：<span style="color:#fb366b"> {{item.tagPrice}}</span> </li>
             </ul>
             <div v-if="item.number>'0'">        

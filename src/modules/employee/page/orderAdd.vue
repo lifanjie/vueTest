@@ -62,7 +62,7 @@
                 <ul class="Attribute_list" style="max-width:140px;">
                   <li>条码：{{item.goods.goodsCode}} </li>
                   <li>净度：{{item.goods.cleanliness}} </li>
-                  <li v-show="item.goods.tagPrice === ''">重量：{{item.goods.weight}} </li>
+                  <li>重量：<span v-show="item.goods.tagPrice === ''">{{item.goods.weight}}</span></li>
                   <li>标价：
                     <span style="color:#fb366b;font-size:18px;"> {{item.goods.tagPrice}}</span>
                   </li>
@@ -184,9 +184,6 @@
             <group :gutter=5 label-width="4.5em" label-align="left">
 
               <popup-radio value-align="left" title="换货商品" v-show="isAutoBonus" placeholder="请选择换货商品" @on-change="selectBarterGoods(index,index2,tbBarter[index].tbOld[index2].barterGoodsCode)" :options="selbarterGoodsList" v-model="tbBarter[index].tbOld[index2].barterGoodsCode"></popup-radio>
-
-              <!-- <popup-picker title="换货商品" v-show="isAutoBonus" placeholder="请选择换货商品" @click.native="setBarterGoods(index,index2)" :data="selbarterGoodsList" 
-              v-model="tbBarter[index].tbOld[index2].selbarterGoods"  @on-change="selectBarterGoods"  value-text-align="left"></popup-picker>             -->
 
               <x-input title="抵扣重量" v-show="tbBarter[index].isOneself === '按克' && isAutoBonus" placeholder="请输入抵扣重量" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].barterWeight" type="number" class="weui-vcode"></x-input>
 
@@ -477,7 +474,7 @@ export default {
             old.autoEdit = false
           }
 
-          barterMoneySum += old.barterMoney
+          barterMoneySum += Number(old.barterMoney)
         }
       }
       barterMoneySum = 0 - barterMoneySum
@@ -900,14 +897,59 @@ export default {
           let goods = item.goodsCode + '-' + item.goodsTypeName
           if (goods === values.toString()) {
             this.tbBarter[this.oldTypeIndex].goodsCode = item.goodsCode
-            this.tbBarter[this.oldTypeIndex].barterWeightNum = item.goodsWeight
+            this.tbBarter[this.oldTypeIndex].barterWeightNum = item.realWeight
             // 钻石的旧料信息
             this.tbBarter[this.oldTypeIndex].certNo = item.certNo
             this.tbBarter[this.oldTypeIndex].mainStone = item.mainStone
             this.tbBarter[this.oldTypeIndex].color = item.color
             this.tbBarter[this.oldTypeIndex].cleanliness = item.cleanliness
-            // 旧料信息
-            this.selectOldType(this.oldTypeIndex, item.goodsTypeName)
+            // 添加抵扣记录
+
+            this.tbBarter[this.oldTypeIndex].tbOld.splice(0, this.tbBarter[this.oldTypeIndex].tbOld.length)
+
+            let oldPrice = 0
+            let unitPrice = ''
+            let discount = validate.isEmpty(item.discount) ? 100 : item.discount
+            if (Number(item.nowPrice) > 0) {
+              unitPrice = Number(item.nowPrice)
+              oldPrice = unitPrice * item.realWeight
+              this.tbBarter[this.oldTypeIndex].isOneself = '按克'
+            } else {
+              oldPrice = item.goodsTagPrice
+              this.tbBarter[this.oldTypeIndex].isOneself = '标价'
+            }
+
+            let barterGoodsCode = this.barterGoodsList[0].barterGoodsCode
+            let barterGoods = this.barterGoodsList[0].barterGoods
+            let barterType = this.barterGoodsList[0].barterType
+
+            for (let barter of this.barterGoodsList) {
+              if (barter.barterType === item.goodsType) {
+                barterGoodsCode = barter.barterGoodsCode
+                barterGoods = barter.barterGoods
+                break
+              }
+            }
+
+            this.tbBarter[this.oldTypeIndex].tbOld.unshift({
+              depreciation: '',
+              autoEdit2: false,
+              unitDepreciation: '',
+              barterGoodsCode: barterGoodsCode,
+              barterGoods: barterGoods,
+              barterType: barterType,
+              barterMoney: item.strikePrice,
+              autoEdit: false,
+              unitPrice: unitPrice,
+              barterDiscount: discount !== 100 ? discount : '',
+              barterWeight: item.realWeight,
+              oldType: '',
+              oldTypeName: '',
+              oldIsWeightCal: '',
+              oldPrice: oldPrice,
+              feePrice: item.feePrice,
+              barterRemarks: ''
+            })
           }
         }
       }
@@ -1004,7 +1046,7 @@ export default {
 
         let barterWeightNum = Number(barter.barterWeightNum)
         // console.log(barterWeightNum + '--' + barterWeight.toString())
-        if (barterWeightNum.toString() !== barterWeight.toString() && this.isAutoBonus) {
+        if (barterWeightNum.toString() !== barterWeight.toString() && this.isAutoBonus && barter.isOneself === '按克') {
           Toast(`${barter.oldTypeName}的抵扣重量合计不等于总重量`)
           return
         }
@@ -1092,7 +1134,6 @@ export default {
         autoEdit: false,
         unitPrice: '',
         barterDiscount: '',
-        barterIsWeightCal: '1',
         barterWeight: '',
         oldType: '',
         oldTypeName: '',
