@@ -915,7 +915,7 @@ export default {
               oldPrice = unitPrice * item.realWeight
               this.tbBarter[this.oldTypeIndex].isOneself = '按克'
             } else {
-              oldPrice = item.goodsTagPrice
+              oldPrice = item.tagPrice
               this.tbBarter[this.oldTypeIndex].isOneself = '标价'
             }
 

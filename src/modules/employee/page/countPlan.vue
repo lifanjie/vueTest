@@ -38,7 +38,6 @@ export default {
       color: '#00a7df',
       countPlanId: '',
       goodsCode: '',
-      goodsCodeInput: '',
       countPlanNumber: 0,
       countPlanWeight: 0,
       countPlanPrice: 0
@@ -110,7 +109,7 @@ export default {
         }
       )
     },
-    setMessage: function (text) {
+    setMessage: function (goodsCode, text) {
           // 设置颜色
       if (this.color === '#ff4582') {
         this.color = '#00a7df'
@@ -122,7 +121,7 @@ export default {
 
       this.messages.unshift({
         'color': this.color,
-        'message': mytime + '：' + this.goodsCodeInput + ' ' + text
+        'message': mytime + '：' + goodsCode + ' ' + text
       })
 
       // 删除最后一个
@@ -138,22 +137,22 @@ export default {
           return
         }
 
-        this.goodsCodeInput = this.goodsCode
+        let goodsCode = this.goodsCode
 
         this.$axios.post(
         'goods/countRecord',
           {
             countPlanId: this.countPlanId,
-            goodsCode: this.goodsCodeInput
+            goodsCode: goodsCode
           },
         r => {
-          this.setMessage('OK')
+          this.setMessage(r.data.goodsCode, 'OK')
           this.countPlanNumber += 1
           this.countPlanWeight += Number(r.data.weight)
           this.countPlanPrice += Number(r.data.tagPrice)
         },
         r => {
-          this.setMessage(r.message)
+          this.setMessage(r.data.goodsCode, r.message)
         }
       )
       // 情况商品货号栏位
