@@ -30,3 +30,12 @@ cnpm install node-sass -D\
 cnpm install axios -D\
 --------需要用的插件--------------\
 
+-------插件修改------------------\
+      let keyCode = window.event ? e.keyCode:e.which
+
+      if (keyCode === 13) {
+      // console.log(keyCode)
+       // e.target.blur()
+        this.$emit('on-enter', this.currentValue, e)
+      }
+
