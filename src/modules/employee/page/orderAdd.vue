@@ -1028,6 +1028,9 @@ export default {
         barter.certNo = barter.certNo.toUpperCase()
         for (let old of barter.tbOld) {
           barterWeight = number.accAdd(barterWeight, old.barterWeight)
+          if (barter.isOneself === '标价') {
+            old.barterWeight = barter.barterWeightNum
+          }
           old.barterMode = barter.barterMode
           old.isOneself = barter.isOneself
           old.goodsCode = barter.goodsCode
