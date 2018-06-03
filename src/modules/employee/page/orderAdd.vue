@@ -262,6 +262,9 @@
           </x-input>
           <popup-picker :show.sync="ordersremarksVisible" :show-cell="false" :data="selremarksList" @on-change="selordersRemarks" value-text-align="left"></popup-picker>
 
+          <popup-radio value-align="left" title="业务员" placeholder="请选择业务员" @on-change="selectUser()" :options="seluserList" v-model="userName">              
+          </popup-radio>
+
         </group>
 
         <group :gutter=10 label-width="4.5em" label-align="left">
@@ -270,7 +273,7 @@
         </group>
 
         <div class="sure_div">
-          <x-button @click.native="sureOrder()" class="sure_button sure_btn">立即下单</x-button>
+          <x-button :disabled="isSureOrder" @click.native="sureOrder()" class="sure_button sure_btn">立即下单</x-button>
         </div>
 
       </mt-tab-container-item>
@@ -303,6 +306,7 @@ import { Toast } from 'mint-ui'
 import { validate } from 'utils/validate'
 import { number } from 'utils/number'
 import { focus } from 'utils/directives'
+import { commonUtil } from 'utils/commonUtil'
 import goodsDetail from '../components/goodsDetail'
 
 Vue.use(focus)
@@ -314,10 +318,13 @@ export default {
   data () {
     return {
       active: 'tab-container1',
+      isSureOrder: false,
       mobile: '',
       username: '',
       headPic: '',
       orderRemarks: '',
+      userName: '',
+      userId: '',
       discountSum: '',
       prestoreCount: 0,
       prestore: '',
@@ -339,6 +346,8 @@ export default {
       selpriceTypeList: [['']],
       manufacturerList: [],
       selmanufacturerList: [['']],
+      userList: [],
+      seluserList: [''],
       oldTypeList: [],
       seloldTypeList: [''],
       barterGoodsList: [],
@@ -591,6 +600,17 @@ export default {
             this.seloldTypeList.push(elem.goodsType)
           }
 
+          // 设置业务员选择
+          this.userList = r.data.userList
+          this.seluserList.splice(0, this.seluserList.length)
+          for (let elem of this.userList) {
+            console.log(elem.name)
+            this.seluserList.push(elem.name)
+          }
+
+          this.userName = r.data.user.name
+          this.userId = r.data.user.id
+
           this.barterModeList = r.data.barterModeList
           this.isOneselfList = r.data.isOneselfList
           this.diamondColorList = r.data.diamondColorList
@@ -801,6 +821,15 @@ export default {
             this.voucherId = item.id
             this.voucherCode = item.code
             this.voucherNum = item.price
+          }
+        }
+      }
+    },
+    selectUser () {
+      if (!validate.isEmpty(this.userName)) {
+        for (let item of this.userList) {
+          if (item.name === this.userName) {
+            this.userId = item.id
           }
         }
       }
@@ -1020,6 +1049,7 @@ export default {
         item.discountSum = this.discountSum
         item.totalBill = this.totalBill
         item.orderRemarks = this.orderRemarks
+        item.userId = this.userId
       }
       // 换货信息
       for (let barter of this.tbBarter) {
@@ -1072,6 +1102,9 @@ export default {
         }
       }
 
+      commonUtil.indicatorOpen('提交订单中...')
+      this.isSureOrder = true
+
       // 保存订单
       this.$axios.post(
         'orders/add',
@@ -1097,6 +1130,7 @@ export default {
           this.$router.push({ path: '/msg' })
         },
         r => {
+          this.isSureOrder = false
           if (r.code === '101') {
             this.$router.push({ path: '/login' })
           }
