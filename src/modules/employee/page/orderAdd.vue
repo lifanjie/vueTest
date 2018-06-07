@@ -83,11 +83,11 @@
 
             <x-input title="数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量" @on-change="tbgoodsStr[index].autoEdit = true" v-if="item.goods.number > 1" placeholder="请输入数量" v-model="tbgoodsStr[index].number" type="number" class="weui-vcode"></x-input>
 
-            <div v-if="item.goods.tagPrice === '' && item.goods.weight != ''">
+            <div v-if="item.goods.tagPrice === '' && item.goods.weight !== ''">
 
               <x-input title="商品实重" placeholder="请输入商品实重" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].realWeight" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="销售单价" :placeholder="'今日牌价:'+item.goods.quoteprice" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].nowPrice" type="number" class="weui-vcode"></x-input>
+              <x-input title="销售单价" :placeholder="'今日牌价:'+item.goods.nowPrice" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].nowPrice" type="number" class="weui-vcode"></x-input>
 
               <x-input title="工费单价" v-if="isExcludeFee === true" placeholder="请输入工费单价" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].fee" type="number" class="weui-vcode"></x-input>
 
@@ -193,15 +193,15 @@
 
               <x-input title="折扣(%)" placeholder="折扣*标价=换货金额" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].barterDiscount" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="工费" placeholder="请输入工费" v-if="isExcludeFee" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].feePrice" type="number" class="weui-vcode"></x-input>
+              <x-input title="购买工费" placeholder="请输入购买工费" v-if="isExcludeFee" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].feePrice" type="number" class="weui-vcode"></x-input>
 
               <x-input title="换货金额" placeholder="请输入换货金额" :readonly="tbBarter[index].tbOld[index2].oldPrice === ''" v-model="tbBarter[index].tbOld[index2].barterMoney" type="number" class="weui-vcode red">
                 <x-button slot="right" v-show="isAutoBonus" type="primary" @click.native="deleteOld(index,index2)" mini>删除抵换</x-button>
               </x-input>
 
-              <x-input title="折旧单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入折旧费单价" @on-change="tbBarter[index].tbOld[index2].autoEdit2 = true" v-model="tbBarter[index].tbOld[index2].unitDepreciation" type="number" class="weui-vcode"></x-input>
+              <x-input title="工费单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入折旧工费单价" @on-change="tbBarter[index].tbOld[index2].autoEdit2 = true" v-model="tbBarter[index].tbOld[index2].unitDepreciation" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="折&ensp;旧&ensp;费" placeholder="请输入折旧费" v-model="tbBarter[index].tbOld[index2].depreciation" type="number" class="weui-vcode"></x-input>
+              <x-input title="折旧工费" placeholder="请输入折旧工费" v-model="tbBarter[index].tbOld[index2].depreciation" type="number" class="weui-vcode"></x-input>
 
               <x-input title="换货备注" placeholder="请输入换货备注" value-align="left" v-model="tbBarter[index].tbOld[index2].barterRemarks" type="text" class="weui-vcode">
                 <img slot="right-full-height" @click="setBarterRemarks(index,index2)" v-if="isRemarks" src="../static/image/search.png">
@@ -396,7 +396,7 @@ export default {
         label: '换货金额',
         value: this.barterMoneySum
       }, {
-        label: '折旧费',
+        label: '折旧工费',
         value: this.depreciationSum
       }, {
         label: '优惠金额',
@@ -461,7 +461,7 @@ export default {
             // 旧料标价
             oldPrice = Math.round(unitPrice * barterWeight)
             old.oldPrice = oldPrice > 0 ? oldPrice : ''
-            // 折旧费
+            // 折旧工费
             if (unitDepreciation !== 0 && barterWeight !== 0) {
               if (old.autoEdit2) {
                 old.depreciation = Math.round(unitDepreciation * barterWeight)
@@ -547,6 +547,10 @@ export default {
         r => {
           this.goodsList = r.data.goodsList
           for (let goods of this.goodsList) {
+            let nowPrice = ''
+            if (goods.tagPrice === '' && goods.weight !== '') {
+              nowPrice = goods.nowPrice
+            }
             this.tbgoodsStr.push({
               goods: goods,
               goodsId: goods.id,
@@ -568,7 +572,7 @@ export default {
               receMoney: 0,
               priceType: '',
               number: 1,
-              nowPrice: goods.nowPrice,
+              nowPrice: nowPrice,
               fee: '',
               feePrice: goods.fee,
               remarks: '',
@@ -604,7 +608,6 @@ export default {
           this.userList = r.data.userList
           this.seluserList.splice(0, this.seluserList.length)
           for (let elem of this.userList) {
-            console.log(elem.name)
             this.seluserList.push(elem.name)
           }
 
