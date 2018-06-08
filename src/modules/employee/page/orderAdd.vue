@@ -1021,6 +1021,8 @@ export default {
             this.tbBarter[index].oldIsWeightCal = item.isWeightCal
             if (this.tbBarter[index].oldIsWeightCal === '1') {
               this.tbBarter[index].isOneself = '按克'
+              // this.tbBarter[index].unitPrice = item.barterPrice
+              // this.tbBarter[index].unitDepreciation = item.depreciation
             } else {
               this.tbBarter[index].isOneself = '标价'
             }
