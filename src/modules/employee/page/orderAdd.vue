@@ -1018,6 +1018,8 @@ export default {
             this.tbBarter[index].oldType = item.id
             this.tbBarter[index].oldTypeName = values
             this.tbBarter[index].material = item.material
+            this.tbBarter[index].barterPrice = item.barterPrice // 回收单价
+            this.tbBarter[index].depreciation = item.depreciation  // 折旧单价
             this.tbBarter[index].oldIsWeightCal = item.isWeightCal
             if (this.tbBarter[index].oldIsWeightCal === '1') {
               this.tbBarter[index].isOneself = '按克'
@@ -1163,16 +1165,23 @@ export default {
         return
       }
 
+      let barterPrice = ''
+      let depreciation = ''
+      if (this.tbBarter[index].isOneself === '按克') {
+        barterPrice = this.tbBarter[index].barterPrice
+        depreciation = this.tbBarter[index].depreciation
+      }
+
       this.tbBarter[index].tbOld.unshift({
         depreciation: '',
         autoEdit2: false,
-        unitDepreciation: '',
+        unitDepreciation: depreciation,
         barterGoodsCode: '',
         barterGoods: '',
         barterType: '',
         barterMoney: '',
         autoEdit: false,
-        unitPrice: '',
+        unitPrice: barterPrice,
         barterDiscount: '',
         barterWeight: '',
         oldType: '',
@@ -1217,7 +1226,9 @@ export default {
         certNo: '',
         mainStone: '',
         color: '',
-        cleanliness: ''
+        cleanliness: '',
+        barterPrice: '',
+        depreciation: ''
       })
 
       this.oldTypeIndex = 0
