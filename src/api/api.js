@@ -7,7 +7,7 @@ import { commonUtil } from 'utils/commonUtil'
 
 // 配置API接口地址
 var root = 'http://ht.zuanno.cn/wechat'
-// var root = 'http://localhost/jeesite/wechat'
+// var root = 'http://localhost:8080/jeesite/wechat'
 // var root = '/wechat'
 // 引用axios
 

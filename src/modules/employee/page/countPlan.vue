@@ -111,11 +111,11 @@ export default {
     },
     setMessage: function (goodsCode, text) {
           // 设置颜色
-      if (this.color === '#ff4582') {
-        this.color = '#00a7df'
-      } else {
-        this.color = '#ff4582'
-      }
+      // if (this.color === '#ff4582') {
+      //   this.color = '#00a7df'
+      // } else {
+      //   this.color = '#ff4582'
+      // }
       var mydate = new Date()
       var mytime = mydate.toLocaleTimeString()
 
@@ -146,13 +146,15 @@ export default {
             goodsCode: goodsCode
           },
         r => {
-          this.setMessage(r.data.goodsCode, 'OK')
+          this.color = '#ff4582'
+          this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  重量：' + r.data.weight + '  标价：' + r.data.tagPrice + '  盘点成功')
           this.countPlanNumber += 1
           this.countPlanWeight += Number(r.data.weight)
           this.countPlanPrice += Number(r.data.tagPrice)
         },
         r => {
-          this.setMessage(r.data.goodsCode, r.message)
+          this.color = '#00a7df'
+          this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
         }
       )
       // 情况商品货号栏位
