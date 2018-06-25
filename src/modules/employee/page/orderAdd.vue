@@ -6,7 +6,7 @@
       <mt-tab-container-item id="tab-container1">
         <div class="page-field">
           <mt-header fixed title="会员信息">
-            <router-link to="/productList" slot="left">
+            <router-link to="" @click.native="homePage()" slot="left">
               <mt-button icon="back">返回</mt-button>
             </router-link>
           </mt-header>
@@ -15,6 +15,7 @@
         <group :gutter=0 label-width="4.5em" label-align="left">
           <x-input title="客户电话" placeholder="请输入客户电话" @on-blur="getcusInfo()" v-model="mobile" type="text" class="weui-vcode"></x-input>
           <x-input title="客户姓名" placeholder="请输入客户姓名" v-model="username" type="text" class="weui-vcode"></x-input>
+          <datetime title="客户生日" :min-year=1900 :max-year=2025 v-model="birthday" value-align="left"></datetime>
           <cell class="weui-vcode" title="客户头像" value-align="left">
             <div class="fileUpload btn btn-primary" id="fileUpload">
               <span></span>
@@ -41,6 +42,7 @@
             <router-link to="" @click.native="activeTab('tab-container1')" slot="left">
               <mt-button icon="back">返回</mt-button>
             </router-link>
+            <mt-button @click.native="homePage()" slot="right">首页</mt-button>         
           </mt-header>
         </div>
 
@@ -321,6 +323,7 @@ export default {
       isSureOrder: false,
       mobile: '',
       username: '',
+      birthday: '',
       headPic: '',
       orderRemarks: '',
       userName: '',
@@ -516,6 +519,7 @@ export default {
         }
 
         // 如果手动修改，就不自动赋值了
+
         if (item.autoEdit) {
           item.strikePrice = item.receMoney - differPrice
           item.autoEdit = false
@@ -534,53 +538,45 @@ export default {
     }
   },
   created: function () {
+    this.mobile = this.$store.state.cusInfo.mobile
+    this.username = this.$store.state.cusInfo.username
+    this.birthday = this.$store.state.cusInfo.birthday
     this.loadOrder()
   },
   methods: {
     activeTab: function (tab) {
       this.active = tab
     },
+    homePage () {
+      // 保存开单信息
+      // this.$store.commit('orderInfo', {tbgiveStr: this.tbgiveStr, tbgoodsStr: this.tbgoodsStr, tbBarter: this.tbBarter})
+
+      this.$router.push({ path: '/productList' })
+    },
     loadOrder: function () {
       this.$axios.post(
         'goods/dicList',
         {},
         r => {
+          // 先加载缓存的数据
+          let orderInfo = this.$store.state.orderInfo
+          // 保存数组对象
+          this.tbgoodsStr = orderInfo.tbgoodsStr
+          this.tbBarter = orderInfo.tbBarter
+          this.tbgiveStr = orderInfo.tbgiveStr
+
           this.goodsList = r.data.goodsList
+
           for (let goods of this.goodsList) {
-            let nowPrice = ''
-            if (goods.tagPrice === '' && goods.weight !== '') {
-              nowPrice = goods.nowPrice
+            // 如果购物车的商品，在缓存不存在，就新增
+            let isInsert = true
+            for (let item of orderInfo.tbgoodsStr) {
+              // 如果商品已经存在 就不新增了
+              if (item.goodsId === goods.id) {
+                isInsert = false
+                continue
+              }
             }
-            this.tbgoodsStr.push({
-              goods: goods,
-              goodsId: goods.id,
-              receivable: 0,
-              spendSum: 0,
-              differPrice: '',
-              voucherNum: 0,
-              voucherId: '',
-              barterMoneySum: 0,
-              prestoreSum: '',
-              depositSum: 0,
-              discountSum: '',
-              totalBill: 0,
-              orderRemarks: '',
-              discount: '',
-              tagPrice: goods.tagPrice,
-              strikePrice: goods.tagPrice,
-              autoEdit: false,
-              receMoney: 0,
-              priceType: '',
-              number: 1,
-              nowPrice: nowPrice,
-              fee: '',
-              feePrice: goods.fee,
-              remarks: '',
-              selremarks: [],
-              photo: '',
-              photosrc: '',
-              realWeight: goods.weight
-            })
 
             this.barterGoodsList.push({
               barterGoodsCode: goods.goodsCode + '-' + goods.goodsTypeName,
@@ -590,6 +586,43 @@ export default {
               weight: goods.weight,
               select: 0
             })
+
+            if (isInsert) {
+              let nowPrice = ''
+              if (goods.tagPrice === '' && goods.weight !== '' && Number(goods.nowPrice) > 0) {
+                nowPrice = goods.nowPrice
+              }
+              this.tbgoodsStr.push({
+                goods: goods,
+                goodsId: goods.id,
+                receivable: 0,
+                spendSum: 0,
+                differPrice: '',
+                voucherNum: 0,
+                voucherId: '',
+                barterMoneySum: 0,
+                prestoreSum: '',
+                depositSum: 0,
+                discountSum: '',
+                totalBill: 0,
+                orderRemarks: '',
+                discount: '',
+                tagPrice: goods.tagPrice,
+                strikePrice: goods.tagPrice,
+                autoEdit: false,
+                receMoney: 0,
+                priceType: '',
+                number: 1,
+                nowPrice: nowPrice,
+                fee: '',
+                feePrice: goods.fee,
+                remarks: '',
+                selremarks: [],
+                photo: '',
+                photosrc: '',
+                realWeight: goods.weight
+              })
+            }
           }
           // 设置换货商品选择
           this.selbarterGoodsList.splice(0, this.selbarterGoodsList.length)
@@ -701,6 +734,7 @@ export default {
         },
         r => {
           this.username = r.data.username
+          this.birthday = r.data.birthday
           this.setCusImager(r.data.thumbHeadPic)
 
           // 可用预存金额
@@ -719,6 +753,7 @@ export default {
     cusOver: function () {
       this.mobile = ''
       this.username = ''
+      this.birthday = ''
       this.isHeadPic = false
       this.active = 'tab-container2'
     },
@@ -729,7 +764,7 @@ export default {
       if (!validate.isEmptyWarn(this.username, '客户姓名')) {
         return
       }
-
+      this.$store.commit('setCusInfo', {mobile: this.mobile, username: this.username, birthday: this.birthday})
       this.active = 'tab-container2'
       this.getSaleGoods(this.mobile)
       this.getExchange(this.mobile)
@@ -892,8 +927,6 @@ export default {
             } else {
               this.tbBarter[index2].tbOld[index3].barterWeight = barterWeightNum
             }
-
-            console.log(this.tbBarter[index2].tbOld[index3].barterWeight)
           }
         }
       }
@@ -920,6 +953,11 @@ export default {
       }
     },
     setSaleGoods: function (index) {
+      // 如果商品货号不为空，查询购买记录
+      // if (this.tbBarter[index].goodsCode === '') {
+
+      // }
+
       this.oldTypeIndex = index
       this.saleGoodsVisible = true
     },
@@ -972,14 +1010,14 @@ export default {
               barterType: barterType,
               barterMoney: item.strikePrice,
               autoEdit: false,
-              unitPrice: unitPrice,
+              unitPrice: Number(unitPrice) > 0 ? unitPrice : '',
               barterDiscount: discount !== 100 ? discount : '',
               barterWeight: item.realWeight,
               oldType: '',
               oldTypeName: '',
               oldIsWeightCal: '',
-              oldPrice: oldPrice,
-              feePrice: item.feePrice,
+              oldPrice: Number(oldPrice) > 0 ? oldPrice : '',
+              feePrice: Number(item.feePrice) > 0 ? item.feePrice : '',
               barterRemarks: ''
             })
           }
@@ -1018,7 +1056,9 @@ export default {
             this.tbBarter[index].oldType = item.id
             this.tbBarter[index].oldTypeName = values
             this.tbBarter[index].material = item.material
-            this.tbBarter[index].oldIsWeightCal = item.isWeightCal
+            this.tbBarter[index].barterPrice = Number(item.barterPrice) > 0 ? item.barterPrice : '' // 回收单价
+            this.tbBarter[index].depreciation = Number(item.depreciation) > 0 ? item.depreciation : ''  // 折旧单价
+            this.tbBarter[index].oldIsWeightCal = Number(item.isWeightCal) > 0 ? item.isWeightCal : ''
             if (this.tbBarter[index].oldIsWeightCal === '1') {
               this.tbBarter[index].isOneself = '按克'
               // this.tbBarter[index].unitPrice = item.barterPrice
@@ -1083,7 +1123,6 @@ export default {
         }
 
         let barterWeightNum = Number(barter.barterWeightNum)
-        // console.log(barterWeightNum + '--' + barterWeight.toString())
         if (barterWeightNum.toString() !== barterWeight.toString() && this.isAutoBonus && barter.isOneself === '按克') {
           Toast(`${barter.oldTypeName}的抵扣重量合计不等于总重量`)
           return
@@ -1117,12 +1156,15 @@ export default {
           mobile: this.mobile,
           thumbHeadPic: this.thumbHeadPic,
           username: this.username,
+          birthdayStr: this.birthday,
           tbBarterStr: JSON.stringify(this.tbBarter),
           tbgoodsStr: JSON.stringify(this.tbgoodsStr),
           tbgiveStr: JSON.stringify(this.tbgiveStr)
         },
         r => {
           this.$store.commit('setOrders', 0)
+          this.$store.commit('setOrderInfo', {tbgiveStr: [], tbgoodsStr: [], tbBarter: []})
+          this.$store.commit('setCusInfo', {mobile: '', username: '', birthday: ''})
           this.$store.commit('setMsg', {
             title: '下单成功',
             description: '请去收银台付款',
@@ -1165,16 +1207,23 @@ export default {
         return
       }
 
+      let barterPrice = ''
+      let depreciation = ''
+      if (this.tbBarter[index].isOneself === '按克') {
+        barterPrice = this.tbBarter[index].barterPrice
+        depreciation = this.tbBarter[index].depreciation
+      }
+
       this.tbBarter[index].tbOld.unshift({
         depreciation: '',
         autoEdit2: false,
-        unitDepreciation: '',
+        unitDepreciation: depreciation,
         barterGoodsCode: '',
         barterGoods: '',
         barterType: '',
         barterMoney: '',
         autoEdit: false,
-        unitPrice: '',
+        unitPrice: barterPrice,
         barterDiscount: '',
         barterWeight: '',
         oldType: '',
@@ -1219,7 +1268,9 @@ export default {
         certNo: '',
         mainStone: '',
         color: '',
-        cleanliness: ''
+        cleanliness: '',
+        barterPrice: '',
+        depreciation: ''
       })
 
       this.oldTypeIndex = 0
@@ -1239,11 +1290,36 @@ export default {
           id: id
         },
         r => {
+          let tbgoods = this.tbgoodsStr[index]
+
+          // 删除缓存中的商品
+          let orderInfo = this.$store.state.orderInfo
+          for (let [goodsIndex, item] of orderInfo.tbgoodsStr.entries()) {
+            if (item.goodsId === tbgoods.goodsId) {
+              orderInfo.tbgoodsStr.splice(goodsIndex, 1)
+            }
+          }
+
+          // 删除换货记录
+          for (let barter of this.tbBarter) {
+            barter.tbOld.forEach((item, i) => {
+              if (tbgoods.goodsId === item.barterGoods) {
+                barter.tbOld.splice(i, 1)
+              }
+            })
+          }
+
+          // 删除换货商品选择
+          this.selbarterGoodsList.forEach((item, i) => {
+            if (tbgoods.goods.goodsCode + '-' + tbgoods.goods.goodsTypeName === item) {
+              this.selbarterGoodsList.splice(i, 1)
+            }
+          })
+
           this.$store.commit('addOrders', -1)
-          if (this.tbgoodsStr.length === 1) {
+          if (this.tbgoodsStr.length === 0) {
             this.$router.push({ path: '/productList' })
           }
-          this.tbgoodsStr.splice(index, 1)
         },
         r => {
           if (r.code === '101') {
@@ -1267,6 +1343,9 @@ export default {
 </style>
 
 <style lang="less">
+.vux-datetime-value{
+  text-align: left !important;
+}
 .red .weui-cell__ft,
 .red .weui-cell__bd {
   color: #fb366b;

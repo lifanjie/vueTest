@@ -15,10 +15,26 @@ const state = {
     butType: 'primary',
     butText: '',
     butLink: ''
+  },
+  cusInfo: {
+    mobile: '',
+    username: '',
+    birthday: ''
+  },
+  orderInfo: {
+    tbgiveStr: [],
+    tbgoodsStr: [],
+    tbBarter: []
   }
 }
 
 const mutations = {
+  setOrderInfo (state, orderInfo) {
+    state.orderInfo = orderInfo
+  },
+  setCusInfo (state, cusInfo) {
+    state.cusInfo = cusInfo
+  },
   setMsg (state, msg) {
     state.msg = msg
   },
