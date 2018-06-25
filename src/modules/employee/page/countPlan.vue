@@ -106,6 +106,12 @@ export default {
           } else {
             this.selcountPlan[0].splice(0, this.selcountPlan[0].length, '')
           }
+        },
+        r => {
+          if (r.code === '101') {
+            this.$router.push({ path: '/login' })
+          }
+          Toast(r)
         }
       )
     },
