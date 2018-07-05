@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <audio ref="audio"></audio>
     <router-view></router-view>
   </div>
 </template>

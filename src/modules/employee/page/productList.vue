@@ -1,5 +1,6 @@
 <template>
   <div id="productList">
+    <audio ref="goodAudio"></audio>
 
     <mt-tab-container v-model="active">
 
@@ -145,12 +146,13 @@ export default {
       }
     },
     play: function () {
-      this.url = this.goods.audio
-      addEventListener('message', () => {
-        this.$refs.audio.src = this.url
-        this.$refs.audio.play()
-      }, false)
-      postMessage(1, '*')
+      let root = 'http://ht.zuanno.cn'
+      this.url = root + this.goods.audio
+
+      this.$nextTick(() => {
+        this.$refs.goodAudio.src = this.url
+        this.$refs.goodAudio.play()
+      })
     },
     activeTab: function (tab, goods) {
       this.goods = goods

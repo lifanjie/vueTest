@@ -1,7 +1,6 @@
 <template>
-  
   <div id="audio">
-
+    <audio ref="audio"></audio>
     <div class="page-field">
       <mt-header fixed title="话术学习">
         <router-link to="/more"  slot="left">
@@ -47,12 +46,13 @@ export default {
   },
   methods: {
     play: function (url) {
-      this.url = url
-      addEventListener('message', () => {
+      let root = 'http://ht.zuanno.cn'
+      this.url = root + url
+
+      this.$nextTick(() => {
         this.$refs.audio.src = this.url
         this.$refs.audio.play()
-      }, false)
-      postMessage(1, '*')
+      })
     },
     getAudio: function (index, type) {
       // 查询话术
