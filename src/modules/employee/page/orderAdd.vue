@@ -15,6 +15,7 @@
         <group :gutter=0 label-width="4.5em" label-align="left">
           <x-input title="客户电话" placeholder="请输入客户电话" @on-blur="getcusInfo()" v-model="mobile" type="text" class="weui-vcode"></x-input>
           <x-input title="客户姓名" placeholder="请输入客户姓名" v-model="username" type="text" class="weui-vcode"></x-input>
+          <x-input title="会员等级"  v-model="levelId" type="text" class="weui-vcode"></x-input>
           <datetime title="客户生日" :min-year=1900 :max-year=2025 v-model="birthday" value-align="left"></datetime>
           <cell class="weui-vcode" title="客户头像" value-align="left">
             <div class="fileUpload btn btn-primary" id="fileUpload">
@@ -323,6 +324,7 @@ export default {
       isSureOrder: false,
       mobile: '',
       username: '',
+      levelId: '',
       birthday: '',
       headPic: '',
       orderRemarks: '',
@@ -541,6 +543,7 @@ export default {
     this.mobile = this.$store.state.cusInfo.mobile
     this.username = this.$store.state.cusInfo.username
     this.birthday = this.$store.state.cusInfo.birthday
+    this.levelId = this.$store.state.cusInfo.levelId
     this.loadOrder()
   },
   methods: {
@@ -600,6 +603,7 @@ export default {
                 differPrice: '',
                 voucherNum: 0,
                 voucherId: '',
+                voucherCode: '',
                 barterMoneySum: 0,
                 prestoreSum: '',
                 depositSum: 0,
@@ -735,6 +739,7 @@ export default {
         r => {
           this.username = r.data.username
           this.birthday = r.data.birthday
+          this.levelId = r.data.levelId
           this.setCusImager(r.data.thumbHeadPic)
 
           // 可用预存金额
@@ -754,6 +759,7 @@ export default {
       this.mobile = ''
       this.username = ''
       this.birthday = ''
+      this.levelId = ''
       this.isHeadPic = false
       this.active = 'tab-container2'
     },
@@ -764,7 +770,7 @@ export default {
       if (!validate.isEmptyWarn(this.username, '客户姓名')) {
         return
       }
-      this.$store.commit('setCusInfo', {mobile: this.mobile, username: this.username, birthday: this.birthday})
+      this.$store.commit('setCusInfo', {mobile: this.mobile, username: this.username, levelId: this.levelId, birthday: this.birthday})
       this.active = 'tab-container2'
       this.getSaleGoods(this.mobile)
       this.getExchange(this.mobile)
@@ -1093,6 +1099,8 @@ export default {
         item.prestoreSum = this.prestoreSum
         item.discountSum = this.discountSum
         item.totalBill = this.totalBill
+        item.voucherId = this.voucherId
+        item.voucherCode = this.voucherCode
         item.orderRemarks = this.orderRemarks
         item.userId = this.userId
       }
@@ -1164,7 +1172,7 @@ export default {
         r => {
           this.$store.commit('setOrders', 0)
           this.$store.commit('setOrderInfo', {tbgiveStr: [], tbgoodsStr: [], tbBarter: []})
-          this.$store.commit('setCusInfo', {mobile: '', username: '', birthday: ''})
+          this.$store.commit('setCusInfo', {mobile: '', username: '', levelId: '', birthday: ''})
           this.$store.commit('setMsg', {
             title: '下单成功',
             description: '请去收银台付款',

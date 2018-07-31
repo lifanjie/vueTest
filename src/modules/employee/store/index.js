@@ -19,6 +19,7 @@ const state = {
   cusInfo: {
     mobile: '',
     username: '',
+    levelId: '',
     birthday: ''
   },
   orderInfo: {
