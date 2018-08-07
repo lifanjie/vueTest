@@ -41,7 +41,7 @@ module.exports = {
     // 环境变量
     env: require('./dev.env'),
     // dev-server监听的端口
-    port: process.env.PORT || 8050,
+    port: process.env.PORT || 80,
     // 是否自动打开浏览器
     autoOpenBrowser: true,
     // 静态资源文件夹

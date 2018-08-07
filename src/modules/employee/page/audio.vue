@@ -1,6 +1,5 @@
 <template>
   <div id="audio">
-    <audio ref="audio"></audio>
     <div class="page-field">
       <mt-header fixed title="话术学习">
         <router-link to="/more"  slot="left">
@@ -10,6 +9,7 @@
     </div>
 
     <group>
+    <audio ref="audio"  autoplay="autoplay" controls></audio>      
         <div v-for="(item,index) in audioList">
           <cell is-link :title="item.value"  :key="item.id"
           @click.native="check(item)" 
@@ -46,12 +46,12 @@ export default {
   },
   methods: {
     play: function (url) {
-      let root = 'http://ht.zuanno.cn'
+      let root = 'http://wx.zuanno.cn'
       this.url = root + url
 
       this.$nextTick(() => {
         this.$refs.audio.src = this.url
-        this.$refs.audio.play()
+        // this.$refs.audio.play()
       })
     },
     getAudio: function (index, type) {
