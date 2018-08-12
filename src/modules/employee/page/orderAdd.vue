@@ -15,7 +15,7 @@
         <group :gutter=0 label-width="4.5em" label-align="left">
           <x-input title="客户电话" placeholder="请输入客户电话" @on-blur="getcusInfo()" v-model="mobile" type="text" class="weui-vcode"></x-input>
           <x-input title="客户姓名" placeholder="请输入客户姓名" v-model="username" type="text" class="weui-vcode"></x-input>
-          <x-input title="会员等级"  v-model="levelId" type="text" class="weui-vcode"></x-input>
+          <x-input title="会员等级" :readonly="true" v-model="levelId" type="text" class="weui-vcode"></x-input>
           <datetime title="客户生日" :min-year=1900 :max-year=2025 v-model="birthday" value-align="left"></datetime>
           <cell class="weui-vcode" title="客户头像" value-align="left">
             <div class="fileUpload btn btn-primary" id="fileUpload">
@@ -759,7 +759,6 @@ export default {
       this.mobile = ''
       this.username = ''
       this.birthday = ''
-      this.levelId = ''
       this.isHeadPic = false
       this.active = 'tab-container2'
     },
@@ -770,7 +769,7 @@ export default {
       if (!validate.isEmptyWarn(this.username, '客户姓名')) {
         return
       }
-      this.$store.commit('setCusInfo', {mobile: this.mobile, username: this.username, levelId: this.levelId, birthday: this.birthday})
+      this.$store.commit('setCusInfo', {mobile: this.mobile, username: this.username, birthday: this.birthday})
       this.active = 'tab-container2'
       this.getSaleGoods(this.mobile)
       this.getExchange(this.mobile)
@@ -1109,6 +1108,10 @@ export default {
         let barterWeight = 0
         barter.goodsCode = barter.goodsCode.toUpperCase()
         barter.certNo = barter.certNo.toUpperCase()
+        if (barter.tbOld.length === 0) {
+          Toast(`${barter.oldTypeName}请输入换货金额`)
+          return
+        }
         for (let old of barter.tbOld) {
           barterWeight = number.accAdd(barterWeight, old.barterWeight)
           if (barter.isOneself === '标价') {
@@ -1172,7 +1175,7 @@ export default {
         r => {
           this.$store.commit('setOrders', 0)
           this.$store.commit('setOrderInfo', {tbgiveStr: [], tbgoodsStr: [], tbBarter: []})
-          this.$store.commit('setCusInfo', {mobile: '', username: '', levelId: '', birthday: ''})
+          this.$store.commit('setCusInfo', {mobile: '', username: '', birthday: ''})
           this.$store.commit('setMsg', {
             title: '下单成功',
             description: '请去收银台付款',
