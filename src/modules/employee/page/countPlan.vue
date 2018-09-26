@@ -12,9 +12,11 @@
       <popup-picker class="weui-vcode"  title="盘点计划" placeholder="请选择盘点计划" :data="selcountPlan" v-model="countPlanValue" @on-change="setCountPlan" value-text-align="left"></popup-picker>                    
       <x-input title="商品条码" ref="goodsCode"  @on-enter="saveCountPlan()" placeholder="请输入商品条码" v-model="goodsCode" type="text" class="weui-vcode">
         <x-button slot="right" type="primary" @click.native="saveCountPlan()" mini>盘点</x-button>
-      </x-input>  
+      </x-input> 
+      <x-input title="盘点数" placeholder="请输入盘点数" v-model="countQuantityBu" type="text" class="weui-vcode"></x-input>         
       <cell-form-preview :list="countPlanList" class="weui-vcode"></cell-form-preview>           
     </group>
+    
 
     <div id="returnlist" v-for="item in messages">
       <p class="returnstr" v-bind:style="{color:item.color}">{{item.message}}</p>
@@ -38,6 +40,7 @@ export default {
       color: '#00a7df',
       countPlanId: '',
       goodsCode: '',
+      countQuantityBu: 1,
       countPlanNumber: 0,
       countPlanWeight: 0,
       countPlanPrice: 0
@@ -144,12 +147,19 @@ export default {
         }
 
         let goodsCode = this.goodsCode
+        let countQuantityBu = this.countQuantityBu
+
+        if (countQuantityBu <= 0) {
+          Toast('盘点数必须大于0')
+          return
+        }
 
         this.$axios.post(
         'goods/countRecord',
           {
             countPlanId: this.countPlanId,
-            goodsCode: goodsCode
+            goodsCode: goodsCode,
+            countQuantityBu: countQuantityBu
           },
         r => {
           this.color = '#ff4582'
@@ -163,8 +173,9 @@ export default {
           this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
         }
       )
-      // 情况商品货号栏位
+        // 清空商品货号栏位
         this.$refs.goodsCode.clear()
+        this.countQuantityBu = 1
       })
     }
   }
