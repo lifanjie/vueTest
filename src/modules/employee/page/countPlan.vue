@@ -4,8 +4,9 @@
       <mt-header fixed title="盘点">
         <router-link to="/more"  slot="left">
           <mt-button icon="back">返回</mt-button>
-        </router-link>          
-      </mt-header>
+        </router-link>    
+        <mt-button @click.native="clearCount()" slot="right">清零</mt-button>       
+      </mt-header>              
     </div>
 
     <group label-width="4.5em" label-align="left">
@@ -13,7 +14,8 @@
       <x-input title="商品条码" ref="goodsCode"  @on-enter="saveCountPlan()" placeholder="请输入商品条码" v-model="goodsCode" type="text" class="weui-vcode">
         <x-button slot="right" type="primary" @click.native="saveCountPlan()" mini>盘点</x-button>
       </x-input> 
-      <x-input title="盘点数" placeholder="请输入盘点数" v-model="countQuantityBu" type="text" class="weui-vcode"></x-input>         
+      <x-input title="盘点数" placeholder="请输入盘点数" v-model="countQuantityBu" type="text" class="weui-vcode"></x-input>   
+      <cell-form-preview :list="countList" class="weui-vcode"></cell-form-preview>       
       <cell-form-preview :list="countPlanList" class="weui-vcode"></cell-form-preview>           
     </group>
     
@@ -41,21 +43,34 @@ export default {
       countPlanId: '',
       goodsCode: '',
       countQuantityBu: 1,
+      countNumber: 0,
+      countWeight: 0,
       countPlanNumber: 0,
       countPlanWeight: 0,
       countPlanPrice: 0
     }
   },
   computed: {
+    countList: function () {
+      let list = [{
+        label: '当前件数',
+        value: this.countNumber
+      }, {
+        label: '当前重量',
+        value: this.countWeight.toFixed(2)
+      }]
+
+      return list
+    },
     countPlanList: function () {
       let list = [{
-        label: '件数',
+        label: '总盘件数',
         value: this.countPlanNumber
       }, {
-        label: '重量',
+        label: '总盘重量',
         value: this.countPlanWeight.toFixed(2)
       }, {
-        label: '金额',
+        label: '总盘金额',
         value: this.countPlanPrice.toFixed(2)
       }]
 
@@ -66,6 +81,10 @@ export default {
     this.selCountPlan()
   },
   methods: {
+    clearCount: function () {
+      this.countNumber = 0
+      this.countWeight = 0
+    },
     setCountPlanSum: function () {
       this.$axios.post(
         'countPlanSum',
@@ -167,6 +186,9 @@ export default {
           this.countPlanNumber += 1
           this.countPlanWeight += Number(r.data.weight)
           this.countPlanPrice += Number(r.data.tagPrice)
+
+          this.countNumber += 1
+          this.countWeight += Number(r.data.weight)
         },
         r => {
           this.color = '#00a7df'
