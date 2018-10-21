@@ -265,8 +265,8 @@
           </x-input>
           <popup-picker :show.sync="ordersremarksVisible" :show-cell="false" :data="selremarksList" @on-change="selordersRemarks" value-text-align="left"></popup-picker>
 
-          <popup-radio value-align="left" title="业务员" placeholder="请选择业务员" @on-change="selectUser()" :options="seluserList" v-model="userName">              
-          </popup-radio>
+          <popup-radio value-align="left" title="主销" placeholder="请选择主销" @on-change="selectUser()" :options="seluserList" v-model="userName"></popup-radio>              
+          <popup-radio value-align="left" title="副销" placeholder="请选择副销" @on-change="selectUser2()" :options="seluserList" v-model="user2Name"></popup-radio>
 
         </group>
 
@@ -328,6 +328,8 @@ export default {
       birthday: '',
       headPic: '',
       orderRemarks: '',
+      user2Name: '',
+      user2Id: '',
       userName: '',
       userId: '',
       discountSum: '',
@@ -877,6 +879,15 @@ export default {
         }
       }
     },
+    selectUser2 () {
+      if (!validate.isEmpty(this.user2Name)) {
+        for (let item of this.userList) {
+          if (item.name === this.user2Name) {
+            this.user2Id = item.id
+          }
+        }
+      }
+    },
     setBarterRemarks: function (index, index2) {
       this.oldTypeIndex = index
       this.barterGoodsIndex = index2
@@ -1102,6 +1113,7 @@ export default {
         item.voucherCode = this.voucherCode
         item.orderRemarks = this.orderRemarks
         item.userId = this.userId
+        item.user2Id = this.user2Id
       }
       // 换货信息
       for (let barter of this.tbBarter) {
