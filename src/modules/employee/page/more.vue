@@ -54,7 +54,6 @@ export default {
   },
   created: function () {
     this.userName = localStorage.getItem('userName')
-    console.log(location.href)
   },
   methods: {
     outlogin: function () {
