@@ -103,7 +103,7 @@ export default {
     autoLogin () {
       let username = this.$route.query.username
       let password = this.$route.query.password
-      console.log(username + '--' + password)
+
       if (validate.isEmpty(username) || validate.isEmpty(password)) {
         this.setGoodsType()
         this.queryGoods2()
