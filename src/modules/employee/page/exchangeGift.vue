@@ -97,8 +97,7 @@ export default {
         'gift/exchange',
         {
           code: this.code[0],
-          mobile: this.mobile,
-          setStatus: '1'
+          mobile: this.mobile
         },
         r => {
           Toast('兑换成功')

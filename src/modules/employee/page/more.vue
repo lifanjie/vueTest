@@ -24,9 +24,9 @@
         <cell class="weui-vcode" title="兑 换" is-link link="/exchangeGift">
           <img slot="icon" class="img-icon" src="../static/image/icon_1_03.png">
         </cell>
-        <cell class="weui-vcode" title="返 现" is-link link="/exchangeCash">
+        <!-- <cell class="weui-vcode" title="返 现" is-link link="/exchangeCash">
           <img slot="icon" class="img-icon" src="../static/image/icon_1_03.png">
-        </cell>
+        </cell> -->
         <cell class="weui-vcode" title="话术学习" is-link link="/audio">
           <img slot="icon" class="img-icon" src="../static/image/icon_d_16.png">
         </cell>
