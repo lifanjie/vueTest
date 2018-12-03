@@ -38,4 +38,23 @@ cnpm install axios -D\
        // e.target.blur()
         this.$emit('on-enter', this.currentValue, e)
       }
+      let direction = newVal.length - oldVal.length
+      // if(this.type !== 'number' ){
+      //   let selection = this.$refs.input.selectionStart
+      //   selection = this._getInputMaskSelection(selection, direction, this.maskValue(newVal))
+      // }
 
+      this.lastDirection = direction
+      this.$emit('input', this.maskValue(newVal))
+      // #2810
+      this.$nextTick(() => {
+        // if(this.type !== 'number' ){
+        //   if (this.$refs.input.selectionStart !== selection) {
+        //     this.$refs.input.selectionStart = selection
+        //     this.$refs.input.selectionEnd = selection
+        //   }
+        // }
+        if (this.currentValue !== this.maskValue(newVal)) {
+          this.currentValue = this.maskValue(newVal)
+        }
+      })
