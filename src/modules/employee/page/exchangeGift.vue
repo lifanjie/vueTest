@@ -46,7 +46,7 @@ export default {
       if (!validate.isEmpty(values.toString())) {
         for (let item of this.giftList) {
           if (item.code === values.toString()) {
-            this.giftName = item.giftName
+            this.giftName = item.name
             this.code[0] = item.code
           }
         }

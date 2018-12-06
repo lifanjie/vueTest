@@ -6,8 +6,8 @@ import { validate } from 'utils/validate'
 import { commonUtil } from 'utils/commonUtil'
 
 // 配置API接口地址
-// var root = 'http://ceshiht.zuanno.cn/wechat'
-var root = 'http://localhost/jeesite/wechat'
+var root = 'http://ceshiht.zuanno.cn/wechat'
+// var root = 'http://localhost/jeesite/wechat'
 // var root = '/wechat'
 // 引用axios
 
