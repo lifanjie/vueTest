@@ -196,7 +196,7 @@ export default {
         }
       )
         // 清空商品货号栏位
-        this.$refs.goodsCode.clear()
+        this.goodsCode = ''
         this.countQuantityBu = 1
       })
     }
