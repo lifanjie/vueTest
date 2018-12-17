@@ -35,7 +35,7 @@ cnpm install axios -D\
 
       if (keyCode === 13) {
       // console.log(keyCode)
-       // e.target.blur()
+        e.target.blur()
         this.$emit('on-enter', this.currentValue, e)
       }
       let direction = newVal.length - oldVal.length
