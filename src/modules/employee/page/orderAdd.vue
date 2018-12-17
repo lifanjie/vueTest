@@ -43,7 +43,7 @@
             <router-link to="" @click.native="activeTab('tab-container1')" slot="left">
               <mt-button icon="back">返回</mt-button>
             </router-link>
-            <mt-button @click.native="homePage()" slot="right">首页</mt-button>         
+            <mt-button @click.native="homePage()" slot="right">首页</mt-button>
           </mt-header>
         </div>
 
@@ -65,7 +65,9 @@
                 <ul class="Attribute_list" style="max-width:140px;">
                   <li>条码：{{item.goods.goodsCode}} </li>
                   <li>净度：{{item.goods.cleanliness}} </li>
-                  <li>重量：<span v-show="item.goods.tagPrice === ''">{{item.goods.weight}}</span></li>
+                  <li>重量：
+                    <span v-show="item.goods.tagPrice === ''">{{item.goods.weight}}</span>
+                  </li>
                   <li>标价：
                     <span style="color:#fb366b;font-size:18px;"> {{item.goods.tagPrice}}</span>
                   </li>
@@ -84,25 +86,25 @@
 
           <group :gutter=0 label-width="4.5em" label-align="left">
 
-            <x-input title="数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量" @on-change="tbgoodsStr[index].autoEdit = true" v-if="item.goods.number > 1" placeholder="请输入数量" v-model="tbgoodsStr[index].number" type="number" class="weui-vcode"></x-input>
+            <x-input title="数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量"  v-if="item.goods.number > 1" placeholder="请输入数量" v-model="tbgoodsStr[index].number" type="number" class="weui-vcode"></x-input>
 
             <div v-if="item.goods.tagPrice === '' && item.goods.weight !== ''">
 
-              <x-input title="商品实重" placeholder="请输入商品实重" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].realWeight" type="number" class="weui-vcode"></x-input>
+              <x-input title="商品实重" placeholder="请输入商品实重" @keyup.native="tbgoodsStr[index].autoEdit = true"  v-model="tbgoodsStr[index].realWeight" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="销售单价" :placeholder="'今日牌价:'+item.goods.nowPrice" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].nowPrice" type="number" class="weui-vcode"></x-input>
+              <x-input title="销售单价" :placeholder="'今日牌价:'+item.goods.nowPrice"  @keyup.native="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].nowPrice" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="工费单价" v-if="isExcludeFee === true" placeholder="请输入工费单价" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].fee" type="number" class="weui-vcode"></x-input>
+              <x-input title="工费单价" v-if="isExcludeFee === true" placeholder="请输入工费单价"  v-model="tbgoodsStr[index].fee" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="工费" v-if="isExcludeFee === true" placeholder="请输入工费" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].feePrice" type="number" class="weui-vcode"></x-input>
+              <x-input title="工费" v-if="isExcludeFee === true" placeholder="请输入工费"  v-model="tbgoodsStr[index].feePrice" type="number" class="weui-vcode"></x-input>
 
             </div>
 
-            <x-input title="折扣(%)" v-if="item.goods.tagPrice != '' && item.goods.isFictitious != '1'" placeholder="标价*折扣=成交价格" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].discount" type="number" class="weui-vcode"></x-input>
+            <x-input title="折扣(%)" v-if="item.goods.tagPrice != '' && item.goods.isFictitious != '1'" @keyup.native="tbgoodsStr[index].autoEdit = true" placeholder="标价*折扣=成交价格"  v-model="tbgoodsStr[index].discount" type="number" class="weui-vcode"></x-input>
 
-            <x-input title="优惠金额" placeholder="请输入优惠金额" @on-change="tbgoodsStr[index].autoEdit = true" v-model="tbgoodsStr[index].differPrice" type="number" class="weui-vcode"></x-input>
+            <x-input title="优惠金额" placeholder="请输入优惠金额" @keyup.native="tbgoodsStr[index].autoEdit = true"  v-model="tbgoodsStr[index].differPrice" type="number" class="weui-vcode"></x-input>
 
-            <x-input title="销售金额" placeholder="请输入销售金额" :readonly="tbgoodsStr[index].differPrice !== ''" v-model="tbgoodsStr[index].strikePrice" type="number" class="weui-vcode red"></x-input>
+            <x-input title="销售金额" placeholder="请输入销售金额" @keyup.native="tbgoodsStr[index].autoEdit = false" :readonly="tbgoodsStr[index].differPrice !== ''" v-model="tbgoodsStr[index].strikePrice" type="number" class="weui-vcode red"></x-input>
 
             <x-input title="已收订金" v-if="item.goods.isReserve === '1'" v-model="item.goods.deposit" type="number" :readonly="true" class="weui-vcode red"></x-input>
 
@@ -154,7 +156,7 @@
             <popup-picker :show.sync="saleGoodsVisible" :show-cell="false" :data="selsaleGoodsList" @on-change="selectSaleGoods" value-text-align="left">
             </popup-picker>
 
-            <popup-radio v-show="tbBarter[index].barterMode === '回收'" value-align="left" title="旧料品类" placeholder="请选择旧料品类" @on-change="selectOldType(index,tbBarter[index].oldTypeName)" :options="seloldTypeList" v-model="tbBarter[index].oldTypeName">              
+            <popup-radio v-show="tbBarter[index].barterMode === '回收'" value-align="left" title="旧料品类" placeholder="请选择旧料品类" @on-change="selectOldType(index,tbBarter[index].oldTypeName)" :options="seloldTypeList" v-model="tbBarter[index].oldTypeName">
             </popup-radio>
 
             <x-input title="总&ensp;重&ensp;量" placeholder="请输入总重量" v-model="tbBarter[index].barterWeightNum" type="number" class="weui-vcode"></x-input>
@@ -188,23 +190,25 @@
 
               <popup-radio value-align="left" title="换货商品" v-show="isAutoBonus" placeholder="请选择换货商品" @on-change="selectBarterGoods(index,index2,tbBarter[index].tbOld[index2].barterGoodsCode)" :options="selbarterGoodsList" v-model="tbBarter[index].tbOld[index2].barterGoodsCode"></popup-radio>
 
-              <x-input title="抵扣重量" v-show="tbBarter[index].isOneself === '按克' && isAutoBonus" placeholder="请输入抵扣重量" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].barterWeight" type="number" class="weui-vcode"></x-input>
+              <x-input title="抵扣重量" v-show="tbBarter[index].isOneself === '按克' && isAutoBonus" placeholder="请输入抵扣重量" v-model="tbBarter[index].tbOld[index2].barterWeight" type="number" :class="{'weui-vcode' : true,'red' : !tbBarter[index].tbOld[index2].autoEdit}">
+                <x-button slot="right" v-show="isAutoBonus" type="primary" @click.native.stop.prevent="calBarterWeight(index,index2)" mini>{{tbBarter[index].tbOld[index2].autoEdit ? '自动算重量' : '自动算金额'}}</x-button>
+              </x-input>
 
-              <x-input title="旧料单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="金重*单价=换货金额" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].unitPrice" type="number" class="weui-vcode"></x-input>
+              <x-input title="旧料单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="金重*单价=换货金额" v-model="tbBarter[index].tbOld[index2].unitPrice" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="回收标价" v-show="tbBarter[index].isOneself === '标价'" placeholder="请输入回收标价" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].oldPrice" type="number" class="weui-vcode"></x-input>
+              <x-input title="回收标价" v-show="tbBarter[index].isOneself === '标价'" placeholder="请输入回收标价" v-model="tbBarter[index].tbOld[index2].oldPrice" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="折扣(%)" placeholder="折扣*标价=换货金额" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].barterDiscount" type="number" class="weui-vcode"></x-input>
+              <x-input title="折扣(%)" placeholder="折扣*标价=换货金额" v-model="tbBarter[index].tbOld[index2].barterDiscount" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="购买工费" placeholder="请输入购买工费" v-if="isExcludeFee" @on-change="tbBarter[index].tbOld[index2].autoEdit = true" v-model="tbBarter[index].tbOld[index2].feePrice" type="number" class="weui-vcode"></x-input>
+              <x-input title="购买工费" placeholder="请输入购买工费" v-if="isExcludeFee" v-model="tbBarter[index].tbOld[index2].feePrice" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="换货金额" placeholder="请输入换货金额" :readonly="tbBarter[index].tbOld[index2].oldPrice === ''" v-model="tbBarter[index].tbOld[index2].barterMoney" type="number" class="weui-vcode red">
+              <x-input title="换货金额" placeholder="请输入换货金额" :readonly="tbBarter[index].isOneself === '标价'" v-model="tbBarter[index].tbOld[index2].barterMoney" type="number" class="weui-vcode red">
                 <x-button slot="right" v-show="isAutoBonus" type="primary" @click.native="deleteOld(index,index2)" mini>删除抵换</x-button>
               </x-input>
 
               <x-input title="工费单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="请输入折旧工费单价" @on-change="tbBarter[index].tbOld[index2].autoEdit2 = true" v-model="tbBarter[index].tbOld[index2].unitDepreciation" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="折旧工费" placeholder="请输入折旧工费" v-model="tbBarter[index].tbOld[index2].depreciation" type="number" class="weui-vcode"></x-input>
+              <x-input title="折旧工费" placeholder="请输入折旧工费" @keyup.native="tbBarter[index].tbOld[index2].autoEdit2 = false" v-model="tbBarter[index].tbOld[index2].depreciation" type="number" class="weui-vcode"></x-input>
 
               <x-input title="换货备注" placeholder="请输入换货备注" value-align="left" v-model="tbBarter[index].tbOld[index2].barterRemarks" type="text" class="weui-vcode">
                 <img slot="right-full-height" @click="setBarterRemarks(index,index2)" v-if="isRemarks" src="../static/image/search.png">
@@ -265,7 +269,7 @@
           </x-input>
           <popup-picker :show.sync="ordersremarksVisible" :show-cell="false" :data="selremarksList" @on-change="selordersRemarks" value-text-align="left"></popup-picker>
 
-          <popup-radio value-align="left" title="主销" placeholder="请选择主销" @on-change="selectUser()" :options="seluserList" v-model="userName"></popup-radio>              
+          <popup-radio value-align="left" title="主销" placeholder="请选择主销" @on-change="selectUser()" :options="seluserList" v-model="userName"></popup-radio>
           <popup-radio value-align="left" title="副销" placeholder="请选择副销" @on-change="selectUser2()" :options="seluserList" v-model="user2Name"></popup-radio>
 
         </group>
@@ -466,28 +470,30 @@ export default {
 
           if (isOneself === '按克') {
             // 旧料标价
-            oldPrice = Math.round(unitPrice * barterWeight)
+            if (old.autoEdit) {
+              let barterMoney2 = Math.round(unitPrice * barterWeight * (barterDiscount / 100) + feePrice)
+              old.barterMoney = barterMoney2 === 0 ? '' : barterMoney2
+              oldPrice = Math.round(unitPrice * barterWeight)
+            } else {
+              barterWeight = Number(Number(number.accDiv(number.accDiv(barterMoney - feePrice, (barterDiscount / 100)), unitPrice)).toFixed(2))
+              old.barterWeight = Number(barterWeight) === 0 ? '' : Number(barterWeight)
+
+              if (validate.isEmpty(old.barterDiscount)) {
+                oldPrice = barterMoney - feePrice
+              } else {
+                oldPrice = Math.round(unitPrice * barterWeight)
+              }
+            }
+
             old.oldPrice = oldPrice > 0 ? oldPrice : ''
             // 折旧工费
             if (unitDepreciation !== 0 && barterWeight !== 0) {
               if (old.autoEdit2) {
                 old.depreciation = Math.round(unitDepreciation * barterWeight)
-                old.autoEdit2 = false
               }
             } else {
               old.depreciation = ''
             }
-
-            if (barterWeight === 0 && barterMoney > 0 && unitPrice > 0) {
-              // old.barterWeight = number.accDiv(barterMoney, unitPrice).toFixed(2)
-            }
-          }
-          let barterMoney2 = Math.round(oldPrice * barterDiscount / 100 + feePrice)
-
-          // 如果手动修改，就不自动赋值了
-          if (old.autoEdit) {
-            old.barterMoney = barterMoney2 === 0 ? '' : barterMoney2
-            old.autoEdit = false
           }
 
           barterMoneySum += Number(old.barterMoney)
@@ -526,7 +532,6 @@ export default {
 
         if (item.autoEdit) {
           item.strikePrice = item.receMoney - differPrice
-          item.autoEdit = false
         }
 
         strikePriceSum += Number(item.strikePrice)
@@ -615,7 +620,7 @@ export default {
                 discount: '',
                 tagPrice: goods.tagPrice,
                 strikePrice: goods.tagPrice,
-                autoEdit: false,
+                autoEdit: true,
                 receMoney: 0,
                 priceType: '',
                 number: 1,
@@ -771,7 +776,7 @@ export default {
       if (!validate.isEmptyWarn(this.username, '客户姓名')) {
         return
       }
-      this.$store.commit('setCusInfo', {mobile: this.mobile, username: this.username, birthday: this.birthday})
+      this.$store.commit('setCusInfo', { mobile: this.mobile, username: this.username, birthday: this.birthday })
       this.active = 'tab-container2'
       this.getSaleGoods(this.mobile)
       this.getExchange(this.mobile)
@@ -1025,7 +1030,7 @@ export default {
               barterGoods: barterGoods,
               barterType: barterType,
               barterMoney: item.strikePrice,
-              autoEdit: false,
+              autoEdit: true,
               unitPrice: Number(unitPrice) > 0 ? unitPrice : '',
               barterDiscount: discount !== 100 ? discount : '',
               barterWeight: item.realWeight,
@@ -1186,8 +1191,8 @@ export default {
         },
         r => {
           this.$store.commit('setOrders', 0)
-          this.$store.commit('setOrderInfo', {tbgiveStr: [], tbgoodsStr: [], tbBarter: []})
-          this.$store.commit('setCusInfo', {mobile: '', username: '', birthday: ''})
+          this.$store.commit('setOrderInfo', { tbgiveStr: [], tbgoodsStr: [], tbBarter: [] })
+          this.$store.commit('setCusInfo', { mobile: '', username: '', birthday: '' })
           this.$store.commit('setMsg', {
             title: '下单成功',
             description: '请去收银台付款',
@@ -1219,6 +1224,12 @@ export default {
     deleteGive: function (index) {
       this.tbgiveStr.splice(index, 1)
     },
+    calBarterWeight: function (index, index2) {
+      if (this.tbBarter[index].tbOld[index2].autoEdit) {
+        this.tbBarter[index].tbOld[index2].barterWeight = ''
+      }
+      this.tbBarter[index].tbOld[index2].autoEdit = !this.tbBarter[index].tbOld[index2].autoEdit
+    },
     deleteOld: function (index, index2) {
       this.tbBarter[index].tbOld.splice(index2, 1)
     },
@@ -1245,7 +1256,7 @@ export default {
         barterGoods: '',
         barterType: '',
         barterMoney: '',
-        autoEdit: false,
+        autoEdit: true,
         unitPrice: barterPrice,
         barterDiscount: '',
         barterWeight: '',
@@ -1366,7 +1377,7 @@ export default {
 </style>
 
 <style lang="less">
-.vux-datetime-value{
+.vux-datetime-value {
   text-align: left !important;
 }
 .red .weui-cell__ft,
