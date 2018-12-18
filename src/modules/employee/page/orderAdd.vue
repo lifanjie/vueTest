@@ -159,7 +159,9 @@
             <popup-radio v-show="tbBarter[index].barterMode === '回收'" value-align="left" title="旧料品类" placeholder="请选择旧料品类" @on-change="selectOldType(index,tbBarter[index].oldTypeName)" :options="seloldTypeList" v-model="tbBarter[index].oldTypeName">
             </popup-radio>
 
-            <x-input title="总&ensp;重&ensp;量" placeholder="请输入总重量" v-model="tbBarter[index].barterWeightNum" type="number" class="weui-vcode"></x-input>
+            <x-input title="总&ensp;重&ensp;量" placeholder="请输入总重量" v-model="tbBarter[index].barterWeightNum" type="number" class="weui-vcode" :class="{'red' :!isAutoBonus && !tbBarter[index].tbOld[0].autoEdit}">
+              <x-button v-if="!isAutoBonus" slot="right" type="primary" @click.native.stop.prevent="calBarterWeight(index,0)" mini>{{tbBarter[index].tbOld[0].autoEdit ? '自动算重量' : '自动算金额'}}</x-button>
+            </x-input>
 
             <div class="diamond" v-show="tbBarter[index].material === '钻石' && tbBarter[index].barterMode === '回收'">
 
@@ -190,8 +192,8 @@
 
               <popup-radio value-align="left" title="换货商品" v-show="isAutoBonus" placeholder="请选择换货商品" @on-change="selectBarterGoods(index,index2,tbBarter[index].tbOld[index2].barterGoodsCode)" :options="selbarterGoodsList" v-model="tbBarter[index].tbOld[index2].barterGoodsCode"></popup-radio>
 
-              <x-input title="抵扣重量" v-show="tbBarter[index].isOneself === '按克' && isAutoBonus" placeholder="请输入抵扣重量" v-model="tbBarter[index].tbOld[index2].barterWeight" type="number" :class="{'weui-vcode' : true,'red' : !tbBarter[index].tbOld[index2].autoEdit}">
-                <x-button slot="right" v-show="isAutoBonus" type="primary" @click.native.stop.prevent="calBarterWeight(index,index2)" mini>{{tbBarter[index].tbOld[index2].autoEdit ? '自动算重量' : '自动算金额'}}</x-button>
+              <x-input title="抵扣重量" v-show="tbBarter[index].isOneself === '按克' && isAutoBonus" placeholder="请输入抵扣重量" @keyup.native="tbBarter[index].tbOld[index2].autoEdit3 = false" v-model="tbBarter[index].tbOld[index2].barterWeight" type="number" class="weui-vcode" :class="{'red' : !tbBarter[index].tbOld[index2].autoEdit}">
+                <x-button slot="right" v-if="isAutoBonus" type="primary" @click.native.stop.prevent="calBarterWeight(index,index2)" mini>{{tbBarter[index].tbOld[index2].autoEdit ? '自动算重量' : '自动算金额'}}</x-button>
               </x-input>
 
               <x-input title="旧料单价" v-show="tbBarter[index].isOneself === '按克'" placeholder="金重*单价=换货金额" v-model="tbBarter[index].tbOld[index2].unitPrice" type="number" class="weui-vcode"></x-input>
@@ -202,7 +204,7 @@
 
               <x-input title="购买工费" placeholder="请输入购买工费" v-if="isExcludeFee" v-model="tbBarter[index].tbOld[index2].feePrice" type="number" class="weui-vcode"></x-input>
 
-              <x-input title="换货金额" placeholder="请输入换货金额" :readonly="tbBarter[index].isOneself === '标价'" v-model="tbBarter[index].tbOld[index2].barterMoney" type="number" class="weui-vcode red">
+              <x-input title="换货金额" placeholder="请输入换货金额" @keyup.native="tbBarter[index].tbOld[index2].autoEdit3 = true" :readonly="tbBarter[index].isOneself === '标价'" v-model="tbBarter[index].tbOld[index2].barterMoney" type="number" class="weui-vcode red">
                 <x-button slot="right" v-show="isAutoBonus" type="primary" @click.native="deleteOld(index,index2)" mini>删除抵换</x-button>
               </x-input>
 
@@ -457,7 +459,7 @@ export default {
         let isOneself = barter.isOneself
         let barterWeightNum = barter.barterWeightNum
         for (let old of barter.tbOld) {
-          if (!this.isAutoBonus) {
+          if (!this.isAutoBonus && old.autoEdit) {
             old.barterWeight = barterWeightNum
           }
           let unitPrice = validate.isEmpty(old.unitPrice) ? 0 : old.unitPrice
@@ -472,11 +474,16 @@ export default {
             // 旧料标价
             if (old.autoEdit) {
               let barterMoney2 = Math.round(unitPrice * barterWeight * (barterDiscount / 100) + feePrice)
-              old.barterMoney = barterMoney2 === 0 ? '' : barterMoney2
+              if (!old.autoEdit3) {
+                old.barterMoney = barterMoney2 === 0 ? '' : barterMoney2
+              }
               oldPrice = Math.round(unitPrice * barterWeight)
             } else {
               barterWeight = Number(Number(number.accDiv(number.accDiv(barterMoney - feePrice, (barterDiscount / 100)), unitPrice)).toFixed(2))
               old.barterWeight = Number(barterWeight) === 0 ? '' : Number(barterWeight)
+              if (!this.isAutoBonus) {
+                barter.barterWeightNum = old.barterWeight
+              }
 
               if (validate.isEmpty(old.barterDiscount)) {
                 oldPrice = barterMoney - feePrice
@@ -495,7 +502,6 @@ export default {
               old.depreciation = ''
             }
           }
-
           barterMoneySum += Number(old.barterMoney)
         }
       }
@@ -1031,6 +1037,7 @@ export default {
               barterType: barterType,
               barterMoney: item.strikePrice,
               autoEdit: true,
+              autoEdit3: false,
               unitPrice: Number(unitPrice) > 0 ? unitPrice : '',
               barterDiscount: discount !== 100 ? discount : '',
               barterWeight: item.realWeight,

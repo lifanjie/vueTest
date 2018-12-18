@@ -118,10 +118,10 @@ export default {
           this.$router.push({path: '/productList'})
         },
         r => {
-          if (r.code === '102' || r.code === '103') {
+          if (r.code === '102' || r.code === '103' || r.code === '104') {
             this.$store.commit('setMsg', {
               title: '登录失败',
-              description: r.code === '102' ? '登录账号不属于门店' : '没有移动开单权限',
+              description: r.message,
               icon: 'warn',
               butType: 'primary',
               butText: '返回登录',
