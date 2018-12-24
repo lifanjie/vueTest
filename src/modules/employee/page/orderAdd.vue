@@ -501,6 +501,9 @@ export default {
             } else {
               old.depreciation = ''
             }
+          } else {
+            let barterMoney2 = Math.round(oldPrice * (barterDiscount / 100) + feePrice)
+            old.barterMoney = barterMoney2 > 0 ? barterMoney2 : ''
           }
           barterMoneySum += Number(old.barterMoney)
         }
