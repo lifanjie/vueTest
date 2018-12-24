@@ -998,6 +998,8 @@ export default {
           if (goods === values.toString()) {
             this.tbBarter[this.oldTypeIndex].goodsCode = item.goodsCode
             this.tbBarter[this.oldTypeIndex].barterWeightNum = item.realWeight
+            // 旧料信息
+            this.tbBarter[this.oldTypeIndex].oldType = item.goodsType
             // 钻石的旧料信息
             this.tbBarter[this.oldTypeIndex].certNo = item.certNo
             this.tbBarter[this.oldTypeIndex].mainStone = item.mainStone
