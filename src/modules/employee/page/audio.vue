@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     play: function (url) {
-      let root = 'http://wx.zuanno.cn'
+      let root = 'https://ht.zuanno.cn'
       this.url = root + url
 
       this.$nextTick(() => {

@@ -146,7 +146,7 @@ export default {
       }
     },
     play: function () {
-      let root = 'http://ht.zuanno.cn'
+      let root = 'https://ht.zuanno.cn'
       this.url = root + this.goods.audio
 
       this.$nextTick(() => {
