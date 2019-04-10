@@ -22,8 +22,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 // optimize-css-assets-webpack-plugin，用于优化和最小化css资源
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
-const env = config.build.env
-
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     // 样式文件的处理规则，对css/sass/scss等不同内容使用相应的styleLoaders
@@ -45,7 +43,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env': env
+      'process.env': config.build.env
     }),
     // UglifyJs do not support ES6+, you can also use babel-minify for better treeshaking: https://github.com/babel/minify
     // 丑化压缩JS代码

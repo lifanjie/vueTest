@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     play: function (url) {
-      let root = 'https://ht.zuanno.cn'
+      let root = process.env.ROOT
       this.url = root + url
 
       this.$nextTick(() => {

@@ -30,7 +30,9 @@ module.exports = merge(baseWebpackConfig, {
   module: {
     // 样式文件的处理规则，对css/sass/scss等不同内容使用相应的styleLoaders
     // 由utils配置出各种类型的预处理语言所需要使用的loader，例如sass需要使用sass-loader
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+    rules: utils.styleLoaders({
+      sourceMap: config.dev.cssSourceMap
+    })
   },
   // cheap-module-eval-source-map is faster for development
   // 使用这种source-map更快
@@ -56,4 +58,4 @@ module.exports = merge(baseWebpackConfig, {
   ]
 })
 //添加Html模板集合
-Array.prototype.push.apply(module.exports.plugins,multipageHelper.getDevHtmlWebpackPluginList())
+Array.prototype.push.apply(module.exports.plugins, multipageHelper.getDevHtmlWebpackPluginList())

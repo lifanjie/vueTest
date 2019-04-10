@@ -2,23 +2,22 @@
   <div id="countPlan">
     <div class="page-field">
       <mt-header fixed title="盘点">
-        <router-link to="/more"  slot="left">
+        <router-link to="/more" slot="left">
           <mt-button icon="back">返回</mt-button>
-        </router-link>    
-        <mt-button @click.native="clearCount()" slot="right">清零</mt-button>       
-      </mt-header>              
+        </router-link>
+        <mt-button @click.native="clearCount()" slot="right">清零</mt-button>
+      </mt-header>
     </div>
 
     <group label-width="4.5em" label-align="left">
-      <popup-picker class="weui-vcode"  title="盘点计划" placeholder="请选择盘点计划" :data="selcountPlan" v-model="countPlanValue" @on-change="setCountPlan" value-text-align="left"></popup-picker>                    
-      <x-input title="商品条码" ref="goodsCode"  @on-enter="saveCountPlan()" placeholder="请输入商品条码" v-model="goodsCode" type="text" class="weui-vcode">
+      <popup-picker class="weui-vcode" title="盘点计划" placeholder="请选择盘点计划" :data="selcountPlan" v-model="countPlanValue" @on-change="setCountPlan" value-text-align="left"></popup-picker>
+      <x-input title="商品条码" ref="goodsCode" @on-enter="saveCountPlan()" placeholder="请输入商品条码" v-model="goodsCode" type="text" class="weui-vcode">
         <x-button slot="right" type="primary" @click.native="saveCountPlan()" mini>盘点</x-button>
-      </x-input> 
-      <x-input title="盘点数" placeholder="请输入盘点数" v-model="countQuantityBu" type="number" class="weui-vcode"></x-input>   
-      <cell-form-preview :list="countList" class="weui-vcode"></cell-form-preview>       
-      <cell-form-preview :list="countPlanList" class="weui-vcode"></cell-form-preview>           
+      </x-input>
+      <x-input title="盘点数" placeholder="请输入盘点数" v-model="countQuantityBu" type="number" class="weui-vcode"></x-input>
+      <cell-form-preview :list="countList" class="weui-vcode"></cell-form-preview>
+      <cell-form-preview :list="countPlanList" class="weui-vcode"></cell-form-preview>
     </group>
-    
 
     <div id="returnlist" v-for="item in messages">
       <p class="returnstr" v-bind:style="{color:item.color}">{{item.message}}</p>
@@ -42,6 +41,7 @@ export default {
       color: '#00a7df',
       countPlanId: '',
       goodsCode: '',
+      oldgoodsCode: '',
       countQuantityBu: 1,
       countNumber: 0,
       countWeight: 0,
@@ -79,8 +79,44 @@ export default {
   },
   created: function () {
     this.selCountPlan()
+    this.initWebSocket()
   },
   methods: {
+    initWebSocket () { // 初始化weosocket
+      const wsuri = process.env.WS + `/inventory/${localStorage.getItem('userId')}`// 这个地址由后端童鞋提供
+      this.websock = new WebSocket(wsuri)
+      this.websock.onmessage = this.websocketonmessage
+      this.websock.onopen = this.websocketonopen
+      this.websock.onerror = this.websocketonerror
+      this.websock.onclose = this.websocketclose
+    },
+    websocketonopen () { // 连接建立之后执行send方法发送数据
+      console.log('连接成功')
+    },
+    websocketonerror () { // 连接建立失败重连
+      this.initWebSocket()
+    },
+    websocketonmessage (e) {
+      // console.log('接收成功', e)
+      var r = JSON.parse(e.data)
+      if (r.success) {
+        this.color = '#ff4582'
+        this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  重量：' + r.data.weight + '  标价：' + r.data.tagPrice + '  盘点成功')
+        this.countPlanNumber += 1
+        this.countPlanWeight += Number(r.data.weight)
+        this.countPlanPrice += Number(r.data.tagPrice)
+
+        this.countNumber += 1
+        this.countWeight += Number(r.data.weight)
+      } else {
+        this.color = '#00a7df'
+        this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
+      }
+    },
+    websocketclose (e) {  // 关闭
+      console.log('断开连接', e)
+      this.initWebSocket()
+    },
     clearCount: function () {
       this.countNumber = 0
       this.countWeight = 0
@@ -138,7 +174,7 @@ export default {
       )
     },
     setMessage: function (goodsCode, text) {
-          // 设置颜色
+      // 设置颜色
       // if (this.color === '#ff4582') {
       //   this.color = '#00a7df'
       // } else {
@@ -157,44 +193,74 @@ export default {
         this.messages.splice(this.messages.length - 1, 1)
       }
     },
-    saveCountPlan: function () {
+  /**
+   * 防止过多提交
+   */
+    throttle: function (fn, gapTime) {
+      let _nowTime = new Date().getTime()
+      if (_nowTime - this._lastTime > gapTime || !this._lastTime) {
+        fn.apply()
+        this._lastTime = _nowTime
+      }
+    },
+    saveCountPlan () {
       this.$nextTick(() => {
         // 这里的代码会在dom渲染完毕运行
-        if (validate.isEmpty(this.goodsCode)) {
-          Toast('商品条码不能为空')
-          return
-        }
 
         let goodsCode = this.goodsCode
+        let oldgoodsCode = this.oldgoodsCode
         let countQuantityBu = this.countQuantityBu
 
-        if (countQuantityBu <= 0) {
-          Toast('盘点数必须大于0')
-          return
+        let gapTime = 500
+        // 同一个单号，5秒才能提交一次
+        if (goodsCode === oldgoodsCode) {
+          gapTime = 5000
         }
 
-        this.$axios.post(
-        'goods/countRecord',
-          {
+        this.throttle(() => {
+          if (validate.isEmpty(goodsCode)) {
+            Toast('商品条码不能为空')
+            return
+          }
+
+          if (countQuantityBu <= 0) {
+            Toast('盘点数必须大于0')
+            return
+          }
+
+          let data = {
             countPlanId: this.countPlanId,
             goodsCode: goodsCode,
             countQuantityBu: countQuantityBu
-          },
-        r => {
-          this.color = '#ff4582'
-          this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  重量：' + r.data.weight + '  标价：' + r.data.tagPrice + '  盘点成功')
-          this.countPlanNumber += 1
-          this.countPlanWeight += Number(r.data.weight)
-          this.countPlanPrice += Number(r.data.tagPrice)
+          }
+          // 数据发送
+          this.websock.send(JSON.stringify(data))
+          this.oldgoodsCode = goodsCode
+        }, gapTime)
 
-          this.countNumber += 1
-          this.countWeight += Number(r.data.weight)
-        },
-        r => {
-          this.color = '#00a7df'
-          this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
-        }
-      )
+        // this.$axios.post(
+        //   'goods/countRecord',
+        //   {
+        //     countPlanId: this.countPlanId,
+        //     goodsCode: goodsCode,
+        //     countQuantityBu: countQuantityBu
+        //   },
+        //   r => {
+        //     this.color = '#ff4582'
+        //     this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  重量：' + r.data.weight + '  标价：' + r.data.tagPrice + '  盘点成功')
+        //     this.countPlanNumber += 1
+        //     this.countPlanWeight += Number(r.data.weight)
+        //     this.countPlanPrice += Number(r.data.tagPrice)
+
+        //     this.countNumber += 1
+        //     this.countWeight += Number(r.data.weight)
+        //   },
+        //   r => {
+        //     this.color = '#00a7df'
+        //     this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
+        //   }
+        // )
+
         // 清空商品货号栏位
         this.goodsCode = ''
         this.countQuantityBu = 1

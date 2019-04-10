@@ -12,7 +12,7 @@
     <div id="bill_List">
 
       <group :gutter=0 label-width="4.5em" label-align="left">
-        <a href="https://ht.zuanno.cn/employee/cus_info.html">
+        <a :href="href">
         <cell class="weui-vcode" title="客流信息" is-link>
           <img slot="icon" class="img-icon" src="../static/image/icon_d_14.png">
         </cell>
@@ -49,7 +49,8 @@
 export default {
   data () {
     return {
-      userName: ''
+      userName: '',
+      href: process.env.ROOT + '/employee/cus_info.html'
     }
   },
   created: function () {

@@ -146,7 +146,7 @@ export default {
       }
     },
     play: function () {
-      let root = 'https://ht.zuanno.cn'
+      let root = process.env.ROOT
       this.url = root + this.goods.audio
 
       this.$nextTick(() => {
