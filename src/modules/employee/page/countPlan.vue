@@ -47,7 +47,11 @@ export default {
       countWeight: 0,
       countPlanNumber: 0,
       countPlanWeight: 0,
-      countPlanPrice: 0
+      countPlanPrice: 0,
+      timeout: 55000,        // 9分钟发一次心跳，比server端设置的连接时间稍微小一点，在接近断开的情况下以通信的方式去重置连接时间。
+      serverTimeoutObj: null,
+      websocket_connected_count: 0,
+      onclose_connected_count: 0
     }
   },
   computed: {
@@ -82,22 +86,52 @@ export default {
     this.initWebSocket()
   },
   methods: {
-    initWebSocket () { // 初始化weosocket
+    connWebSocket () {
       const wsuri = process.env.WS + `/inventory/${localStorage.getItem('userId')}`// 这个地址由后端童鞋提供
       this.websock = new WebSocket(wsuri)
+    },
+    initWebSocket () { // 初始化weosocket
+      this.connWebSocket()
       this.websock.onmessage = this.websocketonmessage
       this.websock.onopen = this.websocketonopen
       this.websock.onerror = this.websocketonerror
       this.websock.onclose = this.websocketclose
+
+      // 路由跳转时结束websocket链接
+      var that = this
+      this.$router.afterEach(function () {
+        that.websock.close()
+        clearTimeout(that.serverTimeoutObj)
+      })
+    },
+    reset () {
+      clearTimeout(this.serverTimeoutObj)
+      return this
+    },
+    start () {
+      this.serverTimeoutObj = setInterval(() => {
+        if (this.websock.readyState === 1) {
+          // console.log('ping')
+          this.websock.send('ping')
+          this.reset().start()    // 如果获取到消息，说明连接是正常的，重置心跳检测
+        } else {
+          console.log('断开状态，尝试重连')
+          this.connWebSocket()
+        }
+      }, this.timeout)
     },
     websocketonopen () { // 连接建立之后执行send方法发送数据
+      this.reset().start()   // 成功建立连接后，重置心跳检测
       console.log('连接成功')
     },
     websocketonerror () { // 连接建立失败重连
-      this.initWebSocket()
+      this.websocket_connected_count++
+      if (this.websocket_connected_count <= 5) {
+        this.connWebSocket()
+      }
     },
     websocketonmessage (e) {
-      // console.log('接收成功', e)
+      this.reset().start()    // 如果获取到消息，说明连接是正常的，重置心跳检测
       var r = JSON.parse(e.data)
       if (r.success) {
         this.color = '#ff4582'
@@ -115,7 +149,6 @@ export default {
     },
     websocketclose (e) {  // 关闭
       console.log('断开连接', e)
-      this.initWebSocket()
     },
     clearCount: function () {
       this.countNumber = 0
@@ -211,55 +244,55 @@ export default {
         let oldgoodsCode = this.oldgoodsCode
         let countQuantityBu = this.countQuantityBu
 
-        let gapTime = 500
-        // 同一个单号，5秒才能提交一次
-        if (goodsCode === oldgoodsCode) {
-          gapTime = 5000
-        }
+        // let gapTime = 500
+        // // 同一个单号，5秒才能提交一次
+        // if (goodsCode === oldgoodsCode) {
+        //   gapTime = 5000
+        // }
 
-        this.throttle(() => {
-          if (validate.isEmpty(goodsCode)) {
-            Toast('商品条码不能为空')
-            return
-          }
+        // this.throttle(() => {
+        //   if (validate.isEmpty(goodsCode)) {
+        //     Toast('商品条码不能为空')
+        //     return
+        //   }
 
-          if (countQuantityBu <= 0) {
-            Toast('盘点数必须大于0')
-            return
-          }
+        //   if (countQuantityBu <= 0) {
+        //     Toast('盘点数必须大于0')
+        //     return
+        //   }
 
-          let data = {
-            countPlanId: this.countPlanId,
-            goodsCode: goodsCode,
-            countQuantityBu: countQuantityBu
-          }
-          // 数据发送
-          this.websock.send(JSON.stringify(data))
-          this.oldgoodsCode = goodsCode
-        }, gapTime)
-
-        // this.$axios.post(
-        //   'goods/countRecord',
-        //   {
+        //   let data = {
         //     countPlanId: this.countPlanId,
         //     goodsCode: goodsCode,
         //     countQuantityBu: countQuantityBu
-        //   },
-        //   r => {
-        //     this.color = '#ff4582'
-        //     this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  重量：' + r.data.weight + '  标价：' + r.data.tagPrice + '  盘点成功')
-        //     this.countPlanNumber += 1
-        //     this.countPlanWeight += Number(r.data.weight)
-        //     this.countPlanPrice += Number(r.data.tagPrice)
-
-        //     this.countNumber += 1
-        //     this.countWeight += Number(r.data.weight)
-        //   },
-        //   r => {
-        //     this.color = '#00a7df'
-        //     this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
         //   }
-        // )
+        //   // 数据发送
+        //   this.websock.send(JSON.stringify(data))
+        //   this.oldgoodsCode = goodsCode
+        // }, gapTime)
+
+        this.$axios.post(
+          'goods/countRecord',
+          {
+            countPlanId: this.countPlanId,
+            goodsCode: goodsCode,
+            countQuantityBu: countQuantityBu
+          },
+          r => {
+            this.color = '#ff4582'
+            this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  重量：' + r.data.weight + '  标价：' + r.data.tagPrice + '  盘点成功')
+            this.countPlanNumber += 1
+            this.countPlanWeight += Number(r.data.weight)
+            this.countPlanPrice += Number(r.data.tagPrice)
+
+            this.countNumber += 1
+            this.countWeight += Number(r.data.weight)
+          },
+          r => {
+            this.color = '#00a7df'
+            this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
+          }
+        )
 
         // 清空商品货号栏位
         this.goodsCode = ''
