@@ -111,7 +111,7 @@ export default {
     start () {
       this.serverTimeoutObj = setInterval(() => {
         if (this.websock.readyState === 1) {
-          // console.log('ping')
+          console.log('ping')
           this.websock.send('ping')
           this.reset().start()    // 如果获取到消息，说明连接是正常的，重置心跳检测
         } else {
