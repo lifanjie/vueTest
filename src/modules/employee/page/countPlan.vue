@@ -244,55 +244,55 @@ export default {
         let oldgoodsCode = this.oldgoodsCode
         let countQuantityBu = this.countQuantityBu
 
-        // let gapTime = 500
-        // // 同一个单号，5秒才能提交一次
-        // if (goodsCode === oldgoodsCode) {
-        //   gapTime = 5000
-        // }
+        let gapTime = 500
+        // 同一个单号，5秒才能提交一次
+        if (goodsCode === oldgoodsCode) {
+          gapTime = 5000
+        }
 
-        // this.throttle(() => {
-        //   if (validate.isEmpty(goodsCode)) {
-        //     Toast('商品条码不能为空')
-        //     return
-        //   }
+        this.throttle(() => {
+          if (validate.isEmpty(goodsCode)) {
+            Toast('商品条码不能为空')
+            return
+          }
 
-        //   if (countQuantityBu <= 0) {
-        //     Toast('盘点数必须大于0')
-        //     return
-        //   }
+          if (countQuantityBu <= 0) {
+            Toast('盘点数必须大于0')
+            return
+          }
 
-        //   let data = {
-        //     countPlanId: this.countPlanId,
-        //     goodsCode: goodsCode,
-        //     countQuantityBu: countQuantityBu
-        //   }
-        //   // 数据发送
-        //   this.websock.send(JSON.stringify(data))
-        //   this.oldgoodsCode = goodsCode
-        // }, gapTime)
-
-        this.$axios.post(
-          'goods/countRecord',
-          {
+          let data = {
             countPlanId: this.countPlanId,
             goodsCode: goodsCode,
             countQuantityBu: countQuantityBu
-          },
-          r => {
-            this.color = '#ff4582'
-            this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  重量：' + r.data.weight + '  标价：' + r.data.tagPrice + '  盘点成功')
-            this.countPlanNumber += 1
-            this.countPlanWeight += Number(r.data.weight)
-            this.countPlanPrice += Number(r.data.tagPrice)
-
-            this.countNumber += 1
-            this.countWeight += Number(r.data.weight)
-          },
-          r => {
-            this.color = '#00a7df'
-            this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
           }
-        )
+          // 数据发送
+          this.websock.send(JSON.stringify(data))
+          this.oldgoodsCode = goodsCode
+        }, gapTime)
+
+        // this.$axios.post(
+        //   'goods/countRecord',
+        //   {
+        //     countPlanId: this.countPlanId,
+        //     goodsCode: goodsCode,
+        //     countQuantityBu: countQuantityBu
+        //   },
+        //   r => {
+        //     this.color = '#ff4582'
+        //     this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  重量：' + r.data.weight + '  标价：' + r.data.tagPrice + '  盘点成功')
+        //     this.countPlanNumber += 1
+        //     this.countPlanWeight += Number(r.data.weight)
+        //     this.countPlanPrice += Number(r.data.tagPrice)
+
+        //     this.countNumber += 1
+        //     this.countWeight += Number(r.data.weight)
+        //   },
+        //   r => {
+        //     this.color = '#00a7df'
+        //     this.setMessage(r.data.goodsCode, '类别--' + r.data.goodsTypeName + '  名称--' + r.data.goodsName + '  ' + r.message)
+        //   }
+        // )
 
         // 清空商品货号栏位
         this.goodsCode = ''
